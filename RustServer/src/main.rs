@@ -9,15 +9,8 @@ fn handle_client(mut stream: TcpStream, dim: Arc<Mutex<i32>>) {
         Ok(size) => {
             let msg = std::str::from_utf8(&data[0..size]).expect("Conversion error");
             println!("{}", msg);
-            if msg.trim() == "j" {
-                let mut dim = dim.lock().unwrap();
-                *dim += 1;
-            } else if msg.trim() == "k" {
-                let mut dim = dim.lock().unwrap();
-                *dim -= 1;
-            }
             let dim_str = dim.lock().unwrap().to_string();
-            let out = format!("{}\n", dim_str); // aggiungi un carattere di fine riga alla fine della risposta
+            let out = format!("{}\n", dim_str); // add an end string character
             // echo everything!
             stream.write(out.as_bytes()).unwrap();
             true
@@ -31,7 +24,6 @@ fn handle_client(mut stream: TcpStream, dim: Arc<Mutex<i32>>) {
 }
 
 fn main() {
-    let mut connections = 0;
     thread::spawn(move || {});
     let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
     // accept connections and process them, spawning a new thread for each one
@@ -41,18 +33,11 @@ fn main() {
         match stream {
             Ok(stream) => {
                 println!("New connection: {}", stream.peer_addr().unwrap());
-                connections +=1;
-                if connections>2{
-                    println!("Too many connections!");
-                    connections -= 1;
-                    stream.shutdown(Shutdown::Both).unwrap();
-                }else {
-                    let dim = Arc::clone(&dim);
-                    thread::spawn(move || {
-                        // connection succeeded
-                        handle_client(stream, dim)
-                    });
-                }
+                let dim = Arc::clone(&dim);
+                thread::spawn(move || {
+                    // connection succeeded
+                    handle_client(stream, dim)
+                });
             }
             Err(e) => {
                 println!("Error: {}", e);
