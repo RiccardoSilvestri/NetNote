@@ -1,3 +1,4 @@
+use std::fs::OpenOptions;
 use std::io::{Read, Write, BufWriter};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
@@ -11,6 +12,13 @@ fn handle_client(mut stream: TcpStream) {
 
         let request = String::from_utf8_lossy(&buffer[..bytes_read]);
         let json: Value = serde_json::from_str(&request).expect("Failed to parse JSON");
+
+        // Open the file in append mode (creates it if it doesn't exist)
+        let mut file = OpenOptions::new().append(true).create(true).open("received.json").expect("Failed to open file");
+
+        // Write the JSON data to the file
+        writeln!(file, "{}", json).expect("Failed to write to file");
+
         let response = serde_json::to_string(&json).expect("Failed to serialize JSON");
 
         let mut writer = BufWriter::new(&stream);
