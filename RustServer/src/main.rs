@@ -1,4 +1,4 @@
-use std::io::{Read, Write};
+use std::io::{Read, Write, BufWriter};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 use serde_json::Value;
@@ -12,10 +12,14 @@ fn handle_client(mut stream: TcpStream) {
         let request = String::from_utf8_lossy(&buffer[..bytes_read]);
         let json: Value = serde_json::from_str(&request).expect("Failed to parse JSON");
         let response = serde_json::to_string(&json).expect("Failed to serialize JSON");
-        stream.write(response.as_bytes()).expect("Failed to write to socket");
-        stream.flush().expect("Failed to flush to socket");
+
+        let mut writer = BufWriter::new(&stream);
+        let length = response.len() as u16;
+        // The java client needs to read the length of the string first, then the string. (readUTF)
+        writer.write(&length.to_be_bytes()).expect("Failed to write length to socket");
+        writer.write(response.as_bytes()).expect("Failed to write to socket");
+        writer.flush().expect("Failed to flush to socket");
     }
-    //
 }
 
 fn main() {
