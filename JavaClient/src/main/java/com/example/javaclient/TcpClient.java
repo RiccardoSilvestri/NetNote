@@ -1,14 +1,12 @@
-package src.main.java.com.example.javaclient;
+package com.example.javaclient;
 
 import java.io.*;
-import java.net.Socket;
-import java.util.Scanner;
+import java.net.*;
 
 public class TcpClient {
     public static void main(String[] args) {
-        String serverName = "localhost"; // server IP address
-        int port = 3333; // server port number
-        Scanner scan = new Scanner(System.in);
+        String serverName = "localhost"; // replace with your server's IP
+        int port = 3333; // replace with your server's port
 
         try {
             System.out.println("Connecting to " + serverName + " on port " + port);
@@ -18,31 +16,10 @@ public class TcpClient {
             OutputStream outToServer = client.getOutputStream();
             DataOutputStream out = new DataOutputStream(outToServer);
 
-            String msg = """
-                    {
-                        "glossary": {
-                            "title": "example glossary",
-                    		"GlossDiv": {
-                                "title": "S",
-                    			"GlossList": {
-                                    "GlossEntry": {
-                                        "ID": "SGML",
-                    					"SortAs": "SGML",
-                    					"GlossTerm": "Standard Generalized Markup Language",
-                    					"Acronym": "SGML",
-                    					"Abbrev": "ISO 8879:1986",
-                    					"GlossDef": {
-                                            "para": "A meta-markup language, used to create markup languages such as DocBook.",
-                    						"GlossSeeAlso": ["GML", "XML"]
-                                        },
-                    					"GlossSee": "markup"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    """;
-            out.write(msg.getBytes());
+            // replace with your JSON data
+            String json = "{\"key\":\"value\"}";
+            out.write(json.getBytes());
+
             InputStream inFromServer = client.getInputStream();
             DataInputStream in = new DataInputStream(inFromServer);
 
