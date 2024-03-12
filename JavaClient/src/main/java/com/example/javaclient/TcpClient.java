@@ -1,5 +1,8 @@
 package com.example.javaclient;
 
+
+import com.example.javaclient.LoginRegister.Register;
+
 import java.io.*;
 import java.net.*;
 
