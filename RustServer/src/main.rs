@@ -1,50 +1,30 @@
-use std::{thread};
-use std::net::{TcpListener, TcpStream, Shutdown};
 use std::io::{Read, Write};
-use std::sync::{Arc, Mutex};
+use std::net::{TcpListener, TcpStream};
+use std::thread;
+use serde_json::Value;
 
-fn handle_client(mut stream: TcpStream, dim: Arc<Mutex<i32>>) {
-    let mut data = [0 as u8; 50]; // using 50 byte buffer
-    while match stream.read(&mut data) {
-        Ok(size) => {
-            let msg = std::str::from_utf8(&data[0..size]).expect("Conversion error");
-            println!("{}", msg);
-            let dim_str = dim.lock().unwrap().to_string();
-            let out = format!("{}\n", dim_str); // add an end string character
-            // echo everything!
-            stream.write(out.as_bytes()).unwrap();
-            true
-        },
-        Err(_) => {
-            println!("An error occurred, terminating connection with {}", stream.peer_addr().unwrap());
-            stream.shutdown(Shutdown::Both).unwrap();
-            false
-        }
-    } {}
+fn handle_client(mut stream: TcpStream) {
+    let mut buffer = [0; 512];
+    loop {
+        let bytes_read = stream.read(&mut buffer).expect("Failed to read from socket");
+        if bytes_read == 0 { return; } // connection closed
+
+        let request = String::from_utf8_lossy(&buffer[..bytes_read]);
+        let json: Value = serde_json::from_str(&request).expect("Failed to parse JSON");
+        let response = serde_json::to_string(&json).expect("Failed to serialize JSON");
+        stream.write(response.as_bytes()).expect("Failed to write to socket");
+        stream.flush().expect("Failed to flush to socket");
+    }
 }
 
 fn main() {
-    thread::spawn(move || {});
-    let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
-    // accept connections and process them, spawning a new thread for each one
-    println!("Server listening on port 3333");
-    let dim = Arc::new(Mutex::new(0));
+    let listener = TcpListener::bind("127.0.0.1:3333").expect("Could not bind");
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                println!("New connection: {}", stream.peer_addr().unwrap());
-                let dim = Arc::clone(&dim);
-                thread::spawn(move || {
-                    // connection succeeded
-                    handle_client(stream, dim)
-                });
+                thread::spawn(|| { handle_client(stream); });
             }
-            Err(e) => {
-                println!("Error: {}", e);
-                /* connection failed */
-            }
+            Err(e) => { eprintln!("Unable to connect: {}", e); }
         }
     }
-    // close the socket server
-    drop(listener);
 }
