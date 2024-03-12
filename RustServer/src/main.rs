@@ -15,6 +15,7 @@ fn handle_client(mut stream: TcpStream) {
         stream.write(response.as_bytes()).expect("Failed to write to socket");
         stream.flush().expect("Failed to flush to socket");
     }
+    //
 }
 
 fn main() {
