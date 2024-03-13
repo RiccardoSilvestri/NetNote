@@ -37,9 +37,7 @@ fn handle_client(mut stream: TcpStream) {
         let response = serde_json::to_string_pretty(&array.last().unwrap()).expect("Failed to serialize JSON");
 
         let mut writer = BufWriter::new(&stream);
-        let length = response.len() as u16;
-        // The java client needs to read the length of the string first, then the string. (readUTF)
-        writer.write(&length.to_be_bytes()).expect("Failed to write length to socket");
+
         writer.write(response.as_bytes()).expect("Failed to write to socket");
         writer.flush().expect("Failed to flush to socket");
     }
