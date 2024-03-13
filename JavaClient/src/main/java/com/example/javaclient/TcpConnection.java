@@ -1,15 +1,11 @@
 package com.example.javaclient;
 
-import com.example.javaclient.LoginRegister.Login;
-
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
-import static com.example.javaclient.LoginRegister.Login.login;
-
-public class TcpClient {
-    public static void main(String[] args, String nomeInput ) {
+public class TcpConnection {
+    public static void main(String[] args) {
         String serverName = "localhost"; // or IP address of server
         int port = 3333;
         try {
@@ -21,7 +17,7 @@ public class TcpClient {
             DataOutputStream out = new DataOutputStream(outToServer);
 
             // Sample JSON string
-            String json = "{\"pizza\":\"margherita\"}";
+            String json = "pizza";
 
             // Convert the JSON string to bytes
             byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
@@ -37,12 +33,5 @@ public class TcpClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-            Login login = new Login();
-            login(nomeInput);
-            if (nomeInput.equals("NOMEDAPASSARE")){
-            }
-            else{
-                System.out.println("errore");;
-            }
     }
 }
