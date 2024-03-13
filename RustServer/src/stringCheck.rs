@@ -1,9 +1,6 @@
-use std::fs::{File, OpenOptions};
 use std::io::{Read, Write, BufWriter};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
-use serde_json::Value;
-
 fn handle_client(mut stream: TcpStream) {
     let mut buffer = [0; 512];
     loop {
@@ -12,29 +9,11 @@ fn handle_client(mut stream: TcpStream) {
 
         let request = String::from_utf8_lossy(&buffer[..bytes_read]);
         println!("Recieved: {request}");
-        let json: Value = serde_json::from_str(&request).expect("Failed to parse JSON");
 
-        // Open the file in read mode
-        let mut file = OpenOptions::new().read(true).open("received.json").unwrap_or_else(|_| File::create("received.json").expect("Failed to create file"));
-
-        // Read the existing JSON data
-        let mut contents = String::new();
-        file.read_to_string(&mut contents).expect("Failed to read file");
-
-        // Parse the existing JSON data into an array
-        let mut array: Vec<Value> = serde_json::from_str(&contents).unwrap_or_else(|_| Vec::new());
-
-        // Append the new JSON data to the array
-        array.push(json);
-
-        // Open the file in write mode
-        let mut file = OpenOptions::new().write(true).truncate(true).open("received.json").expect("Failed to open file");
-
-        // Write the array back to the file in a pretty-printed format
-        writeln!(file, "{}", serde_json::to_string_pretty(&array).expect("Failed to serialize JSON")).expect("Failed to write to file");
-        println!("Wrote to json");
-
-        let response = serde_json::to_string_pretty(&array.last().unwrap()).expect("Failed to serialize JSON");
+        let mut response = request.trim();
+        if request.trim().eq_ignore_ascii_case("pizza"){
+            response = "margherita";
+        }
 
         let mut writer = BufWriter::new(&stream);
         let length = response.len() as u16;
