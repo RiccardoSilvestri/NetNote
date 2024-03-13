@@ -1,5 +1,3 @@
-mod note;
-
 use std::fs::{File, OpenOptions};
 use std::io::{Read, Write, BufWriter};
 use std::net::{TcpListener, TcpStream};
