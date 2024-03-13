@@ -11,6 +11,7 @@ fn handle_client(mut stream: TcpStream) {
         if bytes_read == 0 { return; } // connection closed
 
         let request = String::from_utf8_lossy(&buffer[..bytes_read]);
+        println!("Recieved: {request}");
         let json: Value = serde_json::from_str(&request).expect("Failed to parse JSON");
 
         // Open the file in read mode
@@ -31,6 +32,7 @@ fn handle_client(mut stream: TcpStream) {
 
         // Write the array back to the file in a pretty-printed format
         writeln!(file, "{}", serde_json::to_string_pretty(&array).expect("Failed to serialize JSON")).expect("Failed to write to file");
+        println!("Wrote to json");
 
         let response = serde_json::to_string_pretty(&array.last().unwrap()).expect("Failed to serialize JSON");
 
@@ -44,7 +46,11 @@ fn handle_client(mut stream: TcpStream) {
 }
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:3333").expect("Could not bind");
+    let port = 3333;
+    let mut addr = "127.0.0.1:".to_owned();
+    addr.push_str(&*port.to_string());
+    let listener = TcpListener::bind(addr).expect("Could not bind");
+    println!("Server started on port {}", port);
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
