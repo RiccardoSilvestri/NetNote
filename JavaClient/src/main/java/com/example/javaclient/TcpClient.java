@@ -6,10 +6,9 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
-import static com.example.javaclient.LoginRegister.Login.login;
 
 public class TcpClient {
-    public static void main(String[] args, String nomeInput ) {
+    public static void main(String[] args) {
         String serverName = "localhost"; // or IP address of server
         int port = 3333;
         try {
@@ -37,12 +36,5 @@ public class TcpClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-            Login login = new Login();
-            login(nomeInput);
-            if (nomeInput.equals("NOMEDAPASSARE")){
-            }
-            else{
-                System.out.println("errore");;
-            }
     }
 }
