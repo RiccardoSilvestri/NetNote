@@ -1,5 +1,7 @@
 package com.example.javaclient;
 
+import com.example.javaclient.notes.Note;
+
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -16,8 +18,11 @@ public class TcpConnection {
             OutputStream outToServer = client.getOutputStream();
             DataOutputStream out = new DataOutputStream(outToServer);
 
+            //Note note = new Note("Nuova", "Paolo", "16/11/2002", "Oggi sono molto contento");
+            Note note = Note.inputNote();
             // Sample JSON string
-            String json = "pizza";
+            String json = Note.noteToJson(note);
+            System.out.println(json);
 
             // Convert the JSON string to bytes
             byte[] bytes = json.getBytes(StandardCharsets.UTF_8);

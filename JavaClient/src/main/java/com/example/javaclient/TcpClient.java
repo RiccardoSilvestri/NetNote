@@ -1,6 +1,6 @@
 package com.example.javaclient;
 
-import com.example.javaclient.LoginRegister.Login;
+import com.example.javaclient.notes.Note;
 
 import java.io.*;
 import java.net.*;
@@ -19,8 +19,9 @@ public class TcpClient {
             OutputStream outToServer = client.getOutputStream();
             DataOutputStream out = new DataOutputStream(outToServer);
 
+            Note note = new Note("Nuova", "Paolo", "16/11/2002", "Oggi sono molto contento");
             // Sample JSON string
-            String json = "{\"pizza\":\"margherita\"}";
+            String json = Note.noteToJson(note);
 
             // Convert the JSON string to bytes
             byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
