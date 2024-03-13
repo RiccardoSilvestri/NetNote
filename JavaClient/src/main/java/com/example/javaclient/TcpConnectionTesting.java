@@ -3,12 +3,12 @@ package com.example.javaclient;
 import com.example.javaclient.LoginRegister.Login;
 
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-
-public class TcpClient {
+public class TcpConnectionTesting {
     public static void main(String[] args) {
+
         String serverName = "localhost"; // or IP address of server
         int port = 3333;
         try {
@@ -20,8 +20,12 @@ public class TcpClient {
             DataOutputStream out = new DataOutputStream(outToServer);
 
             // Sample JSON string
-            String json = "{\"pizza\":\"margherita\"}";
+            Login login = new Login();
+            String nomeInput = login.inserisciNome();
+            Login loginP = new Login();
+            String nomePassword = login.inserisciPassword();
 
+            String json = nomeInput;
             // Convert the JSON string to bytes
             byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
 
