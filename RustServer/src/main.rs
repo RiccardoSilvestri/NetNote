@@ -29,10 +29,10 @@ fn handle_client(mut stream: TcpStream) {
         // Open the file in write mode
         let mut file = OpenOptions::new().write(true).truncate(true).open("received.json").expect("Failed to open file");
 
-        // Write the array back to the file
-        writeln!(file, "{}", serde_json::to_string(&array).expect("Failed to serialize JSON")).expect("Failed to write to file");
+        // Write the array back to the file in a pretty-printed format
+        writeln!(file, "{}", serde_json::to_string_pretty(&array).expect("Failed to serialize JSON")).expect("Failed to write to file");
 
-        let response = serde_json::to_string(&array.last().unwrap()).expect("Failed to serialize JSON");
+        let response = serde_json::to_string_pretty(&array.last().unwrap()).expect("Failed to serialize JSON");
 
         let mut writer = BufWriter::new(&stream);
         let length = response.len() as u16;
@@ -42,7 +42,6 @@ fn handle_client(mut stream: TcpStream) {
         writer.flush().expect("Failed to flush to socket");
     }
 }
-
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:3333").expect("Could not bind");
