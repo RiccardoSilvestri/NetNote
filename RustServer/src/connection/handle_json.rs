@@ -1,9 +1,10 @@
 use std::borrow::Cow;
 use std::fs::{File, OpenOptions};
-use std::io::{BufWriter, Read, Write};
+use std::io::{Read, Write};
 use serde_json::{Error as JsonError, Value};
 
-pub fn handle_json(json_string:Cow<str>) -> String{
+pub fn handle_json(json_string :String) -> String{
+    eprintln!("{}", json_string);
     let json_result: Result<Value, JsonError> = serde_json::from_str(&json_string);
     match json_result {
         Ok(json) => {
@@ -26,6 +27,7 @@ pub fn handle_json(json_string:Cow<str>) -> String{
         }
         Err(err) => {
             eprintln!("Failed to parse JSON: {}", err);
+            eprintln!("{}", json_string);
             return "Error".to_string();
             // TODO: send a response back to client
         }
