@@ -1,6 +1,4 @@
-mod connection {
-    pub mod handle_client;
-}
+mod connection;
 use std::net::TcpListener;
 use std::thread;
 use connection::handle_client::*;
