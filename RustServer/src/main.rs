@@ -5,7 +5,7 @@ use std::thread;
 use serde_json::{Value, Error as JsonError};
 
 fn handle_client(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
+    let mut buffer = [0; 512]; //
     loop {
         let bytes_read = stream.read(&mut buffer).expect("Failed to read from socket");
         if bytes_read == 0 { return; } // connection closed
