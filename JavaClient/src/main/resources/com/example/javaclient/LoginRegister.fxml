@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Label alignment="CENTER" layoutX="260.0" layoutY="109.0" text="Login or Register?" textAlignment="CENTER" textFill="#2f4f4f">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="usernameField" layoutX="200.0" layoutY="200.0" prefHeight="40.0" prefWidth="200.0" promptText="Username"/>
+                <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="250.0" prefHeight="40.0" prefWidth="200.0" promptText="Password"/>
+                <Button fx:id="RegisterButton" layoutX="250.0" layoutY="300.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Register" textOverrun="WORD_ELLIPSIS">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Button>
+                <Button fx:id="LoginButton" layoutX="250.0" layoutY="350.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Login" textOverrun="WORD_ELLIPSIS">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

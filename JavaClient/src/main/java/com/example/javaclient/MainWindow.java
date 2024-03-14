@@ -10,21 +10,22 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
-    Register register = new Register();
+public class MainWindow extends Application {
+    TcpConnectionTesting tcpconnecting = new TcpConnectionTesting();
+
     Login login = new Login();
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Registrazione.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("LoginRegister.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 670, 420);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
 
-        // Aggiungi un'azione per gestire il click del pulsante "Register"
-        Button registerButton = (Button) scene.lookup("#registerButton");
-        registerButton.setOnAction(event -> Register.register());
+
+        Button registerButton = (Button) scene.lookup("#LoginButton");
+        registerButton.setOnAction(event -> TcpConnectionTesting.main());
 
         // Aggiungi un'azione per gestire il click del pulsante "Login"
         //Button loginButton = (Button) scene.lookup("#loginButton");

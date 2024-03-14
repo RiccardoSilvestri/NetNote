@@ -2,20 +2,36 @@ package com.example.javaclient;
 
 import com.example.javaclient.LoginRegister.Login;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class TcpConnectionTesting {
-    public static void main(String[] args) {
+    private JTextArea textArea;
+
+    public TcpConnectionTesting() {
+        JFrame frame = new JFrame();
+        textArea = new JTextArea(24, 80);
+        frame.getContentPane().add(new JScrollPane(textArea), "Center");
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public void print(String message) {
+        textArea.append(message + "\n");
+    }
+
+    public static void main() {
+        TcpConnectionTesting tcp = new TcpConnectionTesting();
 
         String serverName = "localhost";
         int port = 3333;
         try {
-            System.out.println("Connecting to " + serverName + " on port " + port);
+            tcp.print("Connecting to " + serverName + " on port " + port);
             Socket client = new Socket(serverName, port);
 
-            System.out.println("Just connected to " + client.getRemoteSocketAddress());
+            tcp.print("Just connected to " + client.getRemoteSocketAddress());
             OutputStream outToServer = client.getOutputStream();
             DataOutputStream out = new DataOutputStream(outToServer);
 
@@ -35,7 +51,7 @@ public class TcpConnectionTesting {
             InputStream inFromServer = client.getInputStream();
             DataInputStream in = new DataInputStream(inFromServer);
 
-            System.out.println("Server says " + in.readUTF());
+            tcp.print("Server says " + in.readUTF());
             client.close();
         } catch (IOException e) {
             e.printStackTrace();

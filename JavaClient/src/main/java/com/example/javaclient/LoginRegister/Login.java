@@ -1,6 +1,6 @@
 package com.example.javaclient.LoginRegister;
 
-import java.util.Scanner;
+import javax.swing.*;
 
 public class Login {
     public static void main(String[] args) {
@@ -14,16 +14,12 @@ public class Login {
     }
 
     public String inserisciNome() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Inserisci Nome: ");
-        String nomeInput = scanner.nextLine();
+        String nomeInput = JOptionPane.showInputDialog(null, "Inserisci Nome:");
         return nomeInput;
     }
 
     public String inserisciPassword() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Inserisci Password: ");
-        String passwordInput = scanner.nextLine();
+        String passwordInput = JOptionPane.showInputDialog(null, "Inserisci Password:");
         return passwordInput;
     }
 }
