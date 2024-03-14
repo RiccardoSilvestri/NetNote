@@ -1,9 +1,7 @@
+mod connection;
 use std::net::TcpListener;
 use std::thread;
-
-use handle_client::*;
-
-mod handle_client;
+use connection::handle_client::*;
 
 fn main() {
     let port = 3333;
