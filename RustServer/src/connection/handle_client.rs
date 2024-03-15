@@ -1,13 +1,8 @@
-use std::io::{Read};
 use std::net::TcpStream;
 use crate::connection::handle_json::handle_json;
 use super::send_utf::*;
-
-fn read_stream(stream: &mut TcpStream) -> String{
-    let mut buffer = [0; 1024]; // Clear buffer
-    let bytes_read = stream.read(&mut buffer).expect("Failed to read from socket");
-    String::from_utf8_lossy(&buffer[..bytes_read]).to_string()
-}
+use super::read_stream::*;
+use crate::connection::user::register::*;
 
 pub(crate) fn handle_client(mut stream: TcpStream) {
     let mut logged = false;
@@ -17,10 +12,12 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
             if request.is_empty(){ return };
             println!("Received: {}", request);
             if request.eq_ignore_ascii_case("1") {
+                send_utf("registering".to_string(), stream.try_clone().unwrap());
+                let registration = read_stream(&mut stream);
+                print!("{}", registration);
+                register(registration);
                 println!("registered, now send json");
-                send_utf("registered".to_string(), stream.try_clone().unwrap());
                 logged = true;
-                // TODO: register function
             } else if request.eq_ignore_ascii_case("2") {
                 // TODO: login function
             } else { println!("Error!") }
@@ -34,6 +31,6 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
         let response = handle_json(request, "received.json");
 
         // The java client needs to read the length of the string first, then the string. (readUTF)
-        send_utf(response, stream.try_clone().unwrap());
+        send_utf(response.to_string(), stream.try_clone().unwrap());
     }
 }

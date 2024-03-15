@@ -1,13 +1,14 @@
 package com.example.javaclient;
 
 import com.example.javaclient.notes.Note;
+import com.example.javaclient.notes.User;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 
-public class TcpClient {
+public class RegisterUser {
     public static void main(String[] args) {
         String serverName = "localhost"; // or IP address of server
         int port = 3333;
@@ -29,9 +30,9 @@ public class TcpClient {
 
             System.out.println("Server says " + in.readUTF());
 
-            Note note = new Note("Nuova", "Paolo", "16/11/2002", "Oggi sono molto contento");
+            User user = new User("Paolo", "cij3n4al");
             // Sample JSON string
-            String json = Note.noteToJson(note);
+            String json = User.UserToJson(user);
 
             // Convert the JSON string to bytes
             bytes = json.getBytes(StandardCharsets.UTF_8);

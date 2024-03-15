@@ -2,7 +2,8 @@ use std::fs::{File, OpenOptions};
 use std::io::{Read, Write};
 use serde_json::{Error as JsonError, Value};
 
-pub fn handle_json(json_string :String, filename :&str) -> String{
+// prettyfies the json, writes it to file and returns it as a string
+pub fn handle_json(json_string : String, filename :&str) -> String{
     eprintln!("{}", json_string);
     let json_result: Result<Value, JsonError> = serde_json::from_str(&json_string);
     return match json_result {
