@@ -3,6 +3,7 @@ use crate::connection::handle_json::handle_json;
 use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
+use crate::connection::user::login::*;
 
 pub(crate) fn handle_client(mut stream: TcpStream) {
     let mut logged = false;
@@ -11,15 +12,17 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
             let request = read_stream(&mut stream);
             if request.is_empty(){ return };
             println!("Received: {}", request);
+            send_utf("registering".to_string(), stream.try_clone().unwrap());
             if request.eq_ignore_ascii_case("1") {
-                send_utf("registering".to_string(), stream.try_clone().unwrap());
                 let registration = read_stream(&mut stream);
                 print!("{}", registration);
                 register(registration);
                 println!("registered, now send json");
                 logged = true;
             } else if request.eq_ignore_ascii_case("2") {
-                // TODO: login function
+                let credentials = read_stream(&mut stream);
+                logged = login(credentials);
+                println!("{}", logged)
             } else { println!("Error!") }
         }
         let request = read_stream(&mut stream);
