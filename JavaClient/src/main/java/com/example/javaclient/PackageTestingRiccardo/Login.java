@@ -1,4 +1,4 @@
-package com.example.javaclient.LoginRegister;
+package com.example.javaclient.PackageTestingRiccardo;
 
 import javax.swing.*;
 

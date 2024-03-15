@@ -10,21 +10,21 @@
 
 <VBox prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <children>
-                <Label alignment="CENTER" layoutX="260.0" layoutY="109.0" text="Login or Register?" textAlignment="CENTER" textFill="#2f4f4f">
+                <Label alignment="CENTER" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" text="Login or Register?" textAlignment="CENTER" textFill="#2f4f4f">
                     <font>
                         <Font size="24.0" />
                     </font>
                 </Label>
-                <TextField fx:id="usernameField" layoutX="200.0" layoutY="200.0" prefHeight="40.0" prefWidth="200.0" promptText="Username"/>
-                <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="250.0" prefHeight="40.0" prefWidth="200.0" promptText="Password"/>
-                <Button fx:id="RegisterButton" layoutX="250.0" layoutY="300.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Register" textOverrun="WORD_ELLIPSIS">
+                <TextField fx:id="usernameField" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="100.0" prefHeight="40.0" prefWidth="300.0" promptText="Username"/>
+                <PasswordField fx:id="passwordField" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0" prefHeight="40.0" prefWidth="300.0" promptText="Password"/>
+                <Button fx:id="RegisterButton" layoutX="150.0" layoutY="200.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Register" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="200.0">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Button>
-                <Button fx:id="LoginButton" layoutX="250.0" layoutY="350.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Login" textOverrun="WORD_ELLIPSIS">
+                <Button fx:id="LoginButton" layoutX="150.0" layoutY="250.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Login" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="250.0">
                     <font>
                         <Font size="18.0" />
                     </font>

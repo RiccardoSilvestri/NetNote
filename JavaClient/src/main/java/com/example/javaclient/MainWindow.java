@@ -1,37 +1,46 @@
 package com.example.javaclient;
 
-import com.example.javaclient.LoginRegister.Login;
-import com.example.javaclient.LoginRegister.Register;
+import com.example.javaclient.PackageTestingRiccardo.Register;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class MainWindow extends Application {
-    TcpConnectionTesting tcpconnecting = new TcpConnectionTesting();
-
-    Login login = new Login();
+    private TextField usernameField;
+    private PasswordField passwordField;
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("LoginRegister.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 670, 420);
+        // Carica l'interfaccia utente da un file FXML
+        VBox root = FXMLLoader.load(getClass().getResource("LoginRegister.fxml"));
+        Scene scene = new Scene(root, 670, 420);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
 
+        // Ottiene riferimenti ai campi di testo e al pulsante di registrazione
+        usernameField = (TextField) scene.lookup("#usernameField");
+        passwordField = (PasswordField) scene.lookup("#passwordField");
+        Button registerButton = (Button) scene.lookup("#RegisterButton");
 
-        Button registerButton = (Button) scene.lookup("#LoginButton");
-        registerButton.setOnAction(event -> TcpConnectionTesting.main());
-
-        // Aggiungi un'azione per gestire il click del pulsante "Login"
-        //Button loginButton = (Button) scene.lookup("#loginButton");
-        //loginButton.setOnAction(event -> Login.login());
+        // Registra un gestore per il clic sul pulsante di registrazione
+        registerButton.setOnAction(event -> register());
     }
 
+    // Metodo per registrare un nuovo utente
+    private void register() {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        Register.register(username, password);
+    }
+
+    // Punto di ingresso dell'applicazione
     public static void main(String[] args) {
         launch();
     }
