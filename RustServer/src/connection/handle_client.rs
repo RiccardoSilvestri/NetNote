@@ -3,14 +3,18 @@ use std::net::TcpStream;
 use crate::connection::handle_json::handle_json;
 use super::send_utf::*;
 
+fn read_stream(stream: &mut TcpStream) -> String{
+    let mut buffer = [0; 1024]; // Clear buffer
+    let bytes_read = stream.read(&mut buffer).expect("Failed to read from socket");
+    String::from_utf8_lossy(&buffer[..bytes_read]).to_string()
+}
+
 pub(crate) fn handle_client(mut stream: TcpStream) {
+    let mut logged = false;
     loop {
-        let mut logged = false;
         while !logged{
-            let mut buffer = [0; 1024];
-            let mut bytes_read = stream.read(&mut buffer).expect("Failed to read from socket");
-            if bytes_read == 0 { return; } // connection closed
-            let request = String::from_utf8_lossy(&buffer[..bytes_read]).to_string();
+            let request = read_stream(&mut stream);
+            if request.is_empty(){ return };
             println!("Received: {}", request);
             if request.eq_ignore_ascii_case("1") {
                 println!("registered, now send json");
@@ -21,10 +25,8 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
                 // TODO: login function
             } else { println!("Error!") }
         }
-        let mut buffer = [0; 1024]; // Clear the buffer
-        let bytes_read  = stream.read(&mut buffer).expect("Failed to read from socket");
-        if bytes_read == 0 { return; } // connection closed
-        let request = String::from_utf8_lossy(&buffer[..bytes_read]).to_string();
+        let request = read_stream(&mut stream);
+        if request.is_empty(){ return };
         println!("Received: {}", request);
 
         // TODO: handle the message to use different functions
