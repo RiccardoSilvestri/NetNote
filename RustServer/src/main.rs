@@ -1,6 +1,6 @@
-mod connection;
 use std::net::TcpListener;
 use std::thread;
+mod connection;
 use connection::handle_client::*;
 
 fn main() {
