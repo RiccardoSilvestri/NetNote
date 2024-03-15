@@ -7,12 +7,12 @@ use std::path::Path;
 pub fn user_exists(username: String) -> bool {
     let file_path = Path::new("users.json");
     if !file_path.exists() {
-        return true;
+        return false;
     }
     let file = File::open(&file_path).expect("Failed to open file");
     let metadata = std::fs::metadata(&file_path).expect("Unable to read metadata");
     if metadata.len() == 0 {
-        return true;
+        return false;
     }
     let reader = BufReader::new(file);
     let users: Value = match serde_json::from_reader(reader) {
@@ -23,7 +23,7 @@ pub fn user_exists(username: String) -> bool {
     if let Some(array) = users.as_array() {
         for user in array {
             if let Some(user_name) = user["Name"].as_str() {
-                if user_name == username {
+                if user_name.eq_ignore_ascii_case(&username) {
                     return true;
                 }
             }
