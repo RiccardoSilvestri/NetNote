@@ -5,7 +5,7 @@ use super::send_utf::*;
 
 pub(crate) fn handle_client(mut stream: TcpStream) {
     loop {
-        let logged = false;
+        let mut logged = false;
         while (!logged){
             let mut buffer = [0; 1024];
             let mut bytes_read = stream.read(&mut buffer).expect("Failed to read from socket");
@@ -14,8 +14,9 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
             println!("Received: {}", request);
             if request.eq_ignore_ascii_case("1") {
                 println!("registered, now send json");
-                send_utf("registered".to_string(), stream.try_clone().unwrap());
+                send_utf("ready to register".to_string(), stream.try_clone().unwrap());
                 // TODO: register function
+                logged = true;
             } else if request.eq_ignore_ascii_case("2") {
                 // TODO: login function
             } else { println!("Error!") }
