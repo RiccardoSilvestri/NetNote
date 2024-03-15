@@ -30,15 +30,34 @@ public class MainWindow extends Application {
         Button registerButton = (Button) scene.lookup("#RegisterButton");
 
         // Registra un gestore per il clic sul pulsante di registrazione
-        registerButton.setOnAction(event -> register());
+        registerButton.setOnAction(event -> {
+            try {
+                register();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     // Metodo per registrare un nuovo utente
-    private void register() {
+    private void register() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
         Register.register(username, password);
+
+        // Chiude la finestra corrente
+        Stage stage = (Stage) usernameField.getScene().getWindow();
+        stage.close();
+
+        // Apre una nuova finestra
+        Stage newStage = new Stage();
+        VBox newRoot = FXMLLoader.load(getClass().getResource("NewWindow.fxml"));
+        Scene newScene = new Scene(newRoot, 800, 600);
+        newStage.setScene(newScene);
+        newStage.setTitle("New Window");
+        newStage.show();
     }
+
 
     // Punto di ingresso dell'applicazione
     public static void main(String[] args) {
