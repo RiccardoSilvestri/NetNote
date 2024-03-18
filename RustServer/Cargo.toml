@@ -7,10 +7,6 @@ edition = "2021"
 name = "server"
 path = "src/main.rs"
 
-[[bin]]
-name = "string"
-path = "src/stringCheck.rs"
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

@@ -24,7 +24,7 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
                 println!("{}", credentials);
                 logged = login(credentials);
                 println!("{}", logged)
-            } else { println!("Error!") }
+            } else { println!("Invalid request") }
         }
         let request = read_stream(&mut stream);
         if request.is_empty(){ return };
