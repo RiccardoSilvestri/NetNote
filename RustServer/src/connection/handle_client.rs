@@ -21,6 +21,7 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
                 logged = true;
             } else if request.eq_ignore_ascii_case("2") {
                 let credentials = read_stream(&mut stream);
+                println!("{}", credentials);
                 logged = login(credentials);
                 println!("{}", logged)
             } else { println!("Error!") }

@@ -9,9 +9,10 @@ fn get_hash(text :String) -> String{
     return hasher.finalize().iter().map(|b| format!("{:02x}", b)).collect();
 }
 
+// Return true if the credentials match users.json
 pub fn login(json :String) -> bool{
     let username = get_username(&json);
     let password = get_password(&json);
-
+    // The user should send the password already hashed
     return get_hash(password).eq(&get_hash(get_password_from_file(&username, "users.json")))
 }
