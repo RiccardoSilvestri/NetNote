@@ -16,7 +16,11 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
             if request.eq_ignore_ascii_case("1") {
                 let registration = read_stream(&mut stream);
                 print!("{}", registration);
-                register(registration);
+                let result = register(registration);
+                match result{
+                    Ok(_) => println!("Operation succeeded"),
+                    Err(e) => println!("Registration failed: {}", e),
+                }
                 println!("registered, now send json");
                 logged = true;
             } else if request.eq_ignore_ascii_case("2") {
