@@ -13,6 +13,7 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
             let request = read_stream(&mut stream);
             if request.is_empty(){ return };
             println!("Received: {}", request);
+            send_utf("request received".to_string(), stream.try_clone().unwrap());
             if request.eq_ignore_ascii_case("1") {
                 let registration = read_stream(&mut stream);
                 print!("{}", registration);
@@ -36,10 +37,10 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
                     },
                     Err(e) => println!("Login failed: {}", e),
                 }
-                println!("{}", return_msg);
-                println!("Logged: {}", logged)
             } else { println!("Invalid request") }
-            send_utf("registering".to_string(), stream.try_clone().unwrap());
+            println!("{}", return_msg);
+            println!("Logged: {}", logged);
+            send_utf(return_msg.to_string(), stream.try_clone().unwrap());
         }
         let request = read_stream(&mut stream);
         if request.is_empty(){ return };
