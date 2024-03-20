@@ -5,32 +5,39 @@ use std::path::Path;
 use serde_json::{Error, Value};
 
 // returns the password of the user if the user exists in users.json
-pub fn get_password_from_file(username: &str, file :&str) -> String {
+pub fn get_password_from_file(username: &str, file :&str) -> Result<String, String> {
     let file_path = Path::new(file);
     if !file_path.exists() {
-        return "File does not exist".to_string();
+        return Err("File does not exist".to_string());
     }
-    let file = File::open(&file_path).expect("Failed to open file");
-    let metadata = std::fs::metadata(&file_path).expect("Unable to read metadata");
+    let file = match File::open(&file_path) {
+        Ok(file) => file,
+        Err(_) => return Err("Failed to open file".to_string()),
+    };
+    let metadata = match std::fs::metadata(&file_path) {
+        Ok(metadata) => metadata,
+        Err(_) => return Err("Unable to read metadata".to_string()),
+    };
     if metadata.len() == 0 {
-        return "File is empty".to_string();
+        return Err("File is empty".to_string());
     }
     let reader = BufReader::new(file);
     let users: Value = match serde_json::from_reader(reader) {
         Ok(data) => data,
-        Err(_) => return "Failed to parse JSON".to_string(),
+        Err(_) => return Err("Failed to parse JSON".to_string()),
     };
 
     if let Some(array) = users.as_array() {
         for user in array {
-            if let Some(user_name) = user["Name"].as_str() {
+            if let Some(user_name) = user["name"].as_str() {
                 if user_name.eq_ignore_ascii_case(username) {
-                    return user["Password"].as_str().unwrap_or_else(|| "Password not found").to_string();
+                    println!("{:?}", user["password"].as_str());
+                    return Ok(user["password"].as_str().unwrap_or_else(|| "Password not found").to_string());
                 }
             }
         }
     }
-    "User does not exist".to_string()
+    Err("User does not exist".to_string())
 }
 
 #[derive(Debug)]

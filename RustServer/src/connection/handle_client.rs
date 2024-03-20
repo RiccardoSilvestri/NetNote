@@ -1,3 +1,4 @@
+use std::io::Write;
 use std::net::TcpStream;
 use crate::connection::handle_json::handle_json;
 use super::send_utf::*;
@@ -40,7 +41,8 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
             } else { println!("Invalid request") }
             println!("{}", return_msg);
             println!("Logged: {}", logged);
-            send_utf(return_msg.to_string(), stream.try_clone().unwrap());
+            let byte_value = logged as u8;
+            stream.write(&[byte_value]).expect("can't send boolean to stream");
         }
         let request = read_stream(&mut stream);
         if request.is_empty(){ return };

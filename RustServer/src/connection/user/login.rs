@@ -31,12 +31,17 @@ pub fn login(received : String) -> Result<String, CustomError> {
         return Err(CustomError::InvalidJson("User does not exist".to_string()));
     }
 
-    let password_hash = get_hash(password.to_string());
-    let stored_password_hash = get_hash(get_password_from_file(&username, "users.json"));
-
-    if password_hash.eq(&stored_password_hash) {
-        return Ok("Successfully logged in".to_string());
+    let mut password_stored = "".to_string();
+    match get_password_from_file(username, "users.json") {
+        Ok(pw) => {
+            println!("Password: {}", pw);
+            password_stored = pw;
+        },
+        Err(error) => println!("Error: {}", error),
+    }
+    return if get_hash(password.to_string()).eq(&get_hash(password_stored)) {
+        Ok("Successfully logged in".to_string())
     } else {
-        return Err(CustomError::InvalidJson("Incorrect password".to_string()));
+        Err(CustomError::InvalidJson("Incorrect password".to_string()))
     }
 }
