@@ -1,5 +1,5 @@
 package com.example.javaclient;
-
+import com.example.javaclient.PackageTestingRiccardo.Login;
 import com.example.javaclient.PackageTestingRiccardo.Register;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,19 +17,20 @@ public class MainWindow extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Carica l'interfaccia utente da un file FXML
+        // Load the user interface from an FXML file
         VBox root = FXMLLoader.load(getClass().getResource("LoginRegister.fxml"));
         Scene scene = new Scene(root, 670, 420);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
 
-        // Ottiene riferimenti ai campi di testo e al pulsante di registrazione
+        // Obtain references to the text fields and buttons
         usernameField = (TextField) scene.lookup("#usernameField");
         passwordField = (PasswordField) scene.lookup("#passwordField");
         Button registerButton = (Button) scene.lookup("#RegisterButton");
+        Button loginButton = (Button) scene.lookup("#LoginButton");
 
-        // Registra un gestore per il clic sul pulsante di registrazione
+        // Register an event handler for the register button
         registerButton.setOnAction(event -> {
             try {
                 register();
@@ -37,19 +38,28 @@ public class MainWindow extends Application {
                 throw new RuntimeException(e);
             }
         });
+
+        // Register an event handler for the login button
+        loginButton.setOnAction(event -> {
+            try {
+                login(); // Renamed to follow Java naming conventions
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    // Metodo per registrare un nuovo utente
+    // Method to register a new user
     private void register() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
         Register.register(username, password);
 
-        // Chiude la finestra corrente
+        // Close the current window
         Stage stage = (Stage) usernameField.getScene().getWindow();
         stage.close();
 
-        // Apre una nuova finestra
+        // Open a new window
         Stage newStage = new Stage();
         VBox newRoot = FXMLLoader.load(getClass().getResource("NewWindow.fxml"));
         Scene newScene = new Scene(newRoot, 800, 600);
@@ -58,8 +68,26 @@ public class MainWindow extends Application {
         newStage.show();
     }
 
+    // Method to log in an existing user
+    private void login() throws IOException {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        Login.login(username, password);
 
-    // Punto di ingresso dell'applicazione
+        // Close the current window
+        Stage stage = (Stage) usernameField.getScene().getWindow();
+        stage.close();
+
+        // Open a new window
+        Stage newStage = new Stage();
+        VBox newRoot = FXMLLoader.load(getClass().getResource("NewWindow.fxml"));
+        Scene newScene = new Scene(newRoot, 800, 600);
+        newStage.setScene(newScene);
+        newStage.setTitle("New Window");
+        newStage.show();
+    }
+
+    // Entry point of the application
     public static void main(String[] args) {
         launch();
     }
