@@ -11,13 +11,13 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
     let mut return_msg = "Invalid request";
     loop {
         while !logged{
-            let request = read_stream(&mut stream);
+            let request = read_utf(&mut stream);
             if request.is_empty(){ return };
             println!("Received: {}", request);
             send_utf("request received".to_string(), stream.try_clone().unwrap());
             if request.eq_ignore_ascii_case("1") {
-                let registration = read_stream(&mut stream);
-                print!("{}", registration);
+                let registration = read_utf(&mut stream);
+                println!("registration request: {}", registration);
                 let result = register(registration);
                 match result{
                     Ok(_) => {
@@ -28,8 +28,8 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
                 }
                 println!("Logged: {}", logged)
             } else if request.eq_ignore_ascii_case("2") {
-                let credentials = read_stream(&mut stream);
-                println!("{}", credentials);
+                let credentials = read_utf(&mut stream);
+                println!("login request: {}", credentials);
                 let result = login(credentials);
                 match result{
                     Ok(_) => {
@@ -44,14 +44,22 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
             let byte_value = logged as u8;
             stream.write(&[byte_value]).expect("can't send boolean to stream");
         }
-        let request = read_stream(&mut stream);
+        let request = read_utf(&mut stream);
         if request.is_empty(){ return };
         println!("Received: {}", request);
 
-        // TODO: handle the message to use different functions
-        // Convert received string to json
-        let response = handle_json(request, "received.json");
-
+        let mut response :String;
+        match request.as_str(){
+            "1" => {
+                println!("create a note");
+                response = handle_json(request, "received.json");
+            },
+            "2" => {
+                // TODO: function to delete a note
+            },
+            _ => println!("invalid request")
+        }
+        
         // The java client needs to read the length of the string first, then the string. (readUTF)
         send_utf(response.to_string(), stream.try_clone().unwrap());
     }
