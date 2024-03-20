@@ -13,7 +13,16 @@ fn main() {
         match stream {
             Ok(stream) => {
                 println!("{:?}", stream);
-                thread::spawn(|| { handle_client(stream); });
+                let handle = thread::spawn(|| {
+                    let result = std::panic::catch_unwind(|| {
+                        handle_client(stream);
+                    });
+                    if let Err(_panic) = result {
+                        eprintln!("A client connection caused a thread to panic.");
+                    }
+                });
+                // Wait for the thread to finish.
+                handle.join().unwrap();
             }
             Err(e) => { eprintln!("Unable to connect: {}", e); }
         }
