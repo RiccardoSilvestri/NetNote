@@ -21,7 +21,7 @@ pub fn register(received : String) -> Result<String, CustomError> {
     let check = user_exists(username.to_string());
 
     if check {
-        return Ok("User already exists".to_string());
+        return Err(CustomError::InvalidJson("User already exists".to_string()));
     }
 
     handle_json(received, "users.json");

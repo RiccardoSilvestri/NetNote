@@ -7,36 +7,39 @@ use crate::connection::user::login::*;
 
 pub(crate) fn handle_client(mut stream: TcpStream) {
     let mut logged = false;
+    let mut return_msg = "Invalid request";
     loop {
         while !logged{
             let request = read_stream(&mut stream);
             if request.is_empty(){ return };
             println!("Received: {}", request);
-            send_utf("registering".to_string(), stream.try_clone().unwrap());
             if request.eq_ignore_ascii_case("1") {
                 let registration = read_stream(&mut stream);
                 print!("{}", registration);
                 let result = register(registration);
                 match result{
                     Ok(_) => {
-                        println!("Registration succeeded");
+                        return_msg = "Registration succeeded";
                         logged = true;
                     },
                     Err(e) => println!("Registration failed: {}", e),
                 }
+                println!("Logged: {}", logged)
             } else if request.eq_ignore_ascii_case("2") {
                 let credentials = read_stream(&mut stream);
                 println!("{}", credentials);
                 let result = login(credentials);
                 match result{
                     Ok(_) => {
-                        println!("Login succeeded");
+                        return_msg = "Login succeeded";
                         logged = true;
                     },
                     Err(e) => println!("Login failed: {}", e),
                 }
-                println!("{}", logged)
+                println!("{}", return_msg);
+                println!("Logged: {}", logged)
             } else { println!("Invalid request") }
+            send_utf("registering".to_string(), stream.try_clone().unwrap());
         }
         let request = read_stream(&mut stream);
         if request.is_empty(){ return };

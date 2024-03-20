@@ -22,7 +22,7 @@ pub fn user_exists(username: String) -> bool {
 
     if let Some(array) = users.as_array() {
         for user in array {
-            if let Some(user_name) = user["Name"].as_str() {
+            if let Some(user_name) = user["name"].as_str() {
                 if user_name.eq_ignore_ascii_case(&username) {
                     return true;
                 }
