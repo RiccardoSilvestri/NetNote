@@ -1,21 +1,8 @@
+use std::fmt;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
-use serde_json::Value;
-
-pub fn get_username(json: &str) -> String {
-    let v: Value = serde_json::from_str(json).expect("Invalid JSON");
-    let username = v["Name"].as_str().unwrap_or_else(|| "Username not found").to_string();
-    println!("{}", username);
-    username
-}
-
-pub fn get_password(json: &str) -> String {
-    let v: Value = serde_json::from_str(json).expect("Invalid JSON");
-    let username = v["Password"].as_str().unwrap_or_else(|| "Password not found").to_string();
-    println!("{}", username);
-    username
-}
+use serde_json::{Error, Value};
 
 // returns the password of the user if the user exists in users.json
 pub fn get_password_from_file(username: &str, file :&str) -> String {
@@ -44,4 +31,25 @@ pub fn get_password_from_file(username: &str, file :&str) -> String {
         }
     }
     "User does not exist".to_string()
+}
+
+#[derive(Debug)]
+pub enum CustomError {
+    InvalidJson(String),
+    SerdeJson(Error),
+}
+
+impl fmt::Display for CustomError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            CustomError::InvalidJson(msg) => write!(f, "Invalid JSON: {}", msg),
+            CustomError::SerdeJson(err) => write!(f, "Serde JSON Error: {}", err),
+        }
+    }
+}
+
+impl From<Error> for CustomError {
+    fn from(err: Error) -> CustomError {
+        CustomError::SerdeJson(err)
+    }
 }

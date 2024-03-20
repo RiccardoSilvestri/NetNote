@@ -7,28 +7,40 @@ use crate::connection::user::login::*;
 
 pub(crate) fn handle_client(mut stream: TcpStream) {
     let mut logged = false;
+    let mut return_msg = "Invalid request";
     loop {
         while !logged{
             let request = read_stream(&mut stream);
             if request.is_empty(){ return };
             println!("Received: {}", request);
-            send_utf("registering".to_string(), stream.try_clone().unwrap());
+            send_utf("request received".to_string(), stream.try_clone().unwrap());
             if request.eq_ignore_ascii_case("1") {
                 let registration = read_stream(&mut stream);
                 print!("{}", registration);
                 let result = register(registration);
                 match result{
-                    Ok(_) => println!("Operation succeeded"),
+                    Ok(_) => {
+                        return_msg = "Registration succeeded";
+                        logged = true;
+                    },
                     Err(e) => println!("Registration failed: {}", e),
                 }
-                println!("registered, now send json");
-                logged = true;
+                println!("Logged: {}", logged)
             } else if request.eq_ignore_ascii_case("2") {
                 let credentials = read_stream(&mut stream);
                 println!("{}", credentials);
-                logged = login(credentials);
-                println!("{}", logged)
+                let result = login(credentials);
+                match result{
+                    Ok(_) => {
+                        return_msg = "Login succeeded";
+                        logged = true;
+                    },
+                    Err(e) => println!("Login failed: {}", e),
+                }
             } else { println!("Invalid request") }
+            println!("{}", return_msg);
+            println!("Logged: {}", logged);
+            send_utf(return_msg.to_string(), stream.try_clone().unwrap());
         }
         let request = read_stream(&mut stream);
         if request.is_empty(){ return };
