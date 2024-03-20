@@ -1,26 +1,5 @@
-use serde_json::{Value, Error};
-use std::fmt;
-
-#[derive(Debug)]
-pub enum CustomError {
-    InvalidJson(String),
-    SerdeJson(Error),
-}
-
-impl fmt::Display for CustomError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            CustomError::InvalidJson(msg) => write!(f, "Invalid JSON: {}", msg),
-            CustomError::SerdeJson(err) => write!(f, "Serde JSON Error: {}", err),
-        }
-    }
-}
-
-impl From<Error> for CustomError {
-    fn from(err: Error) -> CustomError {
-        CustomError::SerdeJson(err)
-    }
-}
+use serde_json::{Value};
+use super::get_credentials::*;
 
 use crate::connection::handle_json::handle_json;
 use crate::connection::user::user_exists::user_exists;

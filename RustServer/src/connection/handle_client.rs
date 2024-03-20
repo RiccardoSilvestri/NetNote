@@ -18,15 +18,23 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
                 print!("{}", registration);
                 let result = register(registration);
                 match result{
-                    Ok(_) => println!("Operation succeeded"),
+                    Ok(_) => {
+                        println!("Registration succeeded");
+                        logged = true;
+                    },
                     Err(e) => println!("Registration failed: {}", e),
                 }
-                println!("registered, now send json");
-                logged = true;
             } else if request.eq_ignore_ascii_case("2") {
                 let credentials = read_stream(&mut stream);
                 println!("{}", credentials);
-                logged = login(credentials);
+                let result = login(credentials);
+                match result{
+                    Ok(_) => {
+                        println!("Login succeeded");
+                        logged = true;
+                    },
+                    Err(e) => println!("Login failed: {}", e),
+                }
                 println!("{}", logged)
             } else { println!("Invalid request") }
         }
