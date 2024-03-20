@@ -53,10 +53,17 @@ public class MainWindow extends Application {
     private void register() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        Register.register(username, password);
+        int returndelserver=Register.register(username, password);
 
         // Close the current window
         Stage stage = (Stage) usernameField.getScene().getWindow();
+
+        if(returndelserver==0){
+            System.out.println("Registrazione Fallita");
+
+        }else{
+            stage.close();
+        }
         stage.close();
 
         // Open a new window
@@ -72,11 +79,17 @@ public class MainWindow extends Application {
     private void login() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        Login.login(username, password);
-
+        int returndelserver = Login.login(username, password);
         // Close the current window
         Stage stage = (Stage) usernameField.getScene().getWindow();
-        stage.close();
+
+        if(returndelserver==0){
+            System.out.println("Login Fallito");
+
+        }else{
+            stage.close();
+        }
+
 
         // Open a new window
         Stage newStage = new Stage();
@@ -85,6 +98,7 @@ public class MainWindow extends Application {
         newStage.setScene(newScene);
         newStage.setTitle("New Window");
         newStage.show();
+
     }
 
     // Entry point of the application
