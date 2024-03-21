@@ -9,6 +9,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -43,6 +45,7 @@ public class Note {
 
     }
 
+
     private static void SendButton(VBox newRoot) {
         HBox sendButtonHBox = new HBox();
         sendButtonHBox.setAlignment(Pos.BOTTOM_RIGHT);
@@ -53,6 +56,18 @@ public class Note {
 
 
     private static void ImportedNotes(TextArea noteTextArea) {
-        noteTextArea.setText("Wire here");
+        String jsonString = "[{\"Author\":\"Paolo\",\"Content\":\"Oggi sono molto contento\",\"Date\":\"16/11/2002\",\"Title\":\"Nuova\"}]";
+
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+            String content = jsonObject.getString("Content");
+
+            noteTextArea.setText(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 }

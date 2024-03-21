@@ -2,6 +2,7 @@ module com.example.javaclient {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires org.json;
 
 
     opens com.example.javaclient to javafx.fxml;
