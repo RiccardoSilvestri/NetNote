@@ -5,7 +5,7 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 public class Register {
-    private static final String SERVER_NAME = "172.17.49.30";
+    private static final String SERVER_NAME = "127.0.0.1";
     private static final int PORT = 4444;
 
     public static int register(String name, String password) {

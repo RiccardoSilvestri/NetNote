@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.StackPane?>
-
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           prefHeight="400.0" prefWidth="400.0">
-    <Label text="Benvenuto" style="-fx-font-size: 24;" />
-</StackPane>

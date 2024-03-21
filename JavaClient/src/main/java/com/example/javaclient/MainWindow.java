@@ -1,7 +1,9 @@
 package com.example.javaclient;
 import com.example.javaclient.PackageTestingRiccardo.Login;
 import com.example.javaclient.PackageTestingRiccardo.Register;
+import com.example.javaclient.notes.Note;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
+
 
 public class MainWindow extends Application {
     private TextField usernameField;
@@ -47,8 +50,9 @@ public class MainWindow extends Application {
                 throw new RuntimeException(e);
             }
         });
-    }
 
+    }
+    Note note = new Note();
     // Method to register a new user
     private void register() throws IOException {
         String username = usernameField.getText();
@@ -65,14 +69,7 @@ public class MainWindow extends Application {
             stage.close();
         }
         stage.close();
-
-        // Open a new window
-        Stage newStage = new Stage();
-        VBox newRoot = FXMLLoader.load(getClass().getResource("NewWindow.fxml"));
-        Scene newScene = new Scene(newRoot, 800, 600);
-        newStage.setScene(newScene);
-        newStage.setTitle("New Window");
-        newStage.show();
+        note.notes();
     }
 
     // Method to log in an existing user
@@ -92,17 +89,21 @@ public class MainWindow extends Application {
 
 
         // Open a new window
-        Stage newStage = new Stage();
-        VBox newRoot = FXMLLoader.load(getClass().getResource("NewWindow.fxml"));
-        Scene newScene = new Scene(newRoot, 800, 600);
-        newStage.setScene(newScene);
-        newStage.setTitle("New Window");
-        newStage.show();
 
+        note.notes();
     }
+
+
+
+
+
 
     // Entry point of the application
     public static void main(String[] args) {
         launch();
+    }
+
+    public void saveFile(ActionEvent actionEvent) {
+
     }
 }

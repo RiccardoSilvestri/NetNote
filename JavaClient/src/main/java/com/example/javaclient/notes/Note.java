@@ -1,81 +1,58 @@
 package com.example.javaclient.notes;
 
-import java.util.Objects;
-import java.util.Scanner;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Note {
-    String title, author, date, content;
+    public void notes() throws IOException {
+        Stage newStage = new Stage();
+        VBox newRoot = FXMLLoader.load(getClass().getResource("/com/example/javaclient/Appunti.fxml"));
+        Scene newScene = new Scene(newRoot, 920, 920);
+        newStage.setScene(newScene);
+        newStage.setTitle("New Window");
+        newStage.show();
 
-    public Note(String title, String author, String date, String content) {
-        this.title = title;
-        this.author = author;
-        this.date = date;
-        this.content = content;
+
+        SendButton(newRoot);
+
+        TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
+        ImportedNotes(noteTextArea);
+
+
+        // Ottieni riferimenti al Label e all'HBox
+        Label titoloLabel = (Label) newRoot.lookup("#titoloLabel");
+        HBox bottoniHBox = (HBox) newRoot.lookup("#bottoniHBox");
+
+        // Imposta il titolo
+        titoloLabel.setText("Titolo Variabile");
+
+        // Aggiungi bottoni all'HBox
+        for (int i = 1; i <= 9; i++) {
+            Button button = new Button(String.valueOf(i));
+            bottoniHBox.getChildren().add(button);
+        }
+
     }
 
-    public String getTitle() {
-        return title;
+    private static void SendButton(VBox newRoot) {
+        HBox sendButtonHBox = new HBox();
+        sendButtonHBox.setAlignment(Pos.BOTTOM_RIGHT);
+        Button sendButton = new Button("Send");
+        sendButtonHBox.getChildren().add(sendButton);
+        newRoot.getChildren().add(sendButtonHBox);
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Note note = (Note) o;
-        return Objects.equals(title, note.title) && Objects.equals(author, note.author) && Objects.equals(date, note.date) && Objects.equals(content, note.content);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, author, date, content);
-    }
-
-    public static String noteToJson(Note note){
-        return  "{"
-                + "\"Title\": \"" + note.title + "\","
-                + "\"Author\": \"" + note.author + "\","
-                + "\"Date\": \"" + note.date + "\","
-                + "\"Content\": \"" + note.content + "\""
-                + "}";
-    }
-    public static Note inputNote(){
-        Scanner scan = new Scanner(System.in);
-        System.out.print("Title: ");
-        String title = scan.nextLine();
-        System.out.print("Author: ");
-        String author = scan.nextLine();
-        System.out.print("Date: ");
-        String date = scan.nextLine();
-        System.out.print("Content: ");
-        String content = scan.nextLine();
-        return new Note(title, author, date, content);
+    private static void ImportedNotes(TextArea noteTextArea) {
+        noteTextArea.setText("Wire here");
     }
 }
