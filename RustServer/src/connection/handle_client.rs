@@ -1,12 +1,12 @@
 use std::io::Write;
 use std::net::TcpStream;
-use crate::connection::handle_json::handle_json;
+use std::sync::{Arc, Mutex};
 use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
 use crate::connection::user::login::*;
 
-pub(crate) fn handle_client(mut stream: TcpStream) {
+pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) {
     let mut logged = false;
     let mut return_msg = "Invalid request";
     loop {
@@ -18,7 +18,7 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
             if request.eq_ignore_ascii_case("1") {
                 let registration = read_utf(&mut stream);
                 println!("registration request: {}", registration);
-                let result = register(registration);
+                let result = register(registration, file_access.clone());
                 match result{
                     Ok(_) => {
                         return_msg = "Registration succeeded";
@@ -48,11 +48,11 @@ pub(crate) fn handle_client(mut stream: TcpStream) {
         if request.is_empty(){ return };
         println!("Received: {}", request);
 
-        let mut response :String;
+        let mut response :String = "".to_string();
         match request.as_str(){
             "1" => {
                 println!("create a note");
-                response = handle_json(request, "received.json");
+                // create a note
             },
             "2" => {
                 // TODO: function to delete a note

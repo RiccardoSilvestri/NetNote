@@ -1,9 +1,12 @@
 use std::net::TcpListener;
+use std::sync::{Arc, Mutex};
 use std::thread;
 mod connection;
 use connection::handle_client::*;
 
 fn main() {
+    // Initialize the file access lock
+    let file_access = Arc::new(Mutex::new(()));
     let port = 4444;
     let mut addr = "0.0.0.0:".to_owned();
     addr.push_str(&*port.to_string());
@@ -13,9 +16,11 @@ fn main() {
         match stream {
             Ok(stream) => {
                 println!("{:?}", stream);
-                let handle = thread::spawn(|| {
+                // Clone the Arc<Mutex<()>> before moving it into the closure
+                let file_access_clone = Arc::clone(&file_access);
+                let handle = thread::spawn(move || {
                     let result = std::panic::catch_unwind(|| {
-                        handle_client(stream);
+                        handle_client(stream, file_access_clone);
                     });
                     if let Err(_panic) = result {
                         eprintln!("A client connection caused a thread to panic.");

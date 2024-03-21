@@ -1,13 +1,17 @@
 use std::fs::{File, OpenOptions};
 use std::io::{Read, Write};
+use std::sync::{Arc, Mutex};
 use serde_json::{Error as JsonError, Value};
 
-// prettyfies the json, writes it to file and returns it as a string
-pub fn handle_json(json_string : String, filename :&str) -> String{
+// Wrap the file access in a Mutex and use Arc to share it across threads
+pub fn handle_json(json_string: String, filename: &str, file_access: Arc<Mutex<()>>) -> String {
     eprintln!("{}", json_string);
     let json_result: Result<Value, JsonError> = serde_json::from_str(&json_string);
     return match json_result {
         Ok(json) => {
+            // Lock the Mutex before accessing the file
+            let _guard = file_access.lock().unwrap();
+
             // Open the file in read mode
             let mut file = OpenOptions::new().read(true).open(filename).unwrap_or_else(|_| File::create(filename).expect("Failed to create file"));
             // Read the existing JSON data
