@@ -33,7 +33,6 @@ pub fn handle_json(json_string: String, filename: &str, file_access: Arc<Mutex<(
             eprintln!("Failed to parse JSON: {}", err);
             eprintln!("{}", json_string);
             "Error".to_string()
-            // TODO: send a response back to client
         }
     }
 }
