@@ -1,6 +1,7 @@
 use std::io::Write;
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
+use crate::connection::handle_json::handle_json;
 use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
@@ -48,11 +49,15 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         if request.is_empty(){ return };
         println!("Received: {}", request);
 
-        let mut response :String = "".to_string();
+        let response = request.clone();
+        send_utf(response, stream.try_clone().unwrap());
         match request.as_str(){
             "1" => {
+                let request = read_utf(&mut stream);
+                if request.is_empty(){ return };
                 println!("create a note");
                 // create a note
+                handle_json(request, "received.json", file_access.clone());
             },
             "2" => {
                 // TODO: function to delete a note
@@ -61,6 +66,5 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         }
         
         // The java client needs to read the length of the string first, then the string. (readUTF)
-        send_utf(response.to_string(), stream.try_clone().unwrap());
     }
 }

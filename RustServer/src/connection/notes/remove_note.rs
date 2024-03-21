@@ -1,30 +1,40 @@
-use serde_json::Value;
+use serde_json::{Value, Map};
 use std::fs::{File, OpenOptions};
-use std::io::{BufReader, BufWriter};
+use std::io::{Read, Write};
 use std::error::Error;
+use std::sync::{Arc, Mutex};
 
-pub fn remove_specific_block(file_path: &str, author: &str, title: &str) -> Result<(), Box<dyn Error>> {
-    // Read the file
-    let file = File::open(file_path)?;
-    let reader = BufReader::new(file);
-    let json: Value = serde_json::from_reader(reader)?;
+// Function to delete a note by author and title
+pub fn remove_note(file_path: &str, author: &str, title: &str, file_access: Arc<Mutex<()>>) -> Result<(), Box<dyn Error>> {
+    // Open the file in read mode
+    let mut file = File::open(file_path)?;
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
 
-    let mut result = Vec::new();
+    // Parse the JSON data
+    let mut json: Value = serde_json::from_str(&contents)?;
 
-    if let Value::Array(blocks) = json {
-        for block in blocks {
-            if let Value::Object(map) = block {
-                if map.get("author") != Some(&Value::String(author.to_string())) || map.get("title") != Some(&Value::String(title.to_string())) {
-                    result.push(Value::Object(map));
+    // Check if the JSON is an array
+    if let Value::Array(ref mut notes) = json {
+        // Iterate over the notes to find the one to delete
+        notes.retain(|note| {
+            if let Value::Object(note_map) = note {
+                // Check if the note has the matching author and title
+                if let Some(Value::String(note_author)) = note_map.get("author") {
+                    if let Some(Value::String(note_title)) = note_map.get("title") {
+                        return !(note_author == author && note_title == title);
+                    }
                 }
             }
-        }
+            true // Keep the note if it doesn't match the criteria
+        });
     }
 
-    // Write the result back to the file
-    let file = OpenOptions::new().write(true).truncate(true).open(file_path)?;
-    let writer = BufWriter::new(file);
-    serde_json::to_writer(writer, &Value::Array(result))?;
+    // Open the file in write mode to overwrite it with the updated JSON
+    let _guard = file_access.lock().unwrap();
+    let mut file = OpenOptions::new().write(true).truncate(true).open(file_path)?;
+    // Write the updated JSON back to the file
+    file.write_all(json.to_string().as_bytes())?;
 
     Ok(())
 }
