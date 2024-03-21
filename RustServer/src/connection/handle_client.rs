@@ -6,6 +6,7 @@ use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
 use crate::connection::user::login::*;
+use crate::connection::notes::filter_by_author::*;
 
 pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) {
     let mut logged = false;
@@ -49,7 +50,9 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         if request.is_empty(){ return };
         println!("Received: {}", request);
 
-        let response = request.clone();
+        // send all user's notes to the client
+        let response = filter_by_author("received.json", "Paolo", file_access.clone()).unwrap().to_string();
+        println!("{}", response);
         send_utf(response, stream.try_clone().unwrap());
         match request.as_str(){
             "1" => {

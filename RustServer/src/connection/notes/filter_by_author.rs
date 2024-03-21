@@ -1,11 +1,11 @@
-use serde_json::{Value, Result};
+use serde_json::{Value};
 use std::fs::File;
 use std::io::BufReader;
 use std::sync::{Arc, Mutex};
 use std::error::Error;
 
 // This function filters JSON data by author and returns the filtered data as a JSON string.
-pub fn filter_by_author(file_path: &str, author: &str, file_access: Arc<Mutex<()>>) -> std::result::Result<String, Box<dyn Error>> {
+pub fn filter_by_author(file_path: &str, author: &str, file_access: Arc<Mutex<()>>) -> Result<String, Box<dyn Error>> {
     // lock the mutex and open the file at the given path.
     let _guard = file_access.lock().unwrap();
     let file = File::open(file_path)?;
@@ -24,7 +24,7 @@ pub fn filter_by_author(file_path: &str, author: &str, file_access: Arc<Mutex<()
             // Check if the item is an object.
             if let Value::Object(map) = block {
                 // Check if the object has an "author" field that matches the specified author.
-                if map.get("author") == Some(&Value::String(author.to_string())) {
+                if map.get("Author") == Some(&Value::String(author.to_string())) {
                     // If the author matches, add the object to the result vector.
                     result.push(Value::Object(map));
                 }
