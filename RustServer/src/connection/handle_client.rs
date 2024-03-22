@@ -71,7 +71,6 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             },
             _ => println!("invalid request")
         }
-        
-        // The java client needs to read the length of the string first, then the string. (readUTF)
+
     }
 }
