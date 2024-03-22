@@ -51,26 +51,27 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         if request.is_empty(){ return };
         println!("Received: {}", request);
 
-        // send all user's notes to the client
-        let response = filter_by_author("received.json", "Paolo", file_access.clone()).unwrap().to_string();
-        println!("{}", response);
-        send_utf(response, stream.try_clone().unwrap());
-        match request.as_str(){
-            "1" => {
-                let request = read_utf(&mut stream);
-                if request.is_empty(){ return };
-                println!("create a note");
-                // create a note
-                write_json(request, "received.json", file_access.clone());
-            },
-            "2" => {
-                // the client should send a json containing only author and title
-                let request = read_utf(&mut stream);
-                if request.is_empty(){ return };
-                remove_note("received.json", &*request, file_access.clone()).unwrap()
-            },
-            _ => println!("invalid request")
+        loop {
+            // send all user's notes to the client
+            let response = filter_by_author("received.json", "Paolo", file_access.clone()).unwrap().to_string();
+            println!("{}", response);
+            send_utf(response, stream.try_clone().unwrap());
+            match request.as_str() {
+                "1" => {
+                    let request = read_utf(&mut stream);
+                    if request.is_empty() { return };
+                    println!("create a note");
+                    // create a note
+                    write_json(request, "received.json", file_access.clone());
+                },
+                "2" => {
+                    // the client should send a json containing only author and title
+                    let request = read_utf(&mut stream);
+                    if request.is_empty() { return };
+                    remove_note("received.json", &*request, file_access.clone()).unwrap()
+                },
+                _ => println!("invalid request")
+            }
         }
-
     }
 }

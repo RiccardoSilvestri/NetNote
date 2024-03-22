@@ -3,30 +3,15 @@ use std::fs::{File, OpenOptions};
 use std::io::{Read, Write};
 use std::error::Error;
 use std::sync::{Arc, Mutex};
-use super::custom_error::*;
+use super::super::user::get_credentials::*;
 
 // Function to delete a note by author and title
 // It uses a json containing Author and Title to find the json to delete
 pub fn remove_note(file_path: &str, target_json: &str, file_access: Arc<Mutex<()>>) -> Result<(), Box<dyn Error>> {
-    let mut author :&str;
-    let mut title :&str;
-    // Parse the string of data into serde_json::Value
-    let value: Value = serde_json::from_str(target_json).unwrap();
-
     // Get the value of the "author" key as a &str
-    if let Some(_name) = value["author"].as_str() {
-        author = _name;
-        println!("Author: {}", author);
-    } else {
-        return Err(Box::new(CustomError { message: "Invalid json: missing author".to_string() }));
-    }
+    let author = get_value_from_json("author", target_json).unwrap().to_string();
     // Get the value of the "title" key as a &str
-    if let Some(_name) = value["title"].as_str() {
-        title = _name;
-        println!("Title: {}", title);
-    } else {
-        return Err(Box::new(CustomError { message: "Invalid json: missing title".to_string() }));
-    }
+    let title = get_value_from_json("title", target_json).unwrap().to_string();
     // Open the file in read mode
     let mut file = File::open(file_path)?;
     let mut contents = String::new();
@@ -43,7 +28,7 @@ pub fn remove_note(file_path: &str, target_json: &str, file_access: Arc<Mutex<()
                 // Check if the note has the matching author and title
                 if let Some(Value::String(note_author)) = note_map.get("author") {
                     if let Some(Value::String(note_title)) = note_map.get("title") {
-                        return !(note_author == author && note_title == title);
+                        return !(note_author.eq_ignore_ascii_case(&*author) && note_title.eq_ignore_ascii_case(&*title));
                     }
                 }
             }

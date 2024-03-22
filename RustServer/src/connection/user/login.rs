@@ -9,17 +9,17 @@ fn get_hash(text :String) -> String{
     return hasher.finalize().iter().map(|b| format!("{:02x}", b)).collect();
 }
 
-pub fn login(received : String) -> Result<String, CustomError> {
-    let v: Value = serde_json::from_str(&received).map_err(CustomError::from)?;
+pub fn login(received : String) -> Result<String, JsonCustomError> {
+    let v: Value = serde_json::from_str(&received).map_err(JsonCustomError::from)?;
 
     if !v.is_object() {
-        return Err(CustomError::InvalidJson("Expected a JSON object".to_string()));
+        return Err(JsonCustomError::InvalidJson("Expected a JSON object".to_string()));
     }
 
     let obj = v.as_object().unwrap();
 
     if obj.len() != 2 || !obj.contains_key("name") || !obj.contains_key("password") {
-        return Err(CustomError::InvalidJson("JSON must only contain 'name' and 'password'".to_string()));
+        return Err(JsonCustomError::InvalidJson("JSON must only contain 'name' and 'password'".to_string()));
     }
 
     let username = obj.get("name").unwrap().as_str().unwrap();
@@ -28,7 +28,7 @@ pub fn login(received : String) -> Result<String, CustomError> {
     let check = user_exists(username.to_string());
 
     if !check {
-        return Err(CustomError::InvalidJson("User does not exist".to_string()));
+        return Err(JsonCustomError::InvalidJson("User does not exist".to_string()));
     }
 
     let mut password_stored = "".to_string();
@@ -42,6 +42,6 @@ pub fn login(received : String) -> Result<String, CustomError> {
     return if get_hash(password.to_string()).eq(&get_hash(password_stored)) {
         Ok("Successfully logged in".to_string())
     } else {
-        Err(CustomError::InvalidJson("Incorrect password".to_string()))
+        Err(JsonCustomError::InvalidJson("Incorrect password".to_string()))
     }
 }

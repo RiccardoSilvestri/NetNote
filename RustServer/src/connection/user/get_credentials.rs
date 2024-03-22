@@ -40,23 +40,54 @@ pub fn get_password_from_file(username: &str, file :&str) -> Result<String, Stri
     Err("User does not exist".to_string())
 }
 
-#[derive(Debug)]
-pub enum CustomError {
-    InvalidJson(String),
-    SerdeJson(Error),
+pub fn get_value_from_json(target_value :&str,target_json :&str) -> Result<String, Box<CustomError>> {
+    // Parse the string of data into serde_json::Value
+    let value: Value = serde_json::from_str(target_json).unwrap();
+
+    // Get the value of the "author" key as a &str
+    if let Some(author) = value[target_value].as_str() {
+        Ok(author.to_string())
+    } else {
+        return Err(Box::new(CustomError { message: "Invalid json: missing author".to_string() }));
+    }
+}
+
+// Define your custom error type
+pub struct CustomError {
+    pub message: String,
 }
 
 impl fmt::Display for CustomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+impl fmt::Debug for CustomError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+impl std::error::Error for CustomError {}
+
+#[derive(Debug)]
+pub enum JsonCustomError {
+    InvalidJson(String),
+    SerdeJson(Error),
+}
+
+impl fmt::Display for JsonCustomError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            CustomError::InvalidJson(msg) => write!(f, "Invalid JSON: {}", msg),
-            CustomError::SerdeJson(err) => write!(f, "Serde JSON Error: {}", err),
+            JsonCustomError::InvalidJson(msg) => write!(f, "Invalid JSON: {}", msg),
+            JsonCustomError::SerdeJson(err) => write!(f, "Serde JSON Error: {}", err),
         }
     }
 }
 
-impl From<Error> for CustomError {
-    fn from(err: Error) -> CustomError {
-        CustomError::SerdeJson(err)
+impl From<Error> for JsonCustomError {
+    fn from(err: Error) -> JsonCustomError {
+        JsonCustomError::SerdeJson(err)
     }
 }
