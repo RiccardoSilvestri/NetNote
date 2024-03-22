@@ -40,12 +40,12 @@ pub fn get_password_from_file(username: &str, file :&str) -> Result<String, Stri
     Err("User does not exist".to_string())
 }
 
-pub fn get_value_from_json(target_value :&str,target_json :&str) -> Result<String, Box<CustomError>> {
+pub fn get_value_from_json(key:&str, target_json :&str) -> Result<String, Box<CustomError>> {
     // Parse the string of data into serde_json::Value
     let value: Value = serde_json::from_str(target_json).unwrap();
 
-    // Get the value of the "author" key as a &str
-    if let Some(author) = value[target_value].as_str() {
+    // Get the value of the target key as a &str
+    if let Some(author) = value[key].as_str() {
         Ok(author.to_string())
     } else {
         return Err(Box::new(CustomError { message: "Invalid json: missing author".to_string() }));

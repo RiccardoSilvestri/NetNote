@@ -8,20 +8,23 @@ use crate::connection::user::register::*;
 use crate::connection::user::login::*;
 use crate::connection::notes::filter_by_author::*;
 use super::notes::remove_note::remove_note;
+use super::user::get_credentials::{get_value_from_json};
 
 pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) {
     let mut logged = false;
     let mut return_msg = "Invalid request";
+    let mut user = "".to_string();
     loop {
         while !logged{
             let request = read_utf(&mut stream);
             if request.is_empty(){ return };
             println!("Received: {}", request);
             send_utf("request received".to_string(), stream.try_clone().unwrap());
+            // now get credentials from client
+            let credentials = read_utf(&mut stream);
             if request.eq_ignore_ascii_case("1") {
-                let registration = read_utf(&mut stream);
-                println!("registration request: {}", registration);
-                let result = register(registration, file_access.clone());
+                println!("registration request: {}", credentials);
+                let result = register(credentials.clone(), file_access.clone());
                 match result{
                     Ok(_) => {
                         return_msg = "Registration succeeded";
@@ -31,9 +34,8 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
                 }
                 println!("Logged: {}", logged)
             } else if request.eq_ignore_ascii_case("2") {
-                let credentials = read_utf(&mut stream);
-                println!("login request: {}", credentials);
-                let result = login(credentials);
+                println!("login request: {}", credentials.clone());
+                let result = login(credentials.clone());
                 match result{
                     Ok(_) => {
                         return_msg = "Login succeeded";
@@ -46,7 +48,12 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             println!("Logged: {}", logged);
             let byte_value = logged as u8;
             stream.write(&[byte_value]).expect("can't send boolean to stream");
+            let _ = match get_value_from_json("name", credentials.clone().as_str()) {
+                Ok(got_name) => {user = got_name}
+                Err(e) => {println!("Error getting user name: {}", e)}
+            };
         }
+        println!("Logged user: {}", user);
         let request = read_utf(&mut stream);
         if request.is_empty(){ return };
         println!("Received: {}", request);
