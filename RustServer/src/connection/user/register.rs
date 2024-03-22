@@ -2,7 +2,7 @@ use std::sync::{Arc, Mutex};
 use serde_json::{Value};
 use super::get_credentials::*;
 
-use crate::connection::handle_json::handle_json;
+use crate::connection::handle_json::write_json;
 use crate::connection::user::user_exists::user_exists;
 
 pub fn register(received : String, file_access: Arc<Mutex<()>>) -> Result<String, CustomError> {
@@ -25,6 +25,6 @@ pub fn register(received : String, file_access: Arc<Mutex<()>>) -> Result<String
         return Err(CustomError::InvalidJson("User already exists".to_string()));
     }
 
-    handle_json(received, "users.json", file_access);
+    write_json(received, "users.json", file_access);
     return Ok("Successfully registered".to_string())
 }

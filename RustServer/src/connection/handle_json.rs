@@ -4,7 +4,7 @@ use std::sync::{Arc, Mutex};
 use serde_json::{Error as JsonError, Value};
 
 // Wrap the file access in a Mutex and use Arc to share it across threads
-pub fn handle_json(json_string: String, filename: &str, file_access: Arc<Mutex<()>>) -> String {
+pub fn write_json(json_string: String, filename: &str, file_access: Arc<Mutex<()>>) -> String {
     eprintln!("{}", json_string);
     let json_result: Result<Value, JsonError> = serde_json::from_str(&json_string);
     return match json_result {

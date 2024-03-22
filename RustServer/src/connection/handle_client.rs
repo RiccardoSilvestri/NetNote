@@ -1,7 +1,7 @@
 use std::io::Write;
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
-use crate::connection::handle_json::handle_json;
+use crate::connection::handle_json::write_json;
 use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
@@ -60,9 +60,11 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
                 if request.is_empty(){ return };
                 println!("create a note");
                 // create a note
-                handle_json(request, "received.json", file_access.clone());
+                write_json(request, "received.json", file_access.clone());
             },
             "2" => {
+                let request = read_utf(&mut stream);
+                if request.is_empty(){ return };
                 // TODO: function to delete a note
             },
             _ => println!("invalid request")
