@@ -1,2 +1,3 @@
 pub(crate) mod filter_by_author;
-mod remove_note;
+pub(crate) mod remove_note;
+mod custom_error;

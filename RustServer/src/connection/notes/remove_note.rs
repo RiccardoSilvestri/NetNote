@@ -3,9 +3,30 @@ use std::fs::{File, OpenOptions};
 use std::io::{Read, Write};
 use std::error::Error;
 use std::sync::{Arc, Mutex};
+use super::custom_error::*;
 
 // Function to delete a note by author and title
-pub fn remove_note(file_path: &str, author: &str, title: &str, file_access: Arc<Mutex<()>>) -> Result<(), Box<dyn Error>> {
+// It uses a json containing Author and Title to find the json to delete
+pub fn remove_note(file_path: &str, target_json: &str, file_access: Arc<Mutex<()>>) -> Result<(), Box<dyn Error>> {
+    let mut author :&str;
+    let mut title :&str;
+    // Parse the string of data into serde_json::Value
+    let value: Value = serde_json::from_str(target_json).unwrap();
+
+    // Get the value of the "author" key as a &str
+    if let Some(_name) = value["author"].as_str() {
+        author = _name;
+        println!("Author: {}", author);
+    } else {
+        return Err(Box::new(CustomError { message: "Invalid json: missing author".to_string() }));
+    }
+    // Get the value of the "title" key as a &str
+    if let Some(_name) = value["title"].as_str() {
+        title = _name;
+        println!("Title: {}", title);
+    } else {
+        return Err(Box::new(CustomError { message: "Invalid json: missing title".to_string() }));
+    }
     // Open the file in read mode
     let mut file = File::open(file_path)?;
     let mut contents = String::new();

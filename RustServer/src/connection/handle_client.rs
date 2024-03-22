@@ -7,6 +7,7 @@ use super::read_stream::*;
 use crate::connection::user::register::*;
 use crate::connection::user::login::*;
 use crate::connection::notes::filter_by_author::*;
+use super::notes::remove_note::remove_note;
 
 pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) {
     let mut logged = false;
@@ -63,9 +64,10 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
                 write_json(request, "received.json", file_access.clone());
             },
             "2" => {
+                // the client should send a json containing only author and title
                 let request = read_utf(&mut stream);
                 if request.is_empty(){ return };
-                // TODO: function to delete a note
+                remove_note("received.json", &*request, file_access.clone()).unwrap()
             },
             _ => println!("invalid request")
         }
