@@ -1,13 +1,13 @@
 use std::io::Write;
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
-use crate::connection::handle_json::write_json;
 use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
 use crate::connection::user::login::*;
 use crate::connection::notes::filter_by_author::*;
 use super::notes::remove_note::remove_note;
+use super::notes::create_note::create_note;
 use super::user::get_credentials::{get_value_from_json};
 
 pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) {
@@ -34,7 +34,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
                 }
                 println!("Logged: {}", logged)
             } else if request.eq_ignore_ascii_case("2") {
-                println!("login request: {}", credentials.clone());
+                println!("login request: {}", credentials);
                 let result = login(credentials.clone());
                 match result{
                     Ok(_) => {
@@ -65,11 +65,11 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             send_utf(response, stream.try_clone().unwrap());
             match request.as_str() {
                 "1" => {
+                    // create a note
                     let request = read_utf(&mut stream);
                     if request.is_empty() { return };
                     println!("create a note");
-                    // create a note
-                    write_json(request, "received.json", file_access.clone());
+                    create_note("received.json", &*request, file_access.clone()).unwrap();
                 },
                 "2" => {
                     // the client should send a json containing only author and title
