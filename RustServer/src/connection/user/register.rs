@@ -5,7 +5,7 @@ use super::get_credentials::*;
 use crate::connection::handle_json::write_json;
 use crate::connection::user::user_exists::user_exists;
 
-pub fn register(received : String, file_access: Arc<Mutex<()>>) -> Result<String, JsonCustomError> {
+pub fn register(received : String, user_file :&str, file_access: Arc<Mutex<()>>) -> Result<String, JsonCustomError> {
     let v: Value = serde_json::from_str(&received).map_err(JsonCustomError::from)?;
 
     if !v.is_object() {
@@ -25,6 +25,6 @@ pub fn register(received : String, file_access: Arc<Mutex<()>>) -> Result<String
         return Err(JsonCustomError::InvalidJson("User already exists".to_string()));
     }
 
-    write_json(received, "users.json", file_access);
+    write_json(received, user_file, file_access);
     return Ok("Successfully registered".to_string())
 }

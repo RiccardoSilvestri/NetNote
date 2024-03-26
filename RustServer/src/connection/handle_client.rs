@@ -9,8 +9,11 @@ use crate::connection::notes::filter_by_author::*;
 use super::notes::remove_note::remove_note;
 use super::notes::create_note::create_note;
 use super::user::get_credentials::{get_value_from_json};
+use super::utils::create_if_not_exists::*;
 
 pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) {
+    let notes_file = "received.json";
+    let users_file = "users.json";
     let mut logged = false;
     let mut return_msg = "Invalid request";
     let mut user = "".to_string();
@@ -24,7 +27,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             let credentials = read_utf(&mut stream);
             if request.eq_ignore_ascii_case("1") {
                 println!("registration request: {}", credentials);
-                let result = register(credentials.clone(), file_access.clone());
+                let result = register(credentials.clone(), users_file, file_access.clone());
                 match result{
                     Ok(_) => {
                         return_msg = "Registration succeeded";
@@ -58,9 +61,14 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         if request.is_empty(){ return };
         println!("Received: {}", request);
 
+        // if the file received.json doesn't exist, create it
+        match create_if_not_exists(notes_file){
+            Ok(_) => println!("File exists or was created successfully."),
+            Err(e) => println!("An error occurred: {}", e),
+        }
         loop {
             // send all user's notes to the client
-            let response = filter_by_author("received.json", "Paolo", file_access.clone()).unwrap().to_string();
+            let response = filter_by_author(notes_file, "Paolo", file_access.clone()).unwrap().to_string();
             println!("{}", response);
             send_utf(response, stream.try_clone().unwrap());
             match request.as_str() {
@@ -69,13 +77,13 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
                     let request = read_utf(&mut stream);
                     if request.is_empty() { return };
                     println!("create a note");
-                    create_note("received.json", &*request, file_access.clone()).unwrap();
+                    create_note(notes_file, &*request, file_access.clone()).unwrap();
                 },
                 "2" => {
                     // the client should send a json containing only author and title
                     let request = read_utf(&mut stream);
                     if request.is_empty() { return };
-                    remove_note("received.json", &*request, file_access.clone()).unwrap()
+                    remove_note(notes_file, &*request, file_access.clone()).unwrap()
                 },
                 _ => println!("invalid request")
             }
