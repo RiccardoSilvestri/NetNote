@@ -95,7 +95,10 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
                 "2" => {
                     // the client should send a json containing only author and title
                     if request.is_empty() { return };
-                    remove_note(notes_file, &*request, file_access.clone()).unwrap()
+                    match remove_note(notes_file, &*request, file_access.clone()){
+                        Ok(_) => {println!("Note deleted")}
+                        Err(e) => {println!("{}", e)}
+                    }
                 },
                 _ => println!("invalid request")
             }

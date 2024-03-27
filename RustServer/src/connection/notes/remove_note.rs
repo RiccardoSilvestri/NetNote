@@ -39,8 +39,8 @@ pub fn remove_note(file_path: &str, target_json: &str, file_access: Arc<Mutex<()
     // Open the file in write mode to overwrite it with the updated JSON
     let _guard = file_access.lock().unwrap();
     let mut file = OpenOptions::new().write(true).truncate(true).open(file_path)?;
-    // Write the updated JSON back to the file
-    file.write_all(json.to_string().as_bytes())?;
+    // Write the updated JSON back to the file in a pretty-printed format
+    file.write_all(serde_json::to_string_pretty(&json)?.as_bytes())?;
 
     Ok(())
 }
