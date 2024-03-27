@@ -24,7 +24,7 @@ pub fn filter_by_author(file_path: &str, author: &str, file_access: Arc<Mutex<()
             // Check if the item is an object.
             if let Value::Object(map) = block {
                 // Check if the object has an "author" field that matches the specified author.
-                if map.get("Author") == Some(&Value::String(author.to_string())) {
+                if map.get("author") == Some(&Value::String(author.to_string())) {
                     // If the author matches, add the object to the result vector.
                     result.push(Value::Object(map));
                 }

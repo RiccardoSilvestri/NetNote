@@ -75,7 +75,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             match check_json_file(notes_file){
                 Ok(_) => {
                     println!("The json file is valid");
-                    response = filter_by_author(notes_file, "Paolo", file_access.clone()).unwrap().to_string();
+                    response = filter_by_author(notes_file, user.as_str(), file_access.clone()).unwrap().to_string();
                 }
                 Err(e) => println!("An error occurred: {}", e),
             }
