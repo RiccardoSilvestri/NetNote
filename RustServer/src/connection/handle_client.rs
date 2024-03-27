@@ -6,6 +6,7 @@ use super::read_stream::*;
 use crate::connection::user::register::*;
 use crate::connection::user::login::*;
 use crate::connection::notes::filter_by_author::*;
+use crate::connection::utils::check_json_file::check_json_file;
 use super::notes::remove_note::remove_note;
 use super::notes::create_note::create_note;
 use super::user::get_credentials::{get_value_from_json};
@@ -50,6 +51,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             println!("{}", return_msg);
             println!("Logged: {}", logged);
             let byte_value = logged as u8;
+            // send boolean to the client
             stream.write(&[byte_value]).expect("can't send boolean to stream");
             let _ = match get_value_from_json("name", credentials.clone().as_str()) {
                 Ok(got_name) => {user = got_name}
@@ -57,31 +59,41 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             };
         }
         println!("Logged user: {}", user);
-        let request = read_utf(&mut stream);
-        if request.is_empty(){ return };
-        println!("Received: {}", request);
+        let option = read_utf(&mut stream);
+        if option.is_empty(){ return };
+        println!("Received: {}", option);
 
-        // if the file received.json doesn't exist, create it
+        // if the notes file doesn't exist, create it
         match create_if_not_exists(notes_file){
             Ok(_) => println!("File exists or was created successfully."),
             Err(e) => println!("An error occurred: {}", e),
         }
         loop {
             // send all user's notes to the client
-            let response = filter_by_author(notes_file, "Paolo", file_access.clone()).unwrap().to_string();
+            let mut response = "no notes".to_string();
+            // if the file is a valid json, filter it by logged user
+            match check_json_file(notes_file){
+                Ok(_) => {
+                    println!("The json file is valid");
+                    response = filter_by_author(notes_file, "Paolo", file_access.clone()).unwrap().to_string();
+                }
+                Err(e) => println!("An error occurred: {}", e),
+            }
             println!("{}", response);
             send_utf(response, stream.try_clone().unwrap());
-            match request.as_str() {
+            let request = read_utf(&mut stream);
+            match option.as_str() {
                 "1" => {
                     // create a note
-                    let request = read_utf(&mut stream);
                     if request.is_empty() { return };
                     println!("create a note");
-                    create_note(notes_file, &*request, file_access.clone()).unwrap();
+                    match create_note(notes_file, &*request, file_access.clone()){
+                        Ok(_) => {println!("Note created")}
+                        Err(e) => {println!("{}", e)}
+                    };
                 },
                 "2" => {
                     // the client should send a json containing only author and title
-                    let request = read_utf(&mut stream);
                     if request.is_empty() { return };
                     remove_note(notes_file, &*request, file_access.clone()).unwrap()
                 },
