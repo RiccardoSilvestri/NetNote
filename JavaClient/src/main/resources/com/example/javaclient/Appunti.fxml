@@ -5,9 +5,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 
-<VBox alignment="CENTER" spacing="20.0" styleClass="container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-    <Label fx:id="titoloLabel" />
+<?import java.net.URL?>
+<VBox alignment="TOP_LEFT" spacing="20.0" styleClass="container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <HBox fx:id="bottoniHBox" spacing="10.0" />
     <TextArea fx:id="noteTextArea" wrapText="true" VBox.vgrow="ALWAYS" />
 
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
 </VBox>
