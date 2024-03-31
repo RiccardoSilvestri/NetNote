@@ -1,5 +1,7 @@
 package com.example.javaclient.PackageTestingFrancesco;
 
+import com.example.javaclient.notes.Note;
+
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -79,8 +81,17 @@ public class connection {
                     """);
             // send the request
             sendMsg(scan.nextLine(), out);
+            System.out.println(readStr(client));
 
-            
+            String note = "{"
+                    + "\"author\": \"" + "francesco" + "\","
+                    + "\"title\": \"" + "Puppa" + "\","
+                    + "\"date\": \"" + "16/11/02" + "\","
+                    + "\"content\": \"" + "ciccio pasticcio" + "\""
+                    + "}";
+            sendMsg(note, out);
+            System.out.println(readStr(client));
+
             client.close();
         } catch (IOException e) {
             e.printStackTrace();

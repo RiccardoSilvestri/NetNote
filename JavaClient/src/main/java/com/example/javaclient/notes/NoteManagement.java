@@ -63,6 +63,7 @@ public class NoteManagement {
         TextArea noteTextArea = (TextArea) root.lookup("#noteTextArea");
         HBox bottoniHBox = (HBox) root.lookup("#bottoniHBox");
 
+        // TODO: da sostituire con l'array di json mandato dal server
         String jsonString = "[{\"Author\":\"Paolo\",\"Content\":\"Oggi sono molto contento\",\"Date\":\"16/11/2002\",\"Title\":\"Nuova\"},{\"Author\":\"Paolo\",\"Content\":\"Lecca lecca\",\"Date\":\"16/11/2002\",\"Title\":\"ruba\"},{\"Author\":\"Paolo\",\"Content\":\"Lello bello\",\"Date\":\"16/11/2002\",\"Title\":\"Rancido\"}]";
 
         ButtonIncrease(noteTextArea, bottoniHBox, jsonString);
