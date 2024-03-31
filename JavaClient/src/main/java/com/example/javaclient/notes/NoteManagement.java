@@ -13,7 +13,6 @@ import java.util.Optional;
 
 public class NoteManagement {
     private VBox root;
-
     public NoteManagement(VBox root) {
         this.root = root;
     }
@@ -21,7 +20,30 @@ public class NoteManagement {
     public void initialize() {
         ManagementButtons();
         ImportedNotes();
+        NewButton();
     }
+
+    private void NewButton() {
+        Button newButton = new Button("New Note");
+        newButton.setOnAction(event -> {
+
+            //System.out.println("New button clicked");
+
+        });
+
+        HBox topHBox = new HBox();
+        topHBox.setAlignment(Pos.TOP_RIGHT);
+        topHBox.setPadding(new Insets(20, 20, 0, 0));
+
+        topHBox.getChildren().add(newButton);
+
+        root.getChildren().add(0, topHBox);
+    }
+
+
+
+
+
 
     private void ManagementButtons() {
         VBox buttonVBox = new VBox();

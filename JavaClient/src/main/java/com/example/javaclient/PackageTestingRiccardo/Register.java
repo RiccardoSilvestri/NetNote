@@ -5,8 +5,8 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 public class Register {
-    private static final String SERVER_NAME = "127.0.0.1";
-    private static final int PORT = 4444;
+    private static final String SERVER_NAME = "129.152.5.12";
+    private static final int PORT = 5555;
 
     public static int register(String name, String password) {
         try (Socket client = new Socket(SERVER_NAME, PORT)) {
