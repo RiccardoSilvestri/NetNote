@@ -1,18 +1,19 @@
 package com.example.javaclient;
-import com.example.javaclient.PackageTestingRiccardo.Login;
-import com.example.javaclient.PackageTestingRiccardo.Register;
+
+import com.example.javaclient.PackageTestingRiccardo.SendCredentials;
 import com.example.javaclient.notes.Note;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.io.IOException;
 
+import java.io.IOException;
 
 public class MainWindow extends Application {
     private TextField usernameField;
@@ -42,63 +43,61 @@ public class MainWindow extends Application {
             }
         });
 
-        // Register an event handler for the login button
         loginButton.setOnAction(event -> {
             try {
-                login(); // Renamed to follow Java naming conventions
+                login();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
 
     }
-    Note note = new Note();
-    // Method to register a new user
+
+
     private void register() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        int returndelserver=Register.register(username, password);
+        int returndelserver = SendCredentials.register(username, password);
 
-        // Close the current window
         Stage stage = (Stage) usernameField.getScene().getWindow();
 
-        if(returndelserver==0){
-            System.out.println("Registrazione Fallita");
+        if (returndelserver == 0) {
+            System.out.println("Register Failed");
 
-        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Register Failed");
+            alert.setHeaderText("registration failed");
+            alert.setContentText("Already registered user.");
+            alert.showAndWait();
+        } else {
             stage.close();
+            Note note = new Note();
+            note.notes();
         }
-        stage.close();
-        note.notes();
     }
 
-    // Method to log in an existing user
     private void login() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        int returndelserver = Login.login(username, password);
-        // Close the current window
-        Stage stage = (Stage) usernameField.getScene().getWindow();
+        int returndelserver = SendCredentials.login(username, password);
 
-        if(returndelserver==0){
-            System.out.println("Login Fallito");
+        if (returndelserver == 0) {
+            System.out.println("Login Failed");
 
-        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Error");
+            alert.setHeaderText("Failed Login");
+            alert.setContentText("Name or Password is wrong!.");
+            alert.showAndWait();
+        } else {
+            Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.close();
+            Note note = new Note();
+            note.notes();
         }
-
-
-        // Open a new window
-
-        note.notes();
     }
 
 
-
-
-
-
-    // Entry point of the application
     public static void main(String[] args) {
         launch();
     }

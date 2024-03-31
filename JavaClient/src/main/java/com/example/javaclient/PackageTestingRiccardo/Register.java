@@ -23,22 +23,19 @@ public class Register {
 
             System.out.println("Server says " + in.readUTF());
 
-            if(name.isEmpty()||password.isEmpty()){
-                System.out.println("sparati");
-            }
-            else{
-                String json = "{\"name\":\"" + name + "\",\"password\":\"" + password + "\"}";
-                // Convert the JSON string to bytes
-                bytes = json.getBytes(StandardCharsets.UTF_8);
-                // Send the bytes to the server
-                out.write(bytes);
-                // Handle server response if needed
-                inFromServer = client.getInputStream();
-                in = new DataInputStream(inFromServer);
-                int returndelserver = in.readByte();
-                System.out.println(returndelserver);
-                return returndelserver;
-            }
+
+            String json = "{\"name\":\"" + name + "\",\"password\":\"" + password + "\"}";
+            // Convert the JSON string to bytes
+            bytes = json.getBytes(StandardCharsets.UTF_8);
+            // Send the bytes to the server
+            out.write(bytes);
+            // Handle server response if needed
+            inFromServer = client.getInputStream();
+            in = new DataInputStream(inFromServer);
+            int returndelserver = in.readByte();
+            System.out.println(returndelserver);
+            return returndelserver;
+
 
         } catch (IOException e) {
             e.printStackTrace();

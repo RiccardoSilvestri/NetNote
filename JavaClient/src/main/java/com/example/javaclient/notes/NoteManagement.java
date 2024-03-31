@@ -9,6 +9,7 @@ import javafx.scene.control.Alert.AlertType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 public class NoteManagement {
@@ -23,12 +24,22 @@ public class NoteManagement {
         NewButton();
     }
 
+
     private void NewButton() {
         Button newButton = new Button("New Note");
         newButton.setOnAction(event -> {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("New Note");
+            dialog.setHeaderText("enter the title of your new note:");
+            dialog.setContentText("title:");
 
-            //System.out.println("New button clicked");
 
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(note -> {
+                System.out.println(note);
+
+
+            });
         });
 
         HBox topHBox = new HBox();
@@ -39,6 +50,7 @@ public class NoteManagement {
 
         root.getChildren().add(0, topHBox);
     }
+
 
 
 
