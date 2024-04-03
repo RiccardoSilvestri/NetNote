@@ -1,9 +1,6 @@
 package com.example.javaclient;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
@@ -12,13 +9,14 @@ public class Connection {
         System.out.println("Connecting to " + serverName + " on port " + port);
         return new Socket(serverName, port);
     }
-    private static void sendMsg(String msg, DataOutputStream out) throws IOException {
+    public static void sendMsg(String msg, Socket client) throws IOException {
         byte[] bytes = msg.getBytes(StandardCharsets.UTF_8);
-
+        OutputStream outToServer = client.getOutputStream();
+        DataOutputStream out = new DataOutputStream(outToServer);
         // Send the bytes to the server
         out.write(bytes);
     }
-    private static String readStr(Socket client) throws IOException {
+    public static String readStr(Socket client) throws IOException {
         InputStream inFromServer = client.getInputStream();
         DataInputStream in = new DataInputStream(inFromServer);
         return in.readUTF();

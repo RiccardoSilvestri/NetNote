@@ -1,5 +1,6 @@
 package com.example.javaclient.notes;
 
+import com.example.javaclient.Connection;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -9,7 +10,8 @@ import javafx.scene.control.Alert.AlertType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Optional;
 
 public class NoteManagement {
@@ -18,9 +20,9 @@ public class NoteManagement {
         this.root = root;
     }
 
-    public void initialize() {
+    public void initialize(Socket client) throws IOException {
         ManagementButtons();
-        ImportedNotes();
+        ImportNotes(client);
         NewButton();
     }
 
@@ -93,12 +95,15 @@ public class NoteManagement {
         });
     }
 
-    private void ImportedNotes() {
+    private void ImportNotes(Socket client) throws IOException {
         TextArea noteTextArea = (TextArea) root.lookup("#noteTextArea");
         HBox bottoniHBox = (HBox) root.lookup("#bottoniHBox");
+        Connection.sendMsg("0", client);
 
         // TODO: da sostituire con l'array di json mandato dal server
-        String jsonString = "[{\"Author\":\"Paolo\",\"Content\":\"Oggi sono molto contento\",\"Date\":\"16/11/2002\",\"Title\":\"Nuova\"},{\"Author\":\"Paolo\",\"Content\":\"Lecca lecca\",\"Date\":\"16/11/2002\",\"Title\":\"ruba\"},{\"Author\":\"Paolo\",\"Content\":\"Lello bello\",\"Date\":\"16/11/2002\",\"Title\":\"Rancido\"}]";
+        String jsonString = Connection.readStr(client);
+        System.out.println(jsonString);
+        //jsonString = "[{\"Author\":\"Paolo\",\"Content\":\"Oggi sono molto contento\",\"Date\":\"16/11/2002\",\"Title\":\"Nuova\"},{\"Author\":\"Paolo\",\"Content\":\"Lecca lecca\",\"Date\":\"16/11/2002\",\"Title\":\"ruba\"},{\"Author\":\"Paolo\",\"Content\":\"Lello bello\",\"Date\":\"16/11/2002\",\"Title\":\"Rancido\"}]";
 
         ButtonIncrease(noteTextArea, bottoniHBox, jsonString);
     }
@@ -110,7 +115,7 @@ public class NoteManagement {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.has("Content")) {
+                if (jsonObject.has("content")) {
                     contentCount++;
                 }
             }
@@ -124,15 +129,15 @@ public class NoteManagement {
     private void Contentviewer(TextArea noteTextArea, HBox bottoniHBox, int contentCount, JSONArray jsonArray) {
         for (int i = 1; i <= contentCount; i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i - 1);
-            String title = jsonObject.getString("Title");
+            String title = jsonObject.getString("title");
             Button button = new Button(title);
 
             button.setOnAction(event -> {
                 String buttonText = ((Button) event.getSource()).getText();
                 for (int j = 0; j < jsonArray.length(); j++) {
                     JSONObject noteObject = jsonArray.getJSONObject(j);
-                    if (noteObject.getString("Title").equals(buttonText)) {
-                        String content = noteObject.getString("Content");
+                    if (noteObject.getString("title").equals(buttonText)) {
+                        String content = noteObject.getString("content");
                         noteTextArea.setText(content);
                         break;
                     }

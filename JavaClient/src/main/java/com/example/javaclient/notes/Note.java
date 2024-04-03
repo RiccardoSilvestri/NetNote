@@ -8,9 +8,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class Note {
-    public void notes() throws IOException {
+    public void notes(Socket client) throws IOException {
         // Carica il contenuto del file FXML nel VBox
         VBox newRoot = FXMLLoader.load(getClass().getResource("/com/example/javaclient/Appunti.fxml"));
 
@@ -34,6 +35,6 @@ public class Note {
 
         // Passaggio del controllo alla classe NoteManagement
         NoteManagement noteManagement = new NoteManagement(newRoot);
-        noteManagement.initialize();
+        noteManagement.initialize(client);
     }
 }
