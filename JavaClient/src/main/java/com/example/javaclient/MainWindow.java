@@ -25,16 +25,17 @@ public class MainWindow extends Application {
     public void start(Stage stage) throws IOException {
         // Load the user interface from an FXML file
         VBox root = FXMLLoader.load(getClass().getResource("LoginRegister.fxml"));
-        Scene scene = new Scene(root, 670, 420);
-        stage.setTitle("Hello!");
+        Scene scene = new Scene(root, 600, 400);
+        stage.setResizable(false);
+        stage.setTitle("NetNote Sign in");
         stage.setScene(scene);
         stage.show();
 
         // Obtain references to the text fields and buttons
         usernameField = (TextField) scene.lookup("#usernameField");
         passwordField = (PasswordField) scene.lookup("#passwordField");
-        Button registerButton = (Button) scene.lookup("#RegisterButton");
-        Button loginButton = (Button) scene.lookup("#LoginButton");
+        Button registerButton = (Button) scene.lookup("#SignUpButton");
+        Button loginButton = (Button) scene.lookup("#SignInButton");
 
         // Register an event handler for the register button
         registerButton.setOnAction(event -> {

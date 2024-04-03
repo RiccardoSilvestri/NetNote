@@ -1,37 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import java.net.URL?>
-<VBox prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="413.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <AnchorPane prefHeight="550.0" prefWidth="600.0" stylesheets="@style.css" VBox.vgrow="ALWAYS">
             <children>
-                <Label alignment="CENTER" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" text="Login or Register?" textAlignment="CENTER" textFill="#2f4f4f">
+                <Label alignment="CENTER" layoutX="-57.0" layoutY="330.0" prefHeight="35.0" prefWidth="206.0" text="New User? " textFill="#2f4f4f" AnchorPane.leftAnchor="-57.0" AnchorPane.rightAnchor="251.0" AnchorPane.topAnchor="330.0">
                     <font>
-                        <Font size="24.0" />
+                        <Font name="Cambria" size="24.0" />
                     </font>
                 </Label>
-                <TextField fx:id="usernameField" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="100.0" prefHeight="40.0" prefWidth="300.0" promptText="Username"/>
-                <PasswordField fx:id="passwordField" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0" prefHeight="40.0" prefWidth="300.0" promptText="Password"/>
-                <Button fx:id="RegisterButton" layoutX="150.0" layoutY="200.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Register" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="200.0">
+                <TextField fx:id="usernameField" layoutX="14.0" layoutY="101.0" prefHeight="40.0" prefWidth="320.0" promptText="Username" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="101.0" />
+                <PasswordField fx:id="passwordField" layoutX="14.0" layoutY="151.0" prefHeight="40.0" prefWidth="320.0" promptText="Password" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="151.0" />
+                <Button fx:id="SignUpButton" layoutX="227.0" layoutY="328.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="147.0" text="Sign up" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="328.0">
+                    <font>
+                        <Font name="Cambria" size="18.0" />
+                    </font>
+                </Button>
+                <Button fx:id="SignInButton" layoutX="14.0" layoutY="211.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="147.0" text="Sign in" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="439.0" AnchorPane.topAnchor="211.0">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Button>
-                <Button fx:id="LoginButton" layoutX="150.0" layoutY="250.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Login" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="250.0">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Button>
+            <ImageView fitHeight="147.0" fitWidth="148.0" layoutX="410.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Logo.png" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER" layoutX="11.0" layoutY="14.0" prefHeight="57.0" prefWidth="270.0" text="Welcome to NetNote" textFill="#2f4f4f">
+               <font>
+                  <Font name="Cambria" size="24.0" />
+               </font>
+            </Label>
             </children>
         </AnchorPane>
+      <VBox prefHeight="400.0" prefWidth="400.0" />
     </children>
 
 </VBox>
