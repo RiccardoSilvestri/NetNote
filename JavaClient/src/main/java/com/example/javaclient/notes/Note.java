@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.Socket;
 
+import static jdk.internal.agent.Agent.getText;
+
 public class Note {
     public void notes(Socket client) throws IOException {
         // Carica il contenuto del file FXML nel VBox
@@ -20,21 +22,26 @@ public class Note {
         newStage.setScene(newScene);
         newStage.setTitle("New Window");
 
-        // Crea un Label con il testo desiderato
+
         Label label = new Label("Benvenuto");
 
-        // Aggiungi il Label al VBox
-        newRoot.getChildren().add(0, label); // Aggiungi il label all'inizio del VBox
 
-        // Mostra il nuovo Stage
+        newRoot.getChildren().add(0, label);
+
         newStage.show();
 
-        // Inizializzazione dei componenti dell'interfaccia utente
         TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
         noteTextArea.setText("Seleziona una nota per visualizzare il contenuto");
+        TextAreaContent(noteTextArea);
 
-        // Passaggio del controllo alla classe NoteManagement
         NoteManagement noteManagement = new NoteManagement(newRoot);
         noteManagement.initialize(client);
     }
+
+
+    public String TextAreaContent(TextArea noteTextArea) {
+        return getText(String.valueOf(noteTextArea));
+    }
+
+
 }

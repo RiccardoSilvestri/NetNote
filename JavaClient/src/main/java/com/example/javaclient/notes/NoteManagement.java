@@ -13,6 +13,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Optional;
+import javafx.scene.control.TextArea;
+
+import static jdk.internal.agent.Agent.getText;
 
 public class NoteManagement {
     private VBox root;
@@ -38,9 +41,12 @@ public class NoteManagement {
 
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(note -> {
+                //Note TextAreaContent = new Note.TextAreaContent();
+
+                //VAI AVANTI PIRLA
+
+
                 System.out.println(note);
-
-
             });
         });
 
@@ -52,9 +58,6 @@ public class NoteManagement {
 
         root.getChildren().add(0, topHBox);
     }
-
-
-
 
 
 
@@ -100,10 +103,9 @@ public class NoteManagement {
         HBox bottoniHBox = (HBox) root.lookup("#bottoniHBox");
         Connection.sendMsg("0", client);
 
-        // TODO: da sostituire con l'array di json mandato dal server
+
         String jsonString = Connection.readStr(client);
         System.out.println(jsonString);
-        //jsonString = "[{\"Author\":\"Paolo\",\"Content\":\"Oggi sono molto contento\",\"Date\":\"16/11/2002\",\"Title\":\"Nuova\"},{\"Author\":\"Paolo\",\"Content\":\"Lecca lecca\",\"Date\":\"16/11/2002\",\"Title\":\"ruba\"},{\"Author\":\"Paolo\",\"Content\":\"Lello bello\",\"Date\":\"16/11/2002\",\"Title\":\"Rancido\"}]";
 
         ButtonIncrease(noteTextArea, bottoniHBox, jsonString);
     }
