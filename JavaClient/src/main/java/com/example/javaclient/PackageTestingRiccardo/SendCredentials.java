@@ -6,18 +6,10 @@ import java.nio.charset.StandardCharsets;
 
 public class SendCredentials {
     private static final String SERVER_NAME = "129.152.5.12";
-    private static final int PORT = 5555;
+    private static final int PORT = 4444;
 
-    public static int register(String name, String password) {
-        return sendCredentials("1", name, password);
-    }
-
-    public static int login(String name, String password) {
-        return sendCredentials("2", name, password);
-    }
-
-    private static int sendCredentials(String option, String name, String password) {
-        try (Socket client = new Socket(SERVER_NAME, PORT)) {
+    public static int sendCredentials(Socket client, String option, String name, String password) {
+        try {
             int returndelserver;
 
             OutputStream outToServer = client.getOutputStream();

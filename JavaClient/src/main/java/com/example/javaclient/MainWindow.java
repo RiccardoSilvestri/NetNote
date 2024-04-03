@@ -14,11 +14,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class MainWindow extends Application {
     private TextField usernameField;
     private PasswordField passwordField;
-
+    private static final String SERVER_NAME = "localhost";
+    private static final int PORT = 4444;
     @Override
     public void start(Stage stage) throws IOException {
         // Load the user interface from an FXML file
@@ -57,7 +59,8 @@ public class MainWindow extends Application {
     private void register() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        int returndelserver = SendCredentials.register(username, password);
+        Socket client = Connection.InitConnection(SERVER_NAME, PORT);
+        int returndelserver = SendCredentials.sendCredentials(client, "1", username, password);
 
         Stage stage = (Stage) usernameField.getScene().getWindow();
 
@@ -79,7 +82,8 @@ public class MainWindow extends Application {
     private void login() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        int returndelserver = SendCredentials.login(username, password);
+        Socket client = Connection.InitConnection(SERVER_NAME, PORT);
+        int returndelserver = SendCredentials.sendCredentials(client, "2", username, password);
 
         if (returndelserver == 0) {
             System.out.println("Login Failed");
