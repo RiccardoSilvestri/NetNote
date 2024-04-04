@@ -71,7 +71,6 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         // send all user's notes to the client
         let mut response = "no notes".to_string();
         // if the file is a valid json, filter it by logged user
-        // TODO: make at least an empty array
         match check_json_file(notes_file){
             Ok(_) => {
                 println!("The json file is valid");
