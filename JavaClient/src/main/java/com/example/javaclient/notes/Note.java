@@ -32,17 +32,18 @@ public class Note {
 
         TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
         noteTextArea.setText("Seleziona una nota per visualizzare il contenuto");
-        TextAreaContent(noteTextArea);
+//       TextAreaContent(noteTextArea);
 
         NoteManagement noteManagement = new NoteManagement(newRoot);
-        noteManagement.initialize(client);
+        noteManagement.initialize(client,newRoot);
     }
 
 
-    public static String TextAreaContent(TextArea noteTextArea) {
-        String TextConverted = getText(String.valueOf(noteTextArea));
-        return TextConverted;
-    }
+//    public static String TextAreaContent(TextArea noteTextArea) {
+//        String text = noteTextArea.getText(); // Ottenere il testo dal TextArea
+//        System.out.println(text);
+//        return text;
+//    }
 
 
 }

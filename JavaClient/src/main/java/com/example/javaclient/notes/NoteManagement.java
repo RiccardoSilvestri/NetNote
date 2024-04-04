@@ -23,14 +23,14 @@ public class NoteManagement {
         this.root = root;
     }
 
-    public void initialize(Socket client) throws IOException {
+    public void initialize(Socket client,VBox newRoot) throws IOException {
         ManagementButtons();
         ImportNotes(client);
-        NewButton();
+        NewButton(newRoot);
     }
 
 
-    private void NewButton() {
+    private void NewButton(VBox newRoot) {
         Button newButton = new Button("New Note");
         newButton.setOnAction(event -> {
             TextInputDialog dialog = new TextInputDialog();
@@ -38,15 +38,18 @@ public class NoteManagement {
             dialog.setHeaderText("enter the title of your new note:");
             dialog.setContentText("title:");
 
-
             Optional<String> result = dialog.showAndWait();
-            result.ifPresent(note -> {
-                String TextAreaContent;
-                TextArea currentext = null;
-                TextAreaContent= Note.TextAreaContent(currentext);
 
-                System.out.println(TextAreaContent);
+            result.ifPresent(note -> {
+                TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
+                String textAreaContent = noteTextArea.getText();
+                String TITOLO = note;
+                System.out.println("Testo: " +textAreaContent);
+                System.out.println("Titolo: " + TITOLO);
+
+                //lettura della textarea
             });
+
         });
 
         HBox topHBox = new HBox();
