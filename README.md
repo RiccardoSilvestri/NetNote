@@ -1,4 +1,5 @@
 <img src="https://github.com/RiccardoSilvestri/UFS-02/blob/main/misc/banner.png" alt="NetNote logo" title="NetNite" align="right" height="60" />
+
 # NetNote
 
 A TCP Note-Taking application written in Rust and Java.
