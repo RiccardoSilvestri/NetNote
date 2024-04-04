@@ -76,7 +76,7 @@ public class MainWindow extends Application {
         } else {
             stage.close();
             Note note = new Note();
-            note.notes(client);
+            note.notes(client, username);
         }
     }
 
@@ -98,7 +98,7 @@ public class MainWindow extends Application {
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.close();
             Note note = new Note();
-            note.notes(client);
+            note.notes(client, username);
         }
     }
 

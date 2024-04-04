@@ -13,7 +13,7 @@ import java.net.Socket;
 import static jdk.internal.agent.Agent.getText;
 
 public class Note {
-    public void notes(Socket client) throws IOException {
+    public void notes(Socket client, String user) throws IOException {
         // Carica il contenuto del file FXML nel VBox
         VBox newRoot = FXMLLoader.load(getClass().getResource("/com/example/javaclient/Appunti.fxml"));
 
@@ -22,7 +22,7 @@ public class Note {
         newStage.setScene(newScene);
         newStage.setTitle("New Window");
 
-        Label label = new Label("Benvenuto");
+        Label label = new Label("Benvenuto " + user + "!");
 
 
         newRoot.getChildren().add(0, label);
@@ -34,7 +34,7 @@ public class Note {
 //       TextAreaContent(noteTextArea);
 
         NoteManagement noteManagement = new NoteManagement(newRoot);
-        noteManagement.initialize(client,newRoot,newStage);
+        noteManagement.initialize(client,newRoot,newStage, user);
     }
 
 

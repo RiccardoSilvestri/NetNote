@@ -24,8 +24,8 @@ public class NoteManagement {
     public NoteManagement(VBox root) {
         this.root = root;
     }
-    public void initialize(Socket client, VBox newRoot, Stage newStage) throws IOException {
-        ManagementButtons(newRoot);
+    public void initialize(Socket client, VBox newRoot, Stage newStage, String user) throws IOException {
+        ManagementButtons(newRoot, user);
         ImportNotes(client,newStage);
         NewButton(newRoot);
     }
@@ -69,7 +69,7 @@ public class NoteManagement {
         topHBox.getChildren().add(newButton);
         root.getChildren().add(0, topHBox);
     }
-    private void ManagementButtons(VBox newRoot) {
+    private void ManagementButtons(VBox newRoot, String user) {
         VBox buttonVBox = new VBox();
         buttonVBox.setAlignment(Pos.BOTTOM_CENTER);
         buttonVBox.setSpacing(10);
@@ -94,8 +94,8 @@ public class NoteManagement {
             System.out.println("Testo: " +textAreaContent);
             System.out.println("Titolo: " + currenttitle);
             System.out.println("Data: "+ strDate);
-            String author="DAPASSARE";
-            System.out.println(noteToJson(author,currenttitle,textAreaContent,strDate));
+            // TODO: passare l'autore
+            System.out.println(noteToJson(user,currenttitle,textAreaContent,strDate));
         });
 
 
