@@ -12,6 +12,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 import javafx.scene.control.TextArea;
 
@@ -22,13 +26,13 @@ public class NoteManagement {
     public NoteManagement(VBox root) {
         this.root = root;
     }
-
     public void initialize(Socket client,VBox newRoot) throws IOException {
-        ManagementButtons();
+        ManagementButtons(newRoot);
         ImportNotes(client);
         NewButton(newRoot);
     }
 
+    String currenttitle = "";
 
     private void NewButton(VBox newRoot) {
         Button newButton = new Button("New Note");
@@ -42,12 +46,19 @@ public class NoteManagement {
 
             result.ifPresent(note -> {
                 TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
+                noteTextArea.setText(" ");
                 String textAreaContent = noteTextArea.getText();
-                String TITOLO = note;
-                System.out.println("Testo: " +textAreaContent);
-                System.out.println("Titolo: " + TITOLO);
+                currenttitle = note;
 
-                //lettura della textarea
+                Date date = Calendar.getInstance().getTime();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                String strDate = dateFormat.format(date);
+
+                System.out.println("Testo: " +textAreaContent);
+                System.out.println("Titolo: " + currenttitle);
+                System.out.println("Data: "+ strDate);
+
+
             });
 
         });
@@ -64,7 +75,7 @@ public class NoteManagement {
 
 
 
-    private void ManagementButtons() {
+    private void ManagementButtons(VBox newRoot) {
         VBox buttonVBox = new VBox();
         buttonVBox.setAlignment(Pos.BOTTOM_CENTER);
         buttonVBox.setSpacing(10);
@@ -79,6 +90,19 @@ public class NoteManagement {
         root.getChildren().add(buttonVBox);
 
         sendButton.setOnAction(event -> {
+
+            TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
+            String textAreaContent = noteTextArea.getText();
+
+
+
+            Date date = Calendar.getInstance().getTime();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            String strDate = dateFormat.format(date);
+
+            System.out.println("Testo: " +textAreaContent);
+           System.out.println("Titolo: " + currenttitle);
+            System.out.println("Data: "+ strDate);
 
         });
 
@@ -141,6 +165,7 @@ public class NoteManagement {
                 for (int j = 0; j < jsonArray.length(); j++) {
                     JSONObject noteObject = jsonArray.getJSONObject(j);
                     if (noteObject.getString("title").equals(buttonText)) {
+                        currenttitle = noteObject.getString("title");
                         String content = noteObject.getString("content");
                         noteTextArea.setText(content);
                         break;
