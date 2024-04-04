@@ -1,3 +1,11 @@
+<h1 align="center">
+    <img src="./misc/banner.png">
+</h1>
+
+<p align="center">
+  <i align="center">A TCP Note-Taking application 🖋</i>
+</p>
+
 <img src="https://github.com/RiccardoSilvestri/UFS-02/blob/main/misc/banner.png" alt="NetNote logo" title="NetNite" align="right" height="60" />
 
 # NetNote
