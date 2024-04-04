@@ -18,10 +18,9 @@ public class Note {
         VBox newRoot = FXMLLoader.load(getClass().getResource("/com/example/javaclient/Appunti.fxml"));
 
         Stage newStage = new Stage();
-        Scene newScene = new Scene(newRoot, 920, 920);
+        Scene newScene = new Scene(newRoot, 700, 500);
         newStage.setScene(newScene);
         newStage.setTitle("New Window");
-
 
         Label label = new Label("Benvenuto");
 
@@ -35,7 +34,7 @@ public class Note {
 //       TextAreaContent(noteTextArea);
 
         NoteManagement noteManagement = new NoteManagement(newRoot);
-        noteManagement.initialize(client,newRoot);
+        noteManagement.initialize(client,newRoot,newStage);
     }
 
 
