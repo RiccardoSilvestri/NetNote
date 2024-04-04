@@ -1,8 +1,6 @@
-# NetNote
+# NetNote ![](./misc/banner.png)
 
 A TCP Note-Taking application written in Rust and Java.
-
-![](./misc/banner.png)
 
 # Server
 
