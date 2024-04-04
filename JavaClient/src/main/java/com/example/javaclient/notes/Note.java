@@ -39,8 +39,9 @@ public class Note {
     }
 
 
-    public String TextAreaContent(TextArea noteTextArea) {
-        return getText(String.valueOf(noteTextArea));
+    public static String TextAreaContent(TextArea noteTextArea) {
+        String TextConverted = getText(String.valueOf(noteTextArea));
+        return TextConverted;
     }
 
 

@@ -41,12 +41,11 @@ public class NoteManagement {
 
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(note -> {
-                //Note TextAreaContent = new Note.TextAreaContent();
+                String TextAreaContent;
+                TextArea currentext = null;
+                TextAreaContent= Note.TextAreaContent(currentext);
 
-                //VAI AVANTI PIRLA
-
-
-                System.out.println(note);
+                System.out.println(TextAreaContent);
             });
         });
 
