@@ -25,7 +25,7 @@ public class NoteManagement {
         this.root = root;
     }
     public void initialize(Socket client, VBox newRoot, Stage newStage, String user) throws IOException {
-        ManagementButtons(newRoot, user);
+        ManagementButtons(newRoot, user,client);
         ImportNotes(client,newStage);
         NewButton(newRoot);
     }
@@ -51,7 +51,7 @@ public class NoteManagement {
 
             result.ifPresent(note -> {
                 TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
-                noteTextArea.setText(" ");
+                noteTextArea.setText("");
                 String textAreaContent = noteTextArea.getText();
                 currenttitle = note;
 //                Date date = Calendar.getInstance().getTime();
@@ -69,7 +69,7 @@ public class NoteManagement {
         topHBox.getChildren().add(newButton);
         root.getChildren().add(0, topHBox);
     }
-    private void ManagementButtons(VBox newRoot, String user) {
+    private void ManagementButtons(VBox newRoot, String user,Socket client) throws IOException{
         VBox buttonVBox = new VBox();
         buttonVBox.setAlignment(Pos.BOTTOM_CENTER);
         buttonVBox.setSpacing(10);
@@ -94,8 +94,13 @@ public class NoteManagement {
             System.out.println("Testo: " +textAreaContent);
             System.out.println("Titolo: " + currenttitle);
             System.out.println("Data: "+ strDate);
-            // TODO: passare l'autore
             System.out.println(noteToJson(user,currenttitle,textAreaContent,strDate));
+
+            Connection.sendMsg("1", client);
+            System.out.println(Connection.readStr(client));
+            Connection.sendMsg(noteToJson(user,currenttitle,textAreaContent,strDate),client);
+
+
         });
 
 
@@ -154,7 +159,6 @@ public class NoteManagement {
                     JSONObject noteObject = jsonArray.getJSONObject(j);
                     if (noteObject.getString("title").equals(buttonText)) {
                         currenttitle = noteObject.getString("title");
-                        //TODO: aggiornare il titolo
                         newStage.setTitle(currenttitle);
                         newStage.show();
                         String content = noteObject.getString("content");
