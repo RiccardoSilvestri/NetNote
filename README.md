@@ -2,7 +2,7 @@
 
 A TCP Note-Taking application written in Rust and Java.
 
-![](misc\banner.png)
+![](./misc/banner.png)
 
 # Server
 
