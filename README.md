@@ -2,7 +2,7 @@
 
 A TCP Note-Taking application written in Rust and Java.
 
-![](C:\Users\FrancescoLanza\OneDrive%20-%20ITS%20Angelo%20Rizzoli\Documents\Projects\UFS-02\misc\banner.png)
+![](misc\banner.png)
 
 # Server
 
