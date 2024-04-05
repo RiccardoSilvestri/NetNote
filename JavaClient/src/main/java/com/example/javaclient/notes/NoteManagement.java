@@ -69,7 +69,7 @@ public class NoteManagement {
         topHBox.getChildren().add(newButton);
         root.getChildren().add(0, topHBox);
     }
-    private void ManagementButtons(VBox newRoot, String user,Socket client) throws IOException{
+    private void ManagementButtons(VBox newRoot, String user,Socket client) {
         VBox buttonVBox = new VBox();
         buttonVBox.setAlignment(Pos.BOTTOM_CENTER);
         buttonVBox.setSpacing(10);
@@ -96,9 +96,7 @@ public class NoteManagement {
             System.out.println("Data: "+ strDate);
             System.out.println(noteToJson(user,currenttitle,textAreaContent,strDate));
 
-            Connection.sendMsg("1", client);
-            System.out.println(Connection.readStr(client));
-            Connection.sendMsg(noteToJson(user,currenttitle,textAreaContent,strDate),client);
+            SendingNote(user, client, textAreaContent, strDate);
 
 
         });
@@ -129,6 +127,16 @@ public class NoteManagement {
         String jsonString = Connection.readStr(client);
         System.out.println(jsonString);
         ButtonIncrease(noteTextArea, bottoniHBox, jsonString,newStage);
+    }
+
+    private void SendingNote(String user, Socket client, String textAreaContent, String strDate) {
+        try {
+            Connection.sendMsg("1", client);
+            System.out.println(Connection.readStr(client));
+            Connection.sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void ButtonIncrease(TextArea noteTextArea, HBox bottoniHBox, String jsonString,Stage newStage) {
