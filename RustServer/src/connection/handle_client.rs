@@ -70,14 +70,10 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         send_user_notes(notes_file, user.clone(), file_access.clone(), stream.try_clone().unwrap());
         println!("Sent user notes");
 
-        // not the best method, but works for now
-        let mut request = "".to_string();
-        if !option.eq("0") {
-            request = read_utf(&mut stream);
-        }
         println!("Option: {}", option);
         match option.as_str() {
             "1" => {
+                let request = read_utf(&mut stream);
                 // create a note
                 // if request.is_empty() { return };
                 println!("create a note");
@@ -87,6 +83,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
                 };
             },
             "2" => {
+                let request = read_utf(&mut stream);
                 // the client should send a json containing only author and title
                 // if request.is_empty() { return };
                 match remove_note(notes_file, &*request, file_access.clone()){
