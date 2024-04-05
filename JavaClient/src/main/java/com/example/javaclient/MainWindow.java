@@ -10,11 +10,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Objects;
 
 public class MainWindow extends Application {
     private TextField usernameField;
@@ -24,9 +26,13 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Load the user interface from an FXML file
-        VBox root = FXMLLoader.load(getClass().getResource("LoginRegister.fxml"));
+        VBox root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LoginRegister.fxml")));
         Scene scene = new Scene(root, 600, 400);
         stage.setResizable(false);
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icon.png")));
+        // Set the icon for the stage
+        stage.getIcons().add(icon);
+
         stage.setTitle("NetNote Sign in");
         stage.setScene(scene);
         stage.show();
