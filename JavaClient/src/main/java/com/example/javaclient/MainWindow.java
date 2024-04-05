@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.Socket;
 
+import static java.lang.Thread.sleep;
+
 public class MainWindow extends Application {
     private TextField usernameField;
     private PasswordField passwordField;
@@ -30,6 +32,11 @@ public class MainWindow extends Application {
         stage.setTitle("NetNote Sign in");
         stage.setScene(scene);
         stage.show();
+
+//        while(true){
+//            sleep(1000);
+//
+//        }
 
         // Obtain references to the text fields and buttons
         usernameField = (TextField) scene.lookup("#usernameField");
