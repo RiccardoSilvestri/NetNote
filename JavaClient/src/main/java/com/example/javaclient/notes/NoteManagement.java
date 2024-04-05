@@ -96,8 +96,10 @@ public class NoteManagement {
             System.out.println("Data: "+ strDate);
             System.out.println(noteToJson(user,currenttitle,textAreaContent,strDate));
 
-            SendingNote(user, client, textAreaContent, strDate);
-
+            //SendingNote(user, client, textAreaContent, strDate);
+            Connection.sendMsg("1", client);
+            System.out.println(Connection.readStr(client));
+            Connection.sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
 
         });
 
@@ -130,13 +132,9 @@ public class NoteManagement {
     }
 
     private void SendingNote(String user, Socket client, String textAreaContent, String strDate) {
-        try {
             Connection.sendMsg("1", client);
             System.out.println(Connection.readStr(client));
             Connection.sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void ButtonIncrease(TextArea noteTextArea, HBox bottoniHBox, String jsonString,Stage newStage) {

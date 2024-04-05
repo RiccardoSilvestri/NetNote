@@ -5,8 +5,7 @@ use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
 use crate::connection::user::login::*;
-use crate::connection::notes::filter_by_author::*;
-use crate::connection::utils::check_json_file::check_json_file;
+use crate::connection::utils::send_user_notes::send_user_notes;
 use super::notes::remove_note::remove_note;
 use super::notes::add_note::add_note;
 use super::user::get_credentials::{get_value_from_json};
@@ -58,9 +57,6 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         };
     }
     println!("Logged user: {}", user);
-    let option = read_utf(&mut stream);
-    if option.is_empty(){ return };
-    println!("Received: {}", option);
 
     // if the notes file doesn't exist, create it
     match create_if_not_exists(notes_file){
@@ -68,19 +64,18 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         Err(e) => println!("An error occurred: {}", e),
     }
     loop {
-        // send all user's notes to the client
-        let mut response = "no notes".to_string();
-        // if the file is a valid json, filter it by logged user
-        match check_json_file(notes_file){
-            Ok(_) => {
-                println!("The json file is valid");
-                response = filter_by_author(notes_file, user.as_str(), file_access.clone()).unwrap().to_string();
-            }
-            Err(e) => println!("An error occurred: {}", e),
+        // first I let the user select the action to take, then I ask for the json of the note
+        let option = read_utf(&mut stream);
+        if option.is_empty(){ return };
+        send_user_notes(notes_file, user.clone(), file_access.clone(), stream.try_clone().unwrap());
+        println!("Sent user notes");
+
+        // not the best method, but works for now
+        let mut request = "".to_string();
+        if !option.eq("0") {
+            request = read_utf(&mut stream);
         }
-        println!("{}", response);
-        send_utf(response, stream.try_clone().unwrap());
-        let request = read_utf(&mut stream);
+        println!("Option: {}", option);
         match option.as_str() {
             "1" => {
                 // create a note

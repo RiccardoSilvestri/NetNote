@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::sync::{Arc, Mutex};
 use serde_json::{from_str, Value};
-use crate::connection::handle_json::write_json;
+use crate::connection::utils::handle_json::write_json;
 use crate::connection::notes::note_exists::note_exists;
 
 pub fn add_note(file_path: &str, target_json: &str, file_access: Arc<Mutex<()>>) -> Result<(), Box<dyn Error>>{

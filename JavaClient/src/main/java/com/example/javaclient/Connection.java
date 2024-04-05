@@ -9,16 +9,32 @@ public class Connection {
         System.out.println("Connecting to " + serverName + " on port " + port);
         return new Socket(serverName, port);
     }
-    public static void sendMsg(String msg, Socket client) throws IOException {
+    public static void sendMsg(String msg, Socket client) {
+        System.out.println("message sent: " + msg);
         byte[] bytes = msg.getBytes(StandardCharsets.UTF_8);
-        OutputStream outToServer = client.getOutputStream();
-        DataOutputStream out = new DataOutputStream(outToServer);
-        // Send the bytes to the server
-        out.write(bytes);
+        OutputStream outToServer = null;
+        DataOutputStream out = null;
+        try {
+            outToServer = client.getOutputStream();
+            out = new DataOutputStream(outToServer);
+            // Send the bytes to the server
+            out.write(bytes);
+            out.flush();
+        } catch (IOException e) {
+            System.out.println("An error occurred while sending the message: " + e.getMessage());
+        }
     }
-    public static String readStr(Socket client) throws IOException {
-        InputStream inFromServer = client.getInputStream();
-        DataInputStream in = new DataInputStream(inFromServer);
-        return in.readUTF();
+
+
+    public static String readStr(Socket client) {
+        try {
+            InputStream inFromServer = client.getInputStream();
+            DataInputStream in = new DataInputStream(inFromServer);
+            return in.readUTF();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
 }

@@ -2,7 +2,7 @@ use std::sync::{Arc, Mutex};
 use serde_json::{Value};
 use super::get_credentials::*;
 
-use crate::connection::handle_json::write_json;
+use crate::connection::utils::handle_json::write_json;
 use crate::connection::user::user_exists::user_exists;
 
 pub fn register(received : String, user_file :&str, file_access: Arc<Mutex<()>>) -> Result<String, JsonCustomError> {
