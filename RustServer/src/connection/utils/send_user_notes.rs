@@ -1,5 +1,6 @@
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
+use colored::Colorize;
 use crate::connection::notes::filter_by_author::filter_by_author;
 use crate::connection::send_utf::send_utf;
 use crate::connection::utils::check_json_file::check_json_file;
@@ -15,6 +16,6 @@ pub fn send_user_notes(notes_file :&str, user :String, file_access :Arc<Mutex<()
         }
         Err(e) => println!("An error occurred: {}", e),
     }
-    println!("{}", response);
+    println!("{} {}", "Sent user notes to client: ".bold().green(), response);
     send_utf(response, stream.try_clone().unwrap());
 }

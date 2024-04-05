@@ -2,6 +2,7 @@ use std::fs::{File, OpenOptions};
 use std::io::{Read, Write};
 use std::sync::{Arc, Mutex};
 use std::path::Path;
+use colored::Colorize;
 use serde_json::{Error as JsonError, Value};
 
 pub fn write_json(json_string: String, filename: &str, file_access: Arc<Mutex<()>>) -> String {
@@ -38,12 +39,12 @@ pub fn write_json(json_string: String, filename: &str, file_access: Arc<Mutex<()
 
             // Write the array back to the file in a pretty-printed format
             writeln!(file, "{}", serde_json::to_string_pretty(&array).expect("Failed to serialize JSON")).expect("Failed to write to file");
-            println!("Wrote to json");
+            println!("{}", "Wrote to json".bold().green());
             let response = serde_json::to_string_pretty(&array.last().unwrap()).expect("Failed to serialize JSON");
             response
         }
         Err(err) => {
-            eprintln!("Failed to parse JSON: {}", err);
+            eprintln!("{} {}", "Failed to parse JSON: ".red(), err);
             eprintln!("{}", json_string);
             "Error".to_string()
         }
