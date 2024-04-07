@@ -128,7 +128,7 @@ public class NoteManagement {
                 alert.showAndWait();
             }
             else{
-                sendMsg("1", client);
+                sendMsg("3", client);
                 System.out.println(readStr(client));
                 sendMsg(noteToJson(user, currenttitle, textAreaContent, strDate), client);
                 try {
@@ -156,7 +156,7 @@ public class NoteManagement {
 
                 sendMsg("2", client);
                 System.out.println(readStr(client));
-                sendMsg(noteToJson(user,currenttitle, author, currenttitle), client);
+                sendMsg(noteToJson(user, currenttitle, author, currenttitle), client);
                 try {
                     ImportNotes(client, newStage);
                     currenttitle = "";
