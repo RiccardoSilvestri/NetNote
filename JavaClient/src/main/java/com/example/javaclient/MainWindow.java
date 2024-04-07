@@ -90,7 +90,7 @@ public class MainWindow extends Application {
 
         registerButton.setOnAction(event -> {
             try {
-                UserManagement.register(usernameField, passwordField, SERVER_NAME, PORT);
+                UserManagement.register(usernameField, passwordField, client.get());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

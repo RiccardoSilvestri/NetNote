@@ -30,12 +30,11 @@ public class UserManagement {
         return false;
     }
 
-    public static void register(TextField usernameField, PasswordField passwordField, String SERVER_NAME, int PORT) throws IOException {
+    public static void register(TextField usernameField, PasswordField passwordField, Socket client) throws IOException {
         String username = usernameField.getText().toLowerCase();
         String password = passwordField.getText();
         if (!checkCredentials(username, password))
             return;
-        Socket client = Connection.InitConnection(SERVER_NAME, PORT);
         int serverReturn = SendCredentials.sendCredentials(client, "1", username, password);
         Stage stage = (Stage) usernameField.getScene().getWindow();
 
