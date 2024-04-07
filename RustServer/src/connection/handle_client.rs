@@ -2,6 +2,7 @@ use std::io::Write;
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
 use colored::Colorize;
+use crate::connection::notes::edit_note::edit_note;
 use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
@@ -96,6 +97,15 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
                     Ok(_) => {println!("Note deleted")}
                     Err(e) => {println!("{}", e)}
                 }
+            },
+            "3" => {
+                let request = read_utf(&mut stream);
+                println!("{} {}", "Recieved message:".bold(), request.italic());
+                // create a note
+                match edit_note(notes_file, &*request, file_access.clone()){
+                    Ok(_) => {println!("Note created")}
+                    Err(e) => {println!("{}", e)}
+                };
             },
             _ => println!("invalid request")
         }

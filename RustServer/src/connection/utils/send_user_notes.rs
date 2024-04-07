@@ -5,7 +5,7 @@ use crate::connection::notes::filter_by_author::filter_by_author;
 use crate::connection::send_utf::send_utf;
 use crate::connection::utils::check_json_file::check_json_file;
 
-pub fn send_user_notes(notes_file :&str, user :String, file_access :Arc<Mutex<()>>, mut stream: TcpStream){
+pub fn send_user_notes(notes_file :&str, user :String, file_access :Arc<Mutex<()>>, stream: TcpStream){
     // send all user's notes to the client
     let mut response = "no notes".to_string();
     // if the file is a valid json, filter it by logged user
