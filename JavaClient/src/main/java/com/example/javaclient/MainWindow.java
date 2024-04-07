@@ -3,28 +3,41 @@ package com.example.javaclient;
 import com.example.javaclient.PackageTestingRiccardo.SendCredentials;
 import com.example.javaclient.notes.Note;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
-
-import static java.lang.Thread.sleep;
 
 public class MainWindow extends Application {
     private TextField usernameField;
     private PasswordField passwordField;
     private static final String SERVER_NAME = "localhost";
     private static final int PORT = 4444;
+
+    private static boolean isServerOnline() {
+        try {
+            Socket socket = new Socket(SERVER_NAME, PORT);
+            socket.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         // Load the user interface from an FXML file
@@ -39,18 +52,35 @@ public class MainWindow extends Application {
         stage.setScene(scene);
         stage.show();
 
-//        while(true){
-//            sleep(1000);
-//
-//        }
+        Label ServerStatus = new Label(" ");
+        ServerStatus.setAlignment(Pos.TOP_RIGHT);
+        VBox.setMargin(ServerStatus, new Insets(10));
+        root.getChildren().add(ServerStatus);
 
-        // Obtain references to the text fields and buttons
+
+        new Thread(() -> {
+            while (true) {
+                try {
+                    if (isServerOnline()) {
+                        Platform.runLater(() -> ServerStatus.setText("ONLINE"));
+                        ServerStatus.setTextFill(Color.GREEN);
+                    } else {
+                        Platform.runLater(() -> ServerStatus.setText("OFFLINE"));
+                        ServerStatus.setTextFill(Color.RED);
+                    }
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
         usernameField = (TextField) scene.lookup("#usernameField");
         passwordField = (PasswordField) scene.lookup("#passwordField");
         Button registerButton = (Button) scene.lookup("#SignUpButton");
         Button loginButton = (Button) scene.lookup("#SignInButton");
 
-        // Register an event handler for the register button
         registerButton.setOnAction(event -> {
             try {
                 register();
@@ -68,13 +98,11 @@ public class MainWindow extends Application {
         });
     }
 
-
     private void register() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
         Socket client = Connection.InitConnection(SERVER_NAME, PORT);
         int returndelserver = SendCredentials.sendCredentials(client, "1", username, password);
-
         Stage stage = (Stage) usernameField.getScene().getWindow();
 
         if (returndelserver == 0) {
@@ -91,6 +119,7 @@ public class MainWindow extends Application {
             note.notes(client, username);
         }
     }
+
     private void login() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -113,12 +142,7 @@ public class MainWindow extends Application {
         }
     }
 
-
     public static void main(String[] args) {
         launch();
-    }
-
-    public void saveFile(ActionEvent actionEvent) {
-
     }
 }
