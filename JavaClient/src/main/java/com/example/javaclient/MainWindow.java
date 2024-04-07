@@ -103,6 +103,10 @@ public class MainWindow extends Application {
                 throw new RuntimeException(e);
             }
         });
+        stage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     public static void main(String[] args) {
