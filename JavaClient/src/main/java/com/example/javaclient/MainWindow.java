@@ -1,7 +1,5 @@
 package com.example.javaclient;
 
-import com.example.javaclient.PackageTestingRiccardo.SendCredentials;
-import com.example.javaclient.notes.Note;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
@@ -83,7 +80,7 @@ public class MainWindow extends Application {
 
         registerButton.setOnAction(event -> {
             try {
-                register();
+                UserManagement.register(usernameField, passwordField, SERVER_NAME, PORT);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -91,55 +88,11 @@ public class MainWindow extends Application {
 
         loginButton.setOnAction(event -> {
             try {
-                login();
+                UserManagement.login(usernameField, passwordField, SERVER_NAME, PORT);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-    }
-
-    private void register() throws IOException {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        Socket client = Connection.InitConnection(SERVER_NAME, PORT);
-        int returndelserver = SendCredentials.sendCredentials(client, "1", username, password);
-        Stage stage = (Stage) usernameField.getScene().getWindow();
-
-        if (returndelserver == 0) {
-            System.out.println("Register Failed");
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Register Failed");
-            alert.setHeaderText("registration failed");
-            alert.setContentText("Already registered user.");
-            alert.showAndWait();
-        } else {
-            stage.close();
-            Note note = new Note();
-            note.notes(client, username);
-        }
-    }
-
-    private void login() throws IOException {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        Socket client = Connection.InitConnection(SERVER_NAME, PORT);
-        int returndelserver = SendCredentials.sendCredentials(client, "2", username, password);
-
-        if (returndelserver == 0) {
-            System.out.println("Login Failed");
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Login Error");
-            alert.setHeaderText("Failed Login");
-            alert.setContentText("Name or Password is wrong!.");
-            alert.showAndWait();
-        } else {
-            Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.close();
-            Note note = new Note();
-            note.notes(client, username);
-        }
     }
 
     public static void main(String[] args) {
