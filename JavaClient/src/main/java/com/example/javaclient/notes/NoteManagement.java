@@ -119,6 +119,11 @@ public class NoteManagement {
             System.out.println("Testo: " + textAreaContent);
             System.out.println("Titolo: " + currenttitle);
             System.out.println("Data: " + strDate);
+            JSONObject json = new JSONObject();
+            json.put("author", author);
+            json.put("content", textAreaContent);
+            json.put("title", currenttitle);
+            json.put("date", date.toString());
             System.out.println(noteToJson(user, currenttitle, textAreaContent, strDate));
             if (currenttitle.equals("") || textAreaContent.equals("")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -130,7 +135,7 @@ public class NoteManagement {
             else{
                 sendMsg("3", client);
                 System.out.println(readStr(client));
-                sendMsg(noteToJson(user, currenttitle, textAreaContent, strDate), client);
+                sendMsg(json.toString(), client);
                 try {
                     ImportNotes(client, newStage);
                 } catch (IOException e) {
@@ -198,6 +203,8 @@ public class NoteManagement {
     private String currentNote = null;
     private String originalContent = null;
 
+    private String previousTitle = null; // Add this line at the class level
+
     private void Contentviewer(TextArea noteTextArea, HBox bottoniHBox, int contentCount, JSONArray jsonArray, Stage newStage) {
         bottoniHBox.getChildren().clear();
         for (int i = 1; i <= contentCount; i++) {
@@ -214,11 +221,9 @@ public class NoteManagement {
                         newStage.setTitle(currenttitle);
                         newStage.show();
                         String currentContent = noteTextArea.getText();
-                        String content = GetContent.getContent(jsonArray, buttonText);
 
                         // If the current note has been modified, show the confirmation alert
                         if (currentNote != null && !originalContent.equals(currentContent)) {
-                            System.out.println("Ripristina nota server.");
                             Alert alert = new Alert(AlertType.CONFIRMATION);
                             alert.setTitle("unsaved data will not be recoverable!");
                             alert.setHeaderText("Are you sure?");
@@ -229,7 +234,10 @@ public class NoteManagement {
                             alert.getButtonTypes().setAll(yesButtonType, noButtonType);
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.get() == yesButtonType) {
-                                noteTextArea.setText(content);
+                                if (previousTitle != null) {
+                                    String previousContent = GetContent.getContent(jsonArray, previousTitle);
+                                    noteTextArea.setText(previousContent);
+                                }
                             }
                             else{
                                 break;
@@ -237,10 +245,11 @@ public class NoteManagement {
                         }
 
                         // Update the current note and its original content
+                        previousTitle = currentNote;
                         currentNote = buttonText;
-                        originalContent = content;
+                        originalContent = GetContent.getContent(jsonArray, buttonText);
 
-                        noteTextArea.setText(content);
+                        noteTextArea.setText(originalContent);
                         break;
                     }
                 }
@@ -248,4 +257,5 @@ public class NoteManagement {
             bottoniHBox.getChildren().add(button);
         }
     }
+
 }
