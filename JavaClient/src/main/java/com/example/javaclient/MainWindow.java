@@ -66,7 +66,6 @@ public class MainWindow extends Application {
                 throw new RuntimeException(e);
             }
         });
-
     }
 
 
@@ -92,7 +91,6 @@ public class MainWindow extends Application {
             note.notes(client, username);
         }
     }
-
     private void login() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();

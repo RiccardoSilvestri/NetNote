@@ -25,7 +25,7 @@ public class NoteManagement {
         this.root = root;
     }
     public void initialize(Socket client, VBox newRoot, Stage newStage, String user) throws IOException {
-        ManagementButtons(newRoot, user,client);
+        ManagementButtons(newRoot, user,client,user,newStage);
         ImportNotes(client,newStage);
         NewButton(newRoot);
     }
@@ -69,7 +69,7 @@ public class NoteManagement {
         topHBox.getChildren().add(newButton);
         root.getChildren().add(0, topHBox);
     }
-    private void ManagementButtons(VBox newRoot, String user,Socket client) {
+    private void ManagementButtons(VBox newRoot, String user,Socket client,String author,Stage newStage) {
         VBox buttonVBox = new VBox();
         buttonVBox.setAlignment(Pos.BOTTOM_CENTER);
         buttonVBox.setSpacing(10);
@@ -82,6 +82,10 @@ public class NoteManagement {
 
         buttonVBox.getChildren().addAll(sendButton, deleteNoteButton);
         root.getChildren().add(buttonVBox);
+
+
+
+
 
         sendButton.setOnAction(event -> {
             TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
@@ -101,6 +105,7 @@ public class NoteManagement {
             System.out.println(Connection.readStr(client));
             Connection.sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
 
+
         });
 
 
@@ -116,7 +121,13 @@ public class NoteManagement {
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == yesButtonType) {
-                System.out.println("Deleted Note");
+                //System.out.println("Deleted Note");
+
+                Connection.sendMsg("2", client);
+                System.out.println(Connection.readStr(client));
+                Connection.sendMsg(noteToJson(user,currenttitle, author, currenttitle), client);
+
+
             }else {
             }
         });
@@ -131,11 +142,6 @@ public class NoteManagement {
         ButtonIncrease(noteTextArea, bottoniHBox, jsonString,newStage);
     }
 
-    private void SendingNote(String user, Socket client, String textAreaContent, String strDate) {
-            Connection.sendMsg("1", client);
-            System.out.println(Connection.readStr(client));
-            Connection.sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
-    }
 
     private void ButtonIncrease(TextArea noteTextArea, HBox bottoniHBox, String jsonString,Stage newStage) {
         try {
