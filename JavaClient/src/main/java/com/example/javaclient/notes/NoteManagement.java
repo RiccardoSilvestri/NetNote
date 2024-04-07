@@ -29,7 +29,7 @@ public class NoteManagement {
     public void initialize(Socket client, VBox newRoot, Stage newStage, String user) throws IOException {
         ManagementButtons(newRoot, user,client,user,newStage);
         ImportNotes(client,newStage);
-        NewButton(newRoot);
+        NewButton(newRoot,newStage,user,client);
     }
     String currenttitle = "";
 
@@ -42,7 +42,7 @@ public class NoteManagement {
                 + "}";
     }
 
-    private void NewButton(VBox newRoot) {
+    private void NewButton(VBox newRoot,Stage newStage,String user,Socket client) {
         Button newButton = new Button("New Note");
         newButton.setOnAction(event -> {
             TextInputDialog dialog = new TextInputDialog();
@@ -55,7 +55,31 @@ public class NoteManagement {
                 TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
                 noteTextArea.setText("");
                 String textAreaContent = noteTextArea.getText();
-                currenttitle = note;
+                if(note.equals("")){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Empty title!");
+                    alert.setHeaderText("Empty title");
+                    alert.setContentText("you can't enter a empty title");
+                    alert.showAndWait();
+                    System.out.println("nooo");
+                }else{
+                    currenttitle = note;
+                    newStage.setTitle(currenttitle);
+                    newStage.show();
+                    sendMsg("1", client);
+                    System.out.println(readStr(client));
+                    textAreaContent="";
+                    String strDate="";
+                    sendMsg(noteToJson(user, currenttitle,textAreaContent,strDate), client);
+                    try {
+                        ImportNotes(client, newStage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
 //                Date date = Calendar.getInstance().getTime();
 //                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
 //                String strDate = dateFormat.format(date);
@@ -93,22 +117,27 @@ public class NoteManagement {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
             String strDate = dateFormat.format(date);
 
-            System.out.println("Testo: " +textAreaContent);
+            System.out.println("Testo: " + textAreaContent);
             System.out.println("Titolo: " + currenttitle);
-            System.out.println("Data: "+ strDate);
-            System.out.println(noteToJson(user,currenttitle,textAreaContent,strDate));
-
-            //SendingNote(user, client, textAreaContent, strDate);
-            sendMsg("1", client);
-            System.out.println(readStr(client));
-            sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
-
-            try {
-                ImportNotes(client, newStage);
-            } catch (IOException e) {
-                e.printStackTrace();
+            System.out.println("Data: " + strDate);
+            System.out.println(noteToJson(user, currenttitle, textAreaContent, strDate));
+            if (currenttitle.equals("") || textAreaContent.equals("")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Empty field!");
+                alert.setHeaderText("Empty field");
+                alert.setContentText("you can't enter a empty field");
+                alert.showAndWait();
             }
-
+            else{
+                sendMsg("1", client);
+                System.out.println(readStr(client));
+                sendMsg(noteToJson(user, currenttitle, textAreaContent, strDate), client);
+                try {
+                    ImportNotes(client, newStage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
 
@@ -131,7 +160,7 @@ public class NoteManagement {
                 sendMsg(noteToJson(user,currenttitle, author, currenttitle), client);
                 try {
                     ImportNotes(client, newStage);
-                    // currenttitle = "";
+                    currenttitle = "";
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

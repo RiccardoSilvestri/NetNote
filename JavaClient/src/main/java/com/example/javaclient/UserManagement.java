@@ -37,7 +37,6 @@ public class UserManagement {
             return;
         int serverReturn = SendCredentials.sendCredentials(client, "1", username, password);
         Stage stage = (Stage) usernameField.getScene().getWindow();
-
         if (serverReturn == 0) {
             System.out.println("Register Failed");
 
