@@ -61,7 +61,6 @@ public class NoteManagement {
                     alert.setHeaderText("Empty title");
                     alert.setContentText("you can't enter a empty title");
                     alert.showAndWait();
-                    System.out.println("nooo");
                 }else{
                     currenttitle = note;
                     newStage.setTitle(currenttitle);
@@ -211,7 +210,31 @@ public class NoteManagement {
                         currenttitle = noteObject.getString("title");
                         newStage.setTitle(currenttitle);
                         newStage.show();
+                        String currentContent = noteTextArea.getText();
                         String content = noteObject.getString("content");
+
+                        if (!content.equals(currentContent)) {
+                            // Aggiungi qui la tua logica per gestire il caso in cui il contenuto è stato modificato senza salvare
+                            System.out.println("Ripristina nota server.");
+                            Alert alert = new Alert(AlertType.CONFIRMATION);
+                            alert.setTitle("unsaved data will not be recoverable!");
+                            alert.setHeaderText("Are you sure?");
+                            alert.setContentText("your note cannot be recovered.");
+
+                            ButtonType yesButtonType = new ButtonType("Yes");
+                            ButtonType noButtonType = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+                            alert.getButtonTypes().setAll(yesButtonType, noButtonType);
+                            Optional<ButtonType> result = alert.showAndWait();
+                            if (result.get() == yesButtonType) {
+                                noteTextArea.setText(content);
+                            }
+                            else{
+                                break;
+                            }
+                        } else {
+                            System.out.println("nothing.");
+                        }
+
                         noteTextArea.setText(content);
                         break;
                     }
