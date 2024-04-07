@@ -15,7 +15,7 @@ fn main() {
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                println!("{:?}", stream);
+                //println!("{:?}", stream);
                 // Clone the Arc<Mutex<()>> before moving it into the closure
                 let file_access_clone = Arc::clone(&file_access);
                 let handle = thread::spawn(move || {

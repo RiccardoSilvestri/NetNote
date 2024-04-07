@@ -1,6 +1,7 @@
 use std::io::Write;
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
+use colored::Colorize;
 use super::send_utf::*;
 use super::read_stream::*;
 use crate::connection::user::register::*;
@@ -20,6 +21,8 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
     while !logged{
         let request = read_utf(&mut stream);
         if request.is_empty(){ return };
+        println!("{} {}", "Recieved message:".bold(), request.italic());
+
         println!("Received: {}", request);
         send_utf("request received".to_string(), stream.try_clone().unwrap());
         // now get credentials from client
@@ -70,10 +73,12 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
         send_user_notes(notes_file, user.clone(), file_access.clone(), stream.try_clone().unwrap());
         println!("Sent user notes");
 
-        println!("Option: {}", option);
+        println!("{} {}", "Option: ".bold(), option);
         match option.as_str() {
+            "0" => {},
             "1" => {
                 let request = read_utf(&mut stream);
+                println!("{} {}", "Recieved message:".bold(), request.italic());
                 // create a note
                 // if request.is_empty() { return };
                 println!("create a note");
@@ -84,6 +89,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             },
             "2" => {
                 let request = read_utf(&mut stream);
+                println!("{} {}", "Recieved message:".bold(), request.italic());
                 // the client should send a json containing only author and title
                 // if request.is_empty() { return };
                 match remove_note(notes_file, &*request, file_access.clone()){
