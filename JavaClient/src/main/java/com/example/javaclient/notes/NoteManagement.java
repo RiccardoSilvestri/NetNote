@@ -190,12 +190,15 @@ public class NoteManagement {
                 }
             }
 
-            Contentviewer(noteTextArea, bottoniHBox, contentCount, jsonArray,newStage);
+            Contentviewer(noteTextArea, bottoniHBox, contentCount, jsonArray, newStage);
         }catch (Exception e) {
             e.printStackTrace();
         }
     }
-    private void Contentviewer(TextArea noteTextArea, HBox bottoniHBox, int contentCount, JSONArray jsonArray,Stage newStage) {
+    private String currentNote = null;
+    private String originalContent = null;
+
+    private void Contentviewer(TextArea noteTextArea, HBox bottoniHBox, int contentCount, JSONArray jsonArray, Stage newStage) {
         bottoniHBox.getChildren().clear();
         for (int i = 1; i <= contentCount; i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i - 1);
@@ -211,10 +214,10 @@ public class NoteManagement {
                         newStage.setTitle(currenttitle);
                         newStage.show();
                         String currentContent = noteTextArea.getText();
-                        String content = noteObject.getString("content");
+                        String content = GetContent.getContent(jsonArray, buttonText);
 
-                        if (!content.equals(currentContent)) {
-                            // Aggiungi qui la tua logica per gestire il caso in cui il contenuto è stato modificato senza salvare
+                        // If the current note has been modified, show the confirmation alert
+                        if (currentNote != null && !originalContent.equals(currentContent)) {
                             System.out.println("Ripristina nota server.");
                             Alert alert = new Alert(AlertType.CONFIRMATION);
                             alert.setTitle("unsaved data will not be recoverable!");
@@ -231,9 +234,11 @@ public class NoteManagement {
                             else{
                                 break;
                             }
-                        } else {
-                            System.out.println("nothing.");
                         }
+
+                        // Update the current note and its original content
+                        currentNote = buttonText;
+                        originalContent = content;
 
                         noteTextArea.setText(content);
                         break;
