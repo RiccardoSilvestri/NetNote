@@ -36,10 +36,10 @@ public class UserManagement {
         if (!checkCredentials(username, password))
             return;
         Socket client = Connection.InitConnection(SERVER_NAME, PORT);
-        int returndelserver = SendCredentials.sendCredentials(client, "1", username, password);
+        int serverReturn = SendCredentials.sendCredentials(client, "1", username, password);
         Stage stage = (Stage) usernameField.getScene().getWindow();
 
-        if (returndelserver == 0) {
+        if (serverReturn == 0) {
             System.out.println("Register Failed");
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -54,13 +54,12 @@ public class UserManagement {
         }
     }
 
-    public static void login(TextField usernameField, PasswordField passwordField, String SERVER_NAME, int PORT) throws IOException {
+    public static void login(TextField usernameField, PasswordField passwordField, Socket client) throws IOException {
         String username = usernameField.getText().toLowerCase();
         String password = passwordField.getText();
-        Socket client = Connection.InitConnection(SERVER_NAME, PORT);
-        int returndelserver = SendCredentials.sendCredentials(client, "2", username, password);
+        int serverReturn = SendCredentials.sendCredentials(client, "2", username, password);
 
-        if (returndelserver == 0) {
+        if (serverReturn == 0) {
             System.out.println("Login Failed");
 
             Alert alert = new Alert(Alert.AlertType.ERROR);

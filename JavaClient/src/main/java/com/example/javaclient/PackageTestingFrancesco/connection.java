@@ -84,10 +84,10 @@ public class connection {
             System.out.println(readStr(client));
 
             String note = "{"
-                    + "\"author\": \"" + "francesco" + "\","
-                    + "\"title\": \"" + "Puppa" + "\","
+                    + "\"author\": \"" + "Antonio" + "\","
+                    + "\"title\": \"" + "Pappa" + "\","
                     + "\"date\": \"" + "16/11/02" + "\","
-                    + "\"content\": \"" + "ciccio pasticcio" + "\""
+                    + "\"content\": \"" + "ciccio pasticcione" + "\""
                     + "}";
             sendMsg(note, out);
             System.out.println(readStr(client));

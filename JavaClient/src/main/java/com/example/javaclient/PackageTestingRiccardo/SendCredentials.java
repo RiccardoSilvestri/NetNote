@@ -3,6 +3,7 @@ package com.example.javaclient.PackageTestingRiccardo;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SendCredentials {
     private static final String SERVER_NAME = "129.152.5.12";

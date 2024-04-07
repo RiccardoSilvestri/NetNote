@@ -18,22 +18,13 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainWindow extends Application {
     private TextField usernameField;
     private PasswordField passwordField;
     private static final String SERVER_NAME = "localhost";
     private static final int PORT = 4444;
-
-    private static boolean isServerOnline() {
-        try {
-            Socket socket = new Socket(SERVER_NAME, PORT);
-            socket.close();
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -54,18 +45,38 @@ public class MainWindow extends Application {
         VBox.setMargin(ServerStatus, new Insets(10));
         root.getChildren().add(ServerStatus);
 
+        // main connection to the server
+        AtomicReference<Socket> client = new AtomicReference<>();
+        client.set(new Socket(SERVER_NAME, PORT));
 
+        // if the server is not connected, re-establish the connection
+        new Thread(() -> {
+            boolean connected = false;
+            while (true) {
+                if (!Connection.isServerOnline(SERVER_NAME, PORT) || !connected) {
+                    connected = StartConnection.EstablishConnection(client, SERVER_NAME, PORT);
+                    System.out.println(connected);
+                }
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+
+        // Spawns a new thread to test the connection and report the connection status
         new Thread(() -> {
             while (true) {
                 try {
-                    if (isServerOnline()) {
+                    if (Connection.isServerOnline(SERVER_NAME, PORT)) {
                         Platform.runLater(() -> ServerStatus.setText("ONLINE"));
                         ServerStatus.setTextFill(Color.GREEN);
                     } else {
                         Platform.runLater(() -> ServerStatus.setText("OFFLINE"));
                         ServerStatus.setTextFill(Color.RED);
                     }
-                    Thread.sleep(2000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -88,7 +99,7 @@ public class MainWindow extends Application {
 
         loginButton.setOnAction(event -> {
             try {
-                UserManagement.login(usernameField, passwordField, SERVER_NAME, PORT);
+                UserManagement.login(usernameField, passwordField, client.get());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

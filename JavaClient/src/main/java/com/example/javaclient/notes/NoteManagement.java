@@ -1,5 +1,5 @@
 package com.example.javaclient.notes;
-import com.example.javaclient.Connection;
+import com.example.javaclient.StartConnection;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -17,6 +17,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import javafx.scene.control.TextArea;
+
+import static com.example.javaclient.Connection.readStr;
+import static com.example.javaclient.Connection.sendMsg;
 import static jdk.internal.agent.Agent.getText;
 
 public class NoteManagement {
@@ -83,10 +86,6 @@ public class NoteManagement {
         buttonVBox.getChildren().addAll(sendButton, deleteNoteButton);
         root.getChildren().add(buttonVBox);
 
-
-
-
-
         sendButton.setOnAction(event -> {
             TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
             String textAreaContent = noteTextArea.getText();
@@ -101,9 +100,9 @@ public class NoteManagement {
             System.out.println(noteToJson(user,currenttitle,textAreaContent,strDate));
 
             //SendingNote(user, client, textAreaContent, strDate);
-            Connection.sendMsg("1", client);
-            System.out.println(Connection.readStr(client));
-            Connection.sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
+            sendMsg("1", client);
+            System.out.println(readStr(client));
+            sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
 
 
         });
@@ -123,9 +122,9 @@ public class NoteManagement {
             if (result.get() == yesButtonType) {
                 //System.out.println("Deleted Note");
 
-                Connection.sendMsg("2", client);
-                System.out.println(Connection.readStr(client));
-                Connection.sendMsg(noteToJson(user,currenttitle, author, currenttitle), client);
+                sendMsg("2", client);
+                System.out.println(readStr(client));
+                sendMsg(noteToJson(user,currenttitle, author, currenttitle), client);
 
 
             }else {
@@ -136,8 +135,8 @@ public class NoteManagement {
     private void ImportNotes(Socket client,Stage newStage) throws IOException {
         TextArea noteTextArea = (TextArea) root.lookup("#noteTextArea");
         HBox bottoniHBox = (HBox) root.lookup("#bottoniHBox");
-        Connection.sendMsg("0", client);
-        String jsonString = Connection.readStr(client);
+        sendMsg("0", client);
+        String jsonString = readStr(client);
         System.out.println(jsonString);
         ButtonIncrease(noteTextArea, bottoniHBox, jsonString,newStage);
     }

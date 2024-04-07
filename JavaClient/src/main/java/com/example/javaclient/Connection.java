@@ -36,5 +36,14 @@ public class Connection {
             return null;
         }
     }
+    public static boolean isServerOnline(String SERVER_NAME, int PORT) {
+        try {
+            Socket socket = new Socket(SERVER_NAME, PORT);
+            socket.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 
 }
