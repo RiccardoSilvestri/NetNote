@@ -18,6 +18,8 @@ public class UserManagement {
         alert.setHeaderText("Credentials error!");
         if (username.length() < 3){
             alert.setContentText("Username must be at least 3 characters.");
+        } else if (username.contains(" ")) {
+            alert.setContentText("Username must not have spaces.");
         } else if (password.length() < 5) {
             alert.setContentText("Password must be at least 5 characters.");
         } else if (password.contains(" ")){
@@ -29,7 +31,7 @@ public class UserManagement {
     }
 
     public static void register(TextField usernameField, PasswordField passwordField, String SERVER_NAME, int PORT) throws IOException {
-        String username = usernameField.getText();
+        String username = usernameField.getText().toLowerCase();
         String password = passwordField.getText();
         if (!checkCredentials(username, password))
             return;
@@ -53,7 +55,7 @@ public class UserManagement {
     }
 
     public static void login(TextField usernameField, PasswordField passwordField, String SERVER_NAME, int PORT) throws IOException {
-        String username = usernameField.getText();
+        String username = usernameField.getText().toLowerCase();
         String password = passwordField.getText();
         Socket client = Connection.InitConnection(SERVER_NAME, PORT);
         int returndelserver = SendCredentials.sendCredentials(client, "2", username, password);
