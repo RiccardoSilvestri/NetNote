@@ -14,35 +14,30 @@ import static jdk.internal.agent.Agent.getText;
 
 public class Note {
     public void notes(Socket client, String user) throws IOException {
-        // Carica il contenuto del file FXML nel VBox
+        // Loading the note layout from the FXML
         VBox newRoot = FXMLLoader.load(getClass().getResource("/com/example/javaclient/Appunti.fxml"));
 
+        // Creating a new note window
         Stage newStage = new Stage();
         Scene newScene = new Scene(newRoot, 700, 500);
         newStage.setScene(newScene);
         newStage.setTitle("New Window");
 
+        // Adding a personalized label to the user
         Label label = new Label("Benvenuto " + user + "!");
-
-
         newRoot.getChildren().add(0, label);
-
         newStage.show();
 
+        // take the textarea for notes from the layout
         TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
         noteTextArea.setText("Seleziona una nota per visualizzare il contenuto");
-//       TextAreaContent(noteTextArea);
 
+        // Initialization of NoteManagement
         NoteManagement noteManagement = new NoteManagement(newRoot);
         noteManagement.initialize(client,newRoot,newStage, user);
     }
 
 
-//    public static String TextAreaContent(TextArea noteTextArea) {
-//        String text = noteTextArea.getText(); // Ottenere il testo dal TextArea
-//        System.out.println(text);
-//        return text;
-//    }
 
 
 }

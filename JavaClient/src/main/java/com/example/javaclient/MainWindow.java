@@ -26,29 +26,36 @@ public class MainWindow extends Application {
     private static final String SERVER_NAME = "localhost";
     private static final int PORT = 4444;
 
+    // Start() method, javafx application entry point
     @Override
     public void start(Stage stage) throws IOException {
+
         // Load the user interface from an FXML file
         VBox root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LoginRegister.fxml")));
         Scene scene = new Scene(root, 600, 400);
         stage.setResizable(false);
         Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icon.png")));
+
         // Set the icon for the stage
         stage.getIcons().add(icon);
 
+        // Setting the window title
         stage.setTitle("NetNote Sign in");
         stage.setScene(scene);
         stage.show();
 
+        // Label to show server status
         Label ServerStatus = new Label(" ");
         ServerStatus.setAlignment(Pos.TOP_RIGHT);
         VBox.setMargin(ServerStatus, new Insets(10));
         root.getChildren().add(ServerStatus);
 
+
         // main connection to the server
         AtomicReference<Socket> client = new AtomicReference<>();
 
-        // if the server is not connected, re-establish the connection
+
+        // Thread to keep the connection to the server active
         new Thread(() -> {
             boolean connected = false;
             while (true) {
@@ -63,6 +70,7 @@ public class MainWindow extends Application {
                 }
             }
         }).start();
+
 
         // Spawns a new thread to test the connection and report the connection status
         new Thread(() -> {
@@ -82,12 +90,13 @@ public class MainWindow extends Application {
             }
         }).start();
 
-
+        // Initialization of input fields and buttons for registration and login
         usernameField = (TextField) scene.lookup("#usernameField");
         passwordField = (PasswordField) scene.lookup("#passwordField");
         Button registerButton = (Button) scene.lookup("#SignUpButton");
         Button loginButton = (Button) scene.lookup("#SignInButton");
 
+        // Action to perform when the register button is pressed
         registerButton.setOnAction(event -> {
             try {
                 UserManagement.register(usernameField, passwordField, client.get());
@@ -96,6 +105,7 @@ public class MainWindow extends Application {
             }
         });
 
+        // Action to perform when the login button is pressed
         loginButton.setOnAction(event -> {
             try {
                 UserManagement.login(usernameField, passwordField, client.get());
@@ -103,6 +113,7 @@ public class MainWindow extends Application {
                 throw new RuntimeException(e);
             }
         });
+
         stage.setOnCloseRequest(event -> {
             Platform.exit();
             System.exit(0);

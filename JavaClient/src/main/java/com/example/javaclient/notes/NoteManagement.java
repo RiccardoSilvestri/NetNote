@@ -1,13 +1,9 @@
 package com.example.javaclient.notes;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Stage;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import static com.example.javaclient.Connection.readStr;
+import static com.example.javaclient.Connection.sendMsg;
+import static jdk.internal.agent.Agent.getText;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.text.DateFormat;
@@ -15,36 +11,55 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextArea;
-
-import static com.example.javaclient.Connection.readStr;
-import static com.example.javaclient.Connection.sendMsg;
-import static jdk.internal.agent.Agent.getText;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class NoteManagement {
     private VBox root;
+
     public NoteManagement(VBox root) {
         this.root = root;
     }
+
+    // Method for NoteManagement initialization
     public void initialize(Socket client, VBox newRoot, Stage newStage, String user) throws IOException {
-        ManagementButtons(newRoot, user,client,user,newStage);
-        ImportNotes(client,newStage);
-        NewButton(newRoot,newStage,user,client);
+        // Method for managing notes buttons
+        ManagementButtons(newRoot, user, client, user, newStage);
+
+        // Method to import notes from the server
+        ImportNotes(client, newStage);
+
+        // Method to add a new "New Note" button
+        NewButton(newRoot, newStage, user, client);
     }
+
+    // LIVE selected note title
     String currenttitle = "";
 
-    private static String noteToJson(String author, String title, String content, String date){
-        return "{"
-                + "\"author\": \"" + author + "\","
-                + "\"content\": \"" + content + "\","
-                + "\"title\": \"" + title + "\","
-                + "\"date\": \"" + date + "\""
-                + "}";
+    // Method to convert note information to JSON format
+    private static String noteToJson(String author, String title, String content, String date) {
+        return "{" +
+                "\"author\": \"" + author + "\"," +
+                "\"content\": \"" + content + "\"," +
+                "\"title\": \"" + title + "\"," +
+                "\"date\": \"" + date + "\"" +
+                "}";
     }
 
-    private void NewButton(VBox newRoot,Stage newStage,String user,Socket client) {
+    // Method to add a new "New Note" button
+    private void NewButton(VBox newRoot, Stage newStage, String user, Socket client) {
         Button newButton = new Button("New Note");
         newButton.setOnAction(event -> {
+
+            // Creating a dialog to insert the new note title
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("New Note");
             dialog.setHeaderText("enter the title of your new note:");
@@ -55,46 +70,44 @@ public class NoteManagement {
                 TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
                 noteTextArea.setText("");
                 String textAreaContent = noteTextArea.getText();
-                if(note.equals("")){
+                if (note.equals("")) {
+
+                    // Warning if the title is empty
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Empty title!");
                     alert.setHeaderText("Empty title");
                     alert.setContentText("you can't enter a empty title");
                     alert.showAndWait();
-                }else{
+                } else {
+
+                    // Setting the current title and sending the new note to the server
                     currenttitle = note;
                     newStage.setTitle(currenttitle);
                     newStage.show();
                     sendMsg("1", client);
                     System.out.println(readStr(client));
-                    textAreaContent="";
-                    String strDate="";
-                    sendMsg(noteToJson(user, currenttitle,textAreaContent,strDate), client);
+                    textAreaContent = "";
+                    String strDate = "";
+                    sendMsg(noteToJson(user, currenttitle, textAreaContent, strDate), client);
                     try {
                         ImportNotes(client, newStage);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 }
-
-
-//                Date date = Calendar.getInstance().getTime();
-//                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
-//                String strDate = dateFormat.format(date);
-//                System.out.println("Testo: " +textAreaContent);
-//                System.out.println("Titolo: " + currenttitle);
-//                System.out.println("Data: "+ strDate);
             });
         });
-
+        // Create a hbox to place the "New Note" button on the """top right"""
         HBox topHBox = new HBox();
         topHBox.setAlignment(Pos.TOP_RIGHT);
         topHBox.setPadding(new Insets(20, 20, 0, 0));
         topHBox.getChildren().add(newButton);
         root.getChildren().add(0, topHBox);
     }
-    private void ManagementButtons(VBox newRoot, String user,Socket client,String author,Stage newStage) {
+
+
+    // Method to manage note sending and deletion buttons
+    private void ManagementButtons(VBox newRoot, String user, Socket client, String author, Stage newStage) {
         VBox buttonVBox = new VBox();
         buttonVBox.setAlignment(Pos.BOTTOM_CENTER);
         buttonVBox.setSpacing(10);
@@ -108,6 +121,7 @@ public class NoteManagement {
         buttonVBox.getChildren().addAll(sendButton, deleteNoteButton);
         root.getChildren().add(buttonVBox);
 
+        // Action to send a note to the server
         sendButton.setOnAction(event -> {
             TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
             String textAreaContent = noteTextArea.getText();
@@ -116,6 +130,7 @@ public class NoteManagement {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
             String strDate = dateFormat.format(date);
 
+            // Creating and sending the JSON object representing the note to the server
             System.out.println("Testo: " + textAreaContent);
             System.out.println("Titolo: " + currenttitle);
             System.out.println("Data: " + strDate);
@@ -125,14 +140,17 @@ public class NoteManagement {
             json.put("title", currenttitle);
             json.put("date", date.toString());
             System.out.println(noteToJson(user, currenttitle, textAreaContent, strDate));
+
             if (currenttitle.equals("") || textAreaContent.equals("")) {
+                // Warning if note title or content is empty
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Empty field!");
                 alert.setHeaderText("Empty field");
                 alert.setContentText("you can't enter a empty field");
                 alert.showAndWait();
-            }
-            else{
+            } else {
+
+                // Sending the note to the server
                 sendMsg("3", client);
                 System.out.println(readStr(client));
                 sendMsg(json.toString(), client);
@@ -144,7 +162,7 @@ public class NoteManagement {
             }
         });
 
-
+        // Action to delete a note
         deleteNoteButton.setOnAction(event -> {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Confirm");
@@ -152,13 +170,13 @@ public class NoteManagement {
             alert.setContentText("your note cannot be recovered.");
 
             ButtonType yesButtonType = new ButtonType("Yes");
-            ButtonType noButtonType = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType noButtonType =
+                    new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(yesButtonType, noButtonType);
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == yesButtonType) {
-                //System.out.println("Deleted Note");
-
+                // Sending the note deletion request to the server
                 sendMsg("2", client);
                 System.out.println(readStr(client));
                 sendMsg(noteToJson(user, currenttitle, author, currenttitle), client);
@@ -169,22 +187,26 @@ public class NoteManagement {
                     e.printStackTrace();
                 }
 
-            }else {
+            } else {
             }
         });
     }
 
-    private void ImportNotes(Socket client,Stage newStage) throws IOException {
+    // Method to import notes from the server
+    private void ImportNotes(Socket client, Stage newStage) throws IOException {
         TextArea noteTextArea = (TextArea) root.lookup("#noteTextArea");
         HBox bottoniHBox = (HBox) root.lookup("#bottoniHBox");
         sendMsg("0", client);
         String jsonString = readStr(client);
         System.out.println(jsonString);
-        ButtonIncrease(noteTextArea, bottoniHBox, jsonString, newStage);
+        ButtonIncrease(noteTextArea, bottoniHBox
+
+                , jsonString, newStage);
     }
 
 
-    private void ButtonIncrease(TextArea noteTextArea, HBox bottoniHBox, String jsonString,Stage newStage) {
+    // Method to add note buttons to the view
+    private void ButtonIncrease(TextArea noteTextArea, HBox bottoniHBox, String jsonString, Stage newStage) {
         try {
             JSONArray jsonArray = new JSONArray(jsonString);
             int contentCount = 0;
@@ -195,16 +217,22 @@ public class NoteManagement {
                 }
             }
 
-            Contentviewer(noteTextArea, bottoniHBox, contentCount, jsonArray, newStage);
-        }catch (Exception e) {
+            Contentviewer(
+                    noteTextArea, bottoniHBox, contentCount, jsonArray, newStage);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    // Variable to keep track of the current note title
     private String currentNote = null;
+
     private String originalContent = null;
 
-    private String previousTitle = null; // Add this line at the class level
+    // Add this line at the class level
+    private String previousTitle = null;
 
+    // Method to display the contents of a selected note
     private void Contentviewer(TextArea noteTextArea, HBox bottoniHBox, int contentCount, JSONArray jsonArray, Stage newStage) {
         bottoniHBox.getChildren().clear();
         for (int i = 1; i <= contentCount; i++) {
@@ -234,12 +262,14 @@ public class NoteManagement {
                             alert.getButtonTypes().setAll(yesButtonType, noButtonType);
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.get() == yesButtonType) {
+
+                                // Update the current note and its original contents
                                 if (previousTitle != null) {
-                                    String previousContent = GetContent.getContent(jsonArray, previousTitle);
+                                    String previousContent =
+                                            GetContent.getContent(jsonArray, previousTitle);
                                     noteTextArea.setText(previousContent);
                                 }
-                            }
-                            else{
+                            } else {
                                 break;
                             }
                         }
@@ -257,5 +287,4 @@ public class NoteManagement {
             bottoniHBox.getChildren().add(button);
         }
     }
-
 }
