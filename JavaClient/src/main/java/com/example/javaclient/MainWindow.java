@@ -47,7 +47,6 @@ public class MainWindow extends Application {
 
         // main connection to the server
         AtomicReference<Socket> client = new AtomicReference<>();
-        client.set(new Socket(SERVER_NAME, PORT));
 
         // if the server is not connected, re-establish the connection
         new Thread(() -> {
