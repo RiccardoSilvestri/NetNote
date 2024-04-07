@@ -1,5 +1,4 @@
 package com.example.javaclient.notes;
-import com.example.javaclient.StartConnection;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -104,6 +103,11 @@ public class NoteManagement {
             System.out.println(readStr(client));
             sendMsg(noteToJson(user,currenttitle, textAreaContent, strDate), client);
 
+            try {
+                ImportNotes(client, newStage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         });
 
@@ -125,7 +129,12 @@ public class NoteManagement {
                 sendMsg("2", client);
                 System.out.println(readStr(client));
                 sendMsg(noteToJson(user,currenttitle, author, currenttitle), client);
-
+                try {
+                    ImportNotes(client, newStage);
+                    // currenttitle = "";
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }else {
             }
@@ -138,7 +147,7 @@ public class NoteManagement {
         sendMsg("0", client);
         String jsonString = readStr(client);
         System.out.println(jsonString);
-        ButtonIncrease(noteTextArea, bottoniHBox, jsonString,newStage);
+        ButtonIncrease(noteTextArea, bottoniHBox, jsonString, newStage);
     }
 
 
@@ -159,6 +168,7 @@ public class NoteManagement {
         }
     }
     private void Contentviewer(TextArea noteTextArea, HBox bottoniHBox, int contentCount, JSONArray jsonArray,Stage newStage) {
+        bottoniHBox.getChildren().clear();
         for (int i = 1; i <= contentCount; i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i - 1);
             String title = jsonObject.getString("title");
