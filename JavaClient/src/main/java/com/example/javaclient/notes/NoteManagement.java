@@ -17,7 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane; // Importa FlowPane
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.json.JSONArray;
@@ -101,11 +101,11 @@ public class NoteManagement {
             });
         });
         // Create a hbox to place the "New Note" button on the """top right"""
-        HBox topHBox = new HBox();
-        topHBox.setAlignment(Pos.BOTTOM_RIGHT);
-        topHBox.setPadding(new Insets(7, 20, 0, 0));
-        topHBox.getChildren().add(newButton);
-        root.getChildren().add(1, topHBox);
+        FlowPane topFlowPane = new FlowPane(); // modify HBox to FlowPane
+        topFlowPane.setAlignment(Pos.BOTTOM_RIGHT);
+        topFlowPane.setPadding(new Insets(7, 20, 0, 0));
+        topFlowPane.getChildren().add(newButton);
+        root.getChildren().add(1, topFlowPane);
 
     }
 
@@ -201,18 +201,16 @@ public class NoteManagement {
     // Method to import notes from the server
     private void ImportNotes(Socket client, Stage newStage) throws IOException {
         TextArea noteTextArea = (TextArea) root.lookup("#noteTextArea");
-        HBox bottoniHBox = (HBox) root.lookup("#bottoniHBox");
+        FlowPane bottoniFlowPane = (FlowPane) root.lookup("#bottoniFlowPane"); // modify HBox to FlowPane
         sendMsg("0", client);
         String jsonString = readStr(client);
         System.out.println(jsonString);
-        ButtonIncrease(noteTextArea, bottoniHBox
-
-                , jsonString, newStage);
+        ButtonIncrease(noteTextArea, bottoniFlowPane, jsonString, newStage); // modify HBox to FlowPane
     }
 
 
     // Method to add note buttons to the view
-    private void ButtonIncrease(TextArea noteTextArea, HBox bottoniHBox, String jsonString, Stage newStage) {
+    private void ButtonIncrease(TextArea noteTextArea, FlowPane bottoniFlowPane, String jsonString, Stage newStage) {
         try {
             JSONArray jsonArray = new JSONArray(jsonString);
             int contentCount = 0;
@@ -223,8 +221,7 @@ public class NoteManagement {
                 }
             }
 
-            Contentviewer(
-                    noteTextArea, bottoniHBox, contentCount, jsonArray, newStage);
+            Contentviewer(noteTextArea, bottoniFlowPane, contentCount, jsonArray, newStage); // modify HBox to FlowPane
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -239,10 +236,10 @@ public class NoteManagement {
     private String previousTitle = null;
 
     // Method to display the contents of a selected note
-    private void Contentviewer(TextArea noteTextArea, HBox bottoniHBox, int contentCount, JSONArray jsonArray, Stage newStage) {
+    private void Contentviewer(TextArea noteTextArea, FlowPane bottoniFlowPane, int contentCount, JSONArray jsonArray, Stage newStage) { // modify HBox to FlowPane
         // boolean to remember if the note has just been updated
         AtomicBoolean updatedNote = new AtomicBoolean(true);
-        bottoniHBox.getChildren().clear();
+        bottoniFlowPane.getChildren().clear();
         for (int i = 1; i <= contentCount; i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i - 1);
             String title = jsonObject.getString("title");
@@ -294,7 +291,7 @@ public class NoteManagement {
                     }
                 }
             });
-            bottoniHBox.getChildren().add(button);
+            bottoniFlowPane.getChildren().add(button); // modify HBox to FlowPane
         }
     }
 }

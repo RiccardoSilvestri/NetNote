@@ -1,5 +1,4 @@
 package com.example.javaclient;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
