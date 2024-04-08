@@ -39,7 +39,8 @@ pub fn login(received : String) -> Result<String, JsonCustomError> {
         },
         Err(error) => println!("Error: {}", error),
     }
-    return if get_hash(password.to_string()).eq(&get_hash(password_stored)) {
+    println!("{}", get_hash(password_stored.to_string()));
+    return if password.to_string().eq(&get_hash(password_stored.clone())) {
         Ok("Successfully logged in".to_string())
     } else {
         Err(JsonCustomError::InvalidJson("Incorrect password".to_string()))

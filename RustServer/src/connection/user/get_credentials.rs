@@ -31,14 +31,19 @@ pub fn get_password_from_file(username: &str, file :&str) -> Result<String, Stri
         for user in array {
             if let Some(user_name) = user["name"].as_str() {
                 if user_name.eq_ignore_ascii_case(username) {
-                    println!("{:?}", user["password"].as_str());
-                    return Ok(user["password"].as_str().unwrap_or_else(|| "Password not found").to_string());
+                    return if let Some(password) = user["password"].as_str() {
+                        println!("{}", password);
+                        Ok(password.to_string())
+                    } else {
+                        Err("Password not found".to_string())
+                    }
                 }
             }
         }
     }
     Err("User does not exist".to_string())
 }
+
 
 pub fn get_value_from_json(key: &str, target_json: &str) -> Result<String, Box<CustomError>> {
     // Try to parse the string of data into serde_json::Value
