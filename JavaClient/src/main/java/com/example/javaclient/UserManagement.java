@@ -2,6 +2,7 @@ package com.example.javaclient;
 
 import com.example.javaclient.PackageTestingRiccardo.SendCredentials;
 import com.example.javaclient.notes.Note;
+import com.example.javaclient.utils.GetSha;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -77,7 +78,7 @@ public class UserManagement {
         String password = passwordField.getText();
 
         // Sending credentials to the server for login
-        int serverReturn = SendCredentials.sendCredentials(client, "2", username, password);
+        int serverReturn = SendCredentials.sendCredentials(client, "2", username, GetSha.getSHA256(password));
 
         // management server response
         if (serverReturn == 0) {
