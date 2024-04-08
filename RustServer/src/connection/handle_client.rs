@@ -79,6 +79,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             "0" => {},
             "1" => {
                 let request = read_utf(&mut stream);
+                send_utf("received".to_string(), stream.try_clone().unwrap());
                 println!("{} {}", "Recieved message:".bold(), request.italic());
                 // create a note
                 // if request.is_empty() { return };
@@ -90,6 +91,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             },
             "2" => {
                 let request = read_utf(&mut stream);
+                send_utf("received".to_string(), stream.try_clone().unwrap());
                 println!("{} {}", "Recieved message:".bold(), request.italic());
                 // the client should send a json containing only author and title
                 // if request.is_empty() { return };
@@ -100,6 +102,7 @@ pub(crate) fn handle_client(mut stream: TcpStream, file_access: Arc<Mutex<()>>) 
             },
             "3" => {
                 let request = read_utf(&mut stream);
+                send_utf("received".to_string(), stream.try_clone().unwrap());
                 println!("{} {}", "Recieved message:".bold(), request.italic());
                 // create a note
                 match edit_note(notes_file, &*request, file_access.clone()){
