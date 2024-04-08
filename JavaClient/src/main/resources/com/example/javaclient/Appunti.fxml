@@ -2,18 +2,11 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="TOP_LEFT" spacing="20.0" styleClass="container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <ImageView fitHeight="72.0" fitWidth="199.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-         <Image url="@banner.png" />
-      </image>
-   </ImageView>
-    <HBox fx:id="bottoniHBox" spacing="10.0" />
+    <HBox fx:id="bottoniHBox" prefHeight="111.0" prefWidth="478.0" spacing="10.0" />
     <TextArea fx:id="noteTextArea" wrapText="true" VBox.vgrow="ALWAYS" />
 
     <stylesheets>

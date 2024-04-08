@@ -100,10 +100,11 @@ public class NoteManagement {
         });
         // Create a hbox to place the "New Note" button on the """top right"""
         HBox topHBox = new HBox();
-        topHBox.setAlignment(Pos.TOP_RIGHT);
-        topHBox.setPadding(new Insets(20, 20, 0, 0));
+        topHBox.setAlignment(Pos.BOTTOM_RIGHT);
+        topHBox.setPadding(new Insets(7, 20, 0, 0));
         topHBox.getChildren().add(newButton);
-        root.getChildren().add(0, topHBox);
+        root.getChildren().add(1, topHBox);
+
     }
 
 
