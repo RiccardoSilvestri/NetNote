@@ -1,5 +1,6 @@
 package com.example.javaclient.notes;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -48,6 +49,10 @@ public class Note {
         // Initialization of NoteManagement
         NoteManagement noteManagement = new NoteManagement(newRoot);
         noteManagement.initialize(client,newRoot,newStage, user);
+        newStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
 
