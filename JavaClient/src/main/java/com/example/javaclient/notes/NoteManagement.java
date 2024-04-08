@@ -2,7 +2,6 @@ package com.example.javaclient.notes;
 
 import static com.example.javaclient.Connection.readStr;
 import static com.example.javaclient.Connection.sendMsg;
-import static jdk.internal.agent.Agent.getText;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -23,7 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class NoteManagement {
-    private VBox root;
+    private final VBox root;
 
     public NoteManagement(VBox root) {
         this.root = root;
@@ -69,8 +68,8 @@ public class NoteManagement {
             result.ifPresent(note -> {
                 TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
                 noteTextArea.setText("");
-                String textAreaContent = noteTextArea.getText();
-                if (note.equals("")) {
+                String textAreaContent;
+                if (note.isEmpty()) {
 
                     // Warning if the title is empty
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -89,6 +88,8 @@ public class NoteManagement {
                     textAreaContent = "";
                     String strDate = "";
                     sendMsg(noteToJson(user, currenttitle, textAreaContent, strDate), client);
+                    // read the output of the server, in order not to send multiple messages at once
+                    readStr(client);
                     try {
                         ImportNotes(client, newStage);
                     } catch (IOException e) {
@@ -154,6 +155,7 @@ public class NoteManagement {
                 sendMsg("3", client);
                 System.out.println(readStr(client));
                 sendMsg(json.toString(), client);
+                readStr(client);
                 try {
                     ImportNotes(client, newStage);
                 } catch (IOException e) {
@@ -180,6 +182,7 @@ public class NoteManagement {
                 sendMsg("2", client);
                 System.out.println(readStr(client));
                 sendMsg(noteToJson(user, currenttitle, author, currenttitle), client);
+                readStr(client);
                 try {
                     ImportNotes(client, newStage);
                     currenttitle = "";
