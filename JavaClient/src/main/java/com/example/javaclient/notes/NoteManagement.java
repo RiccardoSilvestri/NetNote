@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -238,6 +240,8 @@ public class NoteManagement {
 
     // Method to display the contents of a selected note
     private void Contentviewer(TextArea noteTextArea, HBox bottoniHBox, int contentCount, JSONArray jsonArray, Stage newStage) {
+        // boolean to remember if the note has just been updated
+        AtomicBoolean updatedNote = new AtomicBoolean(true);
         bottoniHBox.getChildren().clear();
         for (int i = 1; i <= contentCount; i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i - 1);
@@ -255,7 +259,7 @@ public class NoteManagement {
                         String currentContent = noteTextArea.getText();
 
                         // If the current note has been modified, show the confirmation alert
-                        if (currentNote != null && !originalContent.equals(currentContent)) {
+                        if (currentNote != null && !originalContent.equals(currentContent) && !updatedNote.get()) {
                             Alert alert = new Alert(AlertType.CONFIRMATION);
                             alert.setTitle("unsaved data will not be recoverable!");
                             alert.setHeaderText("Are you sure?");
@@ -277,6 +281,8 @@ public class NoteManagement {
                                 break;
                             }
                         }
+                        // the note has been updated
+                        updatedNote.set(false);
 
                         // Update the current note and its original content
                         previousTitle = currentNote;
