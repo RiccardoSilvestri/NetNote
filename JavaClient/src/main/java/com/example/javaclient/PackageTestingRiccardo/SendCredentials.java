@@ -1,13 +1,13 @@
 package com.example.javaclient.PackageTestingRiccardo;
 
+import com.example.javaclient.utils.GetSha;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SendCredentials {
-    private static final String SERVER_NAME = "129.152.5.12";
-    private static final int PORT = 4444;
 
     public static int sendCredentials(Socket client, String option, String name, String password) {
         try {
@@ -24,7 +24,7 @@ public class SendCredentials {
 
             System.out.println("Server says " + in.readUTF());
 
-            String json = "{\"name\":\"" + name + "\",\"password\":\"" + password + "\"}";
+            String json = "{\"name\":\"" + name + "\",\"password\":\"" + GetSha.getSHA256(password) + "\"}";
             // Convert the JSON string to bytes
             bytes = json.getBytes(StandardCharsets.UTF_8);
             // Send the bytes to the server

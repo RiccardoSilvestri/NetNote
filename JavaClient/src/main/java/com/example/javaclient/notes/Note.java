@@ -14,13 +14,14 @@ import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Objects;
 
 import static jdk.internal.agent.Agent.getText;
 
 public class Note {
     public void notes(Socket client, String user) throws IOException {
         // Loading the note layout from the FXML
-        VBox newRoot = FXMLLoader.load(getClass().getResource("/com/example/javaclient/Appunti.fxml"));
+        VBox newRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclient/Appunti.fxml")));
 
         // Creating a new note window
         Stage newStage = new Stage();
@@ -36,7 +37,7 @@ public class Note {
         newRoot.getChildren().add(0, label);
 
 
-        ImageView bannerImageView = new ImageView(new Image(getClass().getResourceAsStream("/com/example/javaclient/banner.png")));
+        ImageView bannerImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/javaclient/banner.png"))));
         bannerImageView.setFitWidth(199);
         bannerImageView.setFitHeight(72);
         newRoot.getChildren().add(0, bannerImageView);
@@ -49,6 +50,8 @@ public class Note {
         // Initialization of NoteManagement
         NoteManagement noteManagement = new NoteManagement(newRoot);
         noteManagement.initialize(client,newRoot,newStage, user);
+
+        // kill all threads when closing stage
         newStage.setOnCloseRequest(event -> {
             Platform.exit();
             System.exit(0);

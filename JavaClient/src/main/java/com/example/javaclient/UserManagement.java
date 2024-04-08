@@ -13,11 +13,34 @@ import java.net.Socket;
 
 public class UserManagement {
 
+    private static boolean checkConnection(boolean serverStatus){
+        if (!serverStatus){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Connection Error!");
+            alert.setHeaderText("Not connected to server");
+            alert.setContentText("Please wait to connect to server");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
     // Method to check user credentials before registration
-    private static boolean checkCredentials(String username, String password){
+    private static boolean checkCredentials(String username, String password, boolean serverStatus){
 
         // Creating an alert for credential errors
         Alert alert = new Alert(Alert.AlertType.ERROR);
+
+        // if client is not connected, print the warning
+        if (!checkConnection(serverStatus))
+            return false;
+
+        if (!serverStatus){
+            alert.setTitle("Connection Error!");
+            alert.setHeaderText("Not connected to server");
+            alert.setContentText("Please wait to connect to server");
+            alert.showAndWait();
+            return false;
+        }
         alert.setTitle("Credentials error!");
         alert.setHeaderText("Credentials error!");
 
@@ -39,12 +62,12 @@ public class UserManagement {
     }
 
     // Method for register a new user
-    public static void register(TextField usernameField, PasswordField passwordField, Socket client) throws IOException {
+    public static void register(TextField usernameField, PasswordField passwordField, Socket client, boolean serverStatus) throws IOException {
         String username = usernameField.getText().toLowerCase();
         String password = passwordField.getText();
 
         // check of credentials
-        if (!checkCredentials(username, password))
+        if (!checkCredentials(username, password, serverStatus))
             return;
 
         // Sending credentials to the server for registration
@@ -73,12 +96,14 @@ public class UserManagement {
     }
 
     // Method to login a user
-    public static void login(TextField usernameField, PasswordField passwordField, Socket client) throws IOException {
+    public static void login(TextField usernameField, PasswordField passwordField, Socket client, boolean serverStatus) throws IOException {
         String username = usernameField.getText().toLowerCase();
         String password = passwordField.getText();
 
+        if (!checkConnection(serverStatus))
+            return;
         // Sending credentials to the server for login
-        int serverReturn = SendCredentials.sendCredentials(client, "2", username, GetSha.getSHA256(password));
+        int serverReturn = SendCredentials.sendCredentials(client, "2", username, password);
 
         // management server response
         if (serverReturn == 0) {

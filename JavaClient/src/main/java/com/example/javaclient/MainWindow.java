@@ -62,7 +62,7 @@ public class MainWindow extends Application {
                     System.out.println(connected);
                 }
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -97,7 +97,7 @@ public class MainWindow extends Application {
         // Action to perform when the register button is pressed
         registerButton.setOnAction(event -> {
             try {
-                UserManagement.register(usernameField, passwordField, client.get());
+                UserManagement.register(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -106,7 +106,7 @@ public class MainWindow extends Application {
         // Action to perform when the login button is pressed
         loginButton.setOnAction(event -> {
             try {
-                UserManagement.login(usernameField, passwordField, client.get());
+                UserManagement.login(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
