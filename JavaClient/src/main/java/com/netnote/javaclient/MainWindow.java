@@ -1,4 +1,6 @@
 package com.netnote.javaclient;
+import com.netnote.javaclient.utils.ConnectionCheckThread;
+import com.netnote.javaclient.utils.ServerStatusThread;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
@@ -52,38 +53,10 @@ public class MainWindow extends Application {
         AtomicReference<Socket> client = new AtomicReference<>();
 
         // Thread to keep the connection to the server active
-        new Thread(() -> {
-            boolean connected = false;
-            while (true) {
-                if (!Connection.isServerOnline(SERVER_NAME, PORT) || !connected) {
-                    connected = StartConnection.EstablishConnection(client, SERVER_NAME, PORT);
-                    System.out.println(connected);
-                }
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
+        ConnectionCheckThread.run(client, SERVER_NAME, PORT);
 
         // Spawns a new thread to test the connection and report the connection status
-        new Thread(() -> {
-            while (true) {
-                try {
-                    if (Connection.isServerOnline(SERVER_NAME, PORT)) {
-                        Platform.runLater(() -> ServerStatus.setText("ONLINE"));
-                        ServerStatus.setTextFill(Color.GREEN);
-                    } else {
-                        Platform.runLater(() -> ServerStatus.setText("OFFLINE"));
-                        ServerStatus.setTextFill(Color.RED);
-                    }
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        ServerStatusThread.run(SERVER_NAME, PORT, ServerStatus);
 
         // Initialization of input fields and buttons for registration and login
         usernameField = (TextField) scene.lookup("#usernameField");
