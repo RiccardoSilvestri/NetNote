@@ -1,4 +1,4 @@
-package com.example.javaclient.buttons;
+package com.netnote.javaclient.buttons;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

@@ -1,4 +1,4 @@
-package com.example.javaclient;
+package com.netnote.javaclient;
 
 import java.io.*;
 import java.net.Socket;

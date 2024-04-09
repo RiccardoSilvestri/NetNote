@@ -1,4 +1,4 @@
-package com.example.javaclient.utils;
+package com.netnote.javaclient.utils;
 
 public class NoteToJson {
     public static String noteToJson(String author, String title, String content, String date) {

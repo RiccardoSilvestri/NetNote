@@ -1,7 +1,7 @@
-package com.example.javaclient.notes;
+package com.netnote.javaclient.notes;
 
-import com.example.javaclient.Connection;
-import com.example.javaclient.StartConnection;
+import com.netnote.javaclient.Connection;
+import com.netnote.javaclient.StartConnection;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Note {
     public void notes(Socket client, String user) throws IOException {
-        // thread
+        // spawn a thread that displays an error message when not connected to the server
         AtomicReference<Socket> atomicClient = new AtomicReference<>();
         atomicClient.set(client);
         new Thread(() -> {
@@ -41,19 +41,17 @@ public class Note {
                             alert.setContentText("You will be logged out");
                             running.set(false);
                             alert.showAndWait();
+                            // Exit the current JavaFX application
+                            Platform.exit();
+                            System.exit(0);
                         });
                     }
-                }
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
             }
         }).start();
 
         // Loading the note layout from the FXML
-        VBox newRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclient/Appunti.fxml")));
+        VBox newRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/netnote/javaclient/Appunti.fxml")));
 
         // Creating a new note window
         Stage noteStage = new Stage();
@@ -71,7 +69,7 @@ public class Note {
         newRoot.getChildren().add(0, label);
 
 
-        ImageView bannerImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/javaclient/banner.png"))));
+        ImageView bannerImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/netnote/javaclient/banner.png"))));
         bannerImageView.setFitWidth(199);
         bannerImageView.setFitHeight(72);
         newRoot.getChildren().add(0, bannerImageView);

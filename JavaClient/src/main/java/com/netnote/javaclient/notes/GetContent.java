@@ -1,4 +1,4 @@
-package com.example.javaclient.notes;
+package com.netnote.javaclient.notes;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

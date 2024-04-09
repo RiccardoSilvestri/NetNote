@@ -1,7 +1,7 @@
-package com.example.javaclient.notes;
+package com.netnote.javaclient.notes;
 
-import static com.example.javaclient.Connection.readStr;
-import static com.example.javaclient.Connection.sendMsg;
+import static com.netnote.javaclient.Connection.readStr;
+import static com.netnote.javaclient.Connection.sendMsg;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -9,28 +9,20 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
-import com.example.javaclient.Connection;
-import com.example.javaclient.StartConnection;
-import com.example.javaclient.buttons.DeleteButton;
-import com.example.javaclient.buttons.NewNoteButton;
-import com.example.javaclient.buttons.SaveButton;
-import com.example.javaclient.utils.NoteToJson;
+import com.netnote.javaclient.buttons.DeleteButton;
+import com.netnote.javaclient.buttons.NewNoteButton;
+import com.netnote.javaclient.buttons.SaveButton;
+import com.netnote.javaclient.utils.NoteToJson;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane; // Importa FlowPane
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
