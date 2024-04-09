@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.example.javaclient.utils.NoteToJson;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -44,16 +45,6 @@ public class NoteManagement {
 
     // LIVE selected note title
     String currenttitle = "";
-
-    // Method to convert note information to JSON format
-    private static String noteToJson(String author, String title, String content, String date) {
-        return "{" +
-                "\"author\": \"" + author + "\"," +
-                "\"content\": \"" + content + "\"," +
-                "\"title\": \"" + title + "\"," +
-                "\"date\": \"" + date + "\"" +
-                "}";
-    }
 
     // Method to add a new "New Note" button
     private void NewButton(VBox newRoot, Stage newStage, String user, Socket client) {
@@ -89,7 +80,7 @@ public class NoteManagement {
                     System.out.println(readStr(client));
                     textAreaContent = "";
                     String strDate = "";
-                    sendMsg(noteToJson(user, currenttitle, textAreaContent, strDate), client);
+                    sendMsg(NoteToJson.noteToJson(user, currenttitle, textAreaContent, strDate), client);
                     // read the output of the server, in order not to send multiple messages at once
                     readStr(client);
                     try {
@@ -143,7 +134,7 @@ public class NoteManagement {
             json.put("content", textAreaContent);
             json.put("title", currenttitle);
             json.put("date", date.toString());
-            System.out.println(noteToJson(user, currenttitle, textAreaContent, strDate));
+            System.out.println(NoteToJson.noteToJson(user, currenttitle, textAreaContent, strDate));
 
             if (currenttitle.equals("") || textAreaContent.equals("")) {
                 // Warning if note title or content is empty
@@ -184,7 +175,7 @@ public class NoteManagement {
                 // Sending the note deletion request to the server
                 sendMsg("2", client);
                 System.out.println(readStr(client));
-                sendMsg(noteToJson(user, currenttitle, author, currenttitle), client);
+                sendMsg(NoteToJson.noteToJson(user, currenttitle, author, currenttitle), client);
                 readStr(client);
                 try {
                     ImportNotes(client, newStage);
