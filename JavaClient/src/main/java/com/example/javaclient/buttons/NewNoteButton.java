@@ -21,7 +21,9 @@ public class NewNoteButton {
         imageView.setFitWidth(20);
         imageView.setPreserveRatio(true);
 
-        HBox hbox = new HBox(imageView);
+        Text buttonText = new Text("  New Note");
+        buttonText.setFill(Color.WHITE);
+        HBox hbox = new HBox(imageView, buttonText);
 
         // Center the HBox inside the Button
         hbox.setAlignment(Pos.CENTER);
