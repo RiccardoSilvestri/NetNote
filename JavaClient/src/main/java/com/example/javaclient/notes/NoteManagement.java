@@ -44,7 +44,7 @@ public class NoteManagement {
     }
 
     // LIVE selected note title
-    String currenttitle = "";
+    String currentTitle = "";
 
     // Method to add a new "New Note" button
     private void NewButton(VBox newRoot, Stage newStage, String user, Socket client) {
@@ -73,14 +73,14 @@ public class NoteManagement {
                 } else {
 
                     // Setting the current title and sending the new note to the server
-                    currenttitle = note;
-                    newStage.setTitle(currenttitle);
+                    currentTitle = note;
+                    newStage.setTitle(currentTitle);
                     newStage.show();
                     sendMsg("1", client);
                     System.out.println(readStr(client));
                     textAreaContent = "";
                     String strDate = "";
-                    sendMsg(NoteToJson.noteToJson(user, currenttitle, textAreaContent, strDate), client);
+                    sendMsg(NoteToJson.noteToJson(user, currentTitle, textAreaContent, strDate), client);
                     // read the output of the server, in order not to send multiple messages at once
                     readStr(client);
                     try {
@@ -122,21 +122,21 @@ public class NoteManagement {
             String textAreaContent = noteTextArea.getText();
 
             Date date = Calendar.getInstance().getTime();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
             String strDate = dateFormat.format(date);
 
             // Creating and sending the JSON object representing the note to the server
             System.out.println("Testo: " + textAreaContent);
-            System.out.println("Titolo: " + currenttitle);
+            System.out.println("Titolo: " + currentTitle);
             System.out.println("Data: " + strDate);
             JSONObject json = new JSONObject();
             json.put("author", author);
             json.put("content", textAreaContent);
-            json.put("title", currenttitle);
+            json.put("title", currentTitle);
             json.put("date", date.toString());
-            System.out.println(NoteToJson.noteToJson(user, currenttitle, textAreaContent, strDate));
+            System.out.println(NoteToJson.noteToJson(user, currentTitle, textAreaContent, strDate));
 
-            if (currenttitle.equals("") || textAreaContent.equals("")) {
+            if (currentTitle.isEmpty() || textAreaContent.isEmpty()) {
                 // Warning if note title or content is empty
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Empty field!");
@@ -175,16 +175,14 @@ public class NoteManagement {
                 // Sending the note deletion request to the server
                 sendMsg("2", client);
                 System.out.println(readStr(client));
-                sendMsg(NoteToJson.noteToJson(user, currenttitle, author, currenttitle), client);
+                sendMsg(NoteToJson.noteToJson(user, currentTitle, author, currentTitle), client);
                 readStr(client);
                 try {
                     ImportNotes(client, newStage);
-                    currenttitle = "";
+                    currentTitle = "";
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-            } else {
             }
         });
     }
@@ -241,8 +239,8 @@ public class NoteManagement {
                 for (int j = 0; j < jsonArray.length(); j++) {
                     JSONObject noteObject = jsonArray.getJSONObject(j);
                     if (noteObject.getString("title").equals(buttonText)) {
-                        currenttitle = noteObject.getString("title");
-                        newStage.setTitle(currenttitle);
+                        currentTitle = noteObject.getString("title");
+                        newStage.setTitle(currentTitle);
                         newStage.show();
                         String currentContent = noteTextArea.getText();
 

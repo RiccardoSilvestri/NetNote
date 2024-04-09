@@ -48,10 +48,8 @@ public class MainWindow extends Application {
         VBox.setMargin(ServerStatus, new Insets(10));
         root.getChildren().add(ServerStatus);
 
-
         // main connection to the server
         AtomicReference<Socket> client = new AtomicReference<>();
-
 
         // Thread to keep the connection to the server active
         new Thread(() -> {
@@ -68,7 +66,6 @@ public class MainWindow extends Application {
                 }
             }
         }).start();
-
 
         // Spawns a new thread to test the connection and report the connection status
         new Thread(() -> {
