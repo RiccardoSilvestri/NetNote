@@ -1,4 +1,4 @@
-package com.example.javaclient.buttons;
+package com.netnote.javaclient.buttons;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,10 +10,10 @@ import javafx.scene.text.Text;
 
 import java.util.Objects;
 
-public class DeleteButton {
-    public static Button deleteButton(){
-        Button deleteButton = new Button();
-        Image saveImg = new Image(Objects.requireNonNull(SaveButton.class.getResourceAsStream("/deleteIcon.png")));
+public class NewNoteButton {
+    public static Button newNoteButton(){
+        Button newNoteButton = new Button();
+        Image saveImg = new Image(Objects.requireNonNull(SaveButton.class.getResourceAsStream("/newNoteIcon.png")));
         ImageView imageView = new ImageView(saveImg);
 
         // Set the ImageView size to match the Button size
@@ -21,16 +21,16 @@ public class DeleteButton {
         imageView.setFitWidth(20);
         imageView.setPreserveRatio(true);
 
-        Text buttonText = new Text(" Delete");
+        Text buttonText = new Text("  New Note");
         buttonText.setFill(Color.WHITE);
         HBox hbox = new HBox(imageView, buttonText);
 
         // Center the HBox inside the Button
         hbox.setAlignment(Pos.CENTER);
 
-        deleteButton.setGraphic(hbox);
-        deleteButton.setMaxWidth(Double.MAX_VALUE);
+        newNoteButton.setGraphic(hbox);
+        newNoteButton.setMaxWidth(Double.MAX_VALUE);
 
-        return deleteButton;
+        return newNoteButton;
     }
 }

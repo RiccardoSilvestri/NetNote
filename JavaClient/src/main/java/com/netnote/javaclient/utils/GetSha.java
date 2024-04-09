@@ -1,4 +1,4 @@
-package com.example.javaclient.utils;
+package com.netnote.javaclient.utils;
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 import java.math.BigInteger;

@@ -1,8 +1,7 @@
-package com.example.javaclient;
+package com.netnote.javaclient;
 
-import com.example.javaclient.PackageTestingRiccardo.SendCredentials;
-import com.example.javaclient.notes.Note;
-import com.example.javaclient.utils.GetSha;
+import com.netnote.javaclient.PackageTestingRiccardo.SendCredentials;
+import com.netnote.javaclient.notes.Note;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;

@@ -1,11 +1,10 @@
-package com.example.javaclient.PackageTestingRiccardo;
+package com.netnote.javaclient.PackageTestingRiccardo;
 
-import com.example.javaclient.utils.GetSha;
+import com.netnote.javaclient.utils.GetSha;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SendCredentials {
 

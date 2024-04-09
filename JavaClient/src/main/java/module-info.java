@@ -5,8 +5,8 @@ module com.example.javaclient {
     requires org.json;
     requires jdk.management.agent;
 
-    opens com.example.javaclient to javafx.fxml;
-    exports com.example.javaclient;
-    exports com.example.javaclient.PackageTestingRiccardo;
-    opens com.example.javaclient.PackageTestingRiccardo to javafx.fxml;
+    opens com.netnote.javaclient to javafx.fxml;
+    exports com.netnote.javaclient;
+    exports com.netnote.javaclient.PackageTestingRiccardo;
+    opens com.netnote.javaclient.PackageTestingRiccardo to javafx.fxml;
 }
