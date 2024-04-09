@@ -3,11 +3,10 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="TOP_LEFT" spacing="20.0" styleClass="container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-    <FlowPane fx:id="bottoniFlowPane" prefWidth="200.0" prefHeight="200.0" hgap="5.0" />
+    <FlowPane fx:id="bottoniFlowPane" hgap="5.0" prefHeight="200.0" prefWidth="200.0" />
     <TextArea fx:id="noteTextArea" wrapText="true" VBox.vgrow="ALWAYS" />
 
     <stylesheets>
