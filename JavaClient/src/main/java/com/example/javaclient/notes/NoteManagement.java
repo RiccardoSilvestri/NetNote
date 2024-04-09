@@ -12,7 +12,10 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
+import com.example.javaclient.Connection;
+import com.example.javaclient.StartConnection;
 import com.example.javaclient.buttons.DeleteButton;
 import com.example.javaclient.buttons.NewNoteButton;
 import com.example.javaclient.buttons.SaveButton;
