@@ -9,17 +9,25 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.example.javaclient.buttons.DeleteButton;
+import com.example.javaclient.buttons.NewNoteButton;
+import com.example.javaclient.buttons.SaveButton;
 import com.example.javaclient.utils.NoteToJson;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane; // Importa FlowPane
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,7 +56,7 @@ public class NoteManagement {
 
     // Method to add a new "New Note" button
     private void NewButton(VBox newRoot, Stage newStage, String user, Socket client) {
-        Button newButton = new Button("New Note");
+        Button newButton = NewNoteButton.newNoteButton();
         newButton.setOnAction(event -> {
 
             // Creating a dialog to insert the new note title
@@ -108,16 +116,15 @@ public class NoteManagement {
         buttonVBox.setSpacing(10);
         buttonVBox.setPadding(new Insets(0, 20, 10, 20));
 
-        Button sendButton = new Button("Send");
-        sendButton.setMaxWidth(Double.MAX_VALUE);
-        Button deleteNoteButton = new Button("Delete Note");
-        deleteNoteButton.setMaxWidth(Double.MAX_VALUE);
+        // save button
+        Button saveButton = SaveButton.saveButton();
+        Button deleteNoteButton = DeleteButton.deleteButton();
 
-        buttonVBox.getChildren().addAll(sendButton, deleteNoteButton);
+        buttonVBox.getChildren().addAll(saveButton, deleteNoteButton);
         root.getChildren().add(buttonVBox);
 
         // Action to send a note to the server
-        sendButton.setOnAction(event -> {
+        saveButton.setOnAction(event -> {
             TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
             String textAreaContent = noteTextArea.getText();
 
@@ -126,9 +133,9 @@ public class NoteManagement {
             String strDate = dateFormat.format(date);
 
             // Creating and sending the JSON object representing the note to the server
-            System.out.println("Testo: " + textAreaContent);
-            System.out.println("Titolo: " + currentTitle);
-            System.out.println("Data: " + strDate);
+            System.out.println("Content: " + textAreaContent);
+            System.out.println("Title: " + currentTitle);
+            System.out.println("Date: " + strDate);
             JSONObject json = new JSONObject();
             json.put("author", author);
             json.put("content", textAreaContent);
