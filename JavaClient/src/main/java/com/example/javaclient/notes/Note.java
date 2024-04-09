@@ -24,12 +24,14 @@ public class Note {
         VBox newRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/javaclient/Appunti.fxml")));
 
         // Creating a new note window
-        Stage newStage = new Stage();
+        Stage noteStage = new Stage();
         Scene newScene = new Scene(newRoot, 700, 500);
-        newStage.setScene(newScene);
-        newStage.setTitle("New Window");
+        noteStage.setScene(newScene);
+        noteStage.setTitle("New Window");
 
-
+        // Set the icon for the stage
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icon.png")));
+        noteStage.getIcons().add(icon);
 
         // Adding a personalized label to the user
         Label label = new Label("Benvenuto " + user + "!");
@@ -41,7 +43,7 @@ public class Note {
         bannerImageView.setFitWidth(199);
         bannerImageView.setFitHeight(72);
         newRoot.getChildren().add(0, bannerImageView);
-        newStage.show();
+        noteStage.show();
 
         // take the textarea for notes from the layout
         TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
@@ -49,10 +51,10 @@ public class Note {
 
         // Initialization of NoteManagement
         NoteManagement noteManagement = new NoteManagement(newRoot);
-        noteManagement.initialize(client,newRoot,newStage, user);
+        noteManagement.initialize(client,newRoot,noteStage, user);
 
         // kill all threads when closing stage
-        newStage.setOnCloseRequest(event -> {
+        noteStage.setOnCloseRequest(event -> {
             Platform.exit();
             System.exit(0);
         });

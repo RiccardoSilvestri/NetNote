@@ -32,9 +32,9 @@ public class MainWindow extends Application {
         VBox root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LoginRegister.fxml")));
         Scene scene = new Scene(root, 600, 400);
         stage.setResizable(false);
-        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icon.png")));
 
         // Set the icon for the stage
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icon.png")));
         stage.getIcons().add(icon);
 
         // Setting the window title
