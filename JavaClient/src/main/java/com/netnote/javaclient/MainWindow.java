@@ -1,8 +1,7 @@
 package com.netnote.javaclient;
-import com.netnote.javaclient.notes.Note;
 import com.netnote.javaclient.threads.EstablishConnectionThread;
 import com.netnote.javaclient.threads.ServerStatusThread;
-import com.netnote.javaclient.utils.goToNote;
+import com.netnote.javaclient.utils.GoToNote;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -75,7 +74,7 @@ public class MainWindow extends Application {
             try {
                 if (UserManagement.register(usernameField, passwordField, client.get(), serverStatus)){
                     // Closing the register window and opening the notes window
-                    goToNote.goToNoteWindow(stage, client.get(), username);
+                    GoToNote.goToNoteWindow(stage, client.get(), usernameField.getText().toLowerCase());
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -86,7 +85,7 @@ public class MainWindow extends Application {
         loginButton.setOnAction(event -> {
             try {
                 if (UserManagement.login(usernameField, passwordField, client.get(), serverStatus)){
-                    goToNote.goToNoteWindow(stage, client.get(), username);
+                    GoToNote.goToNoteWindow(stage, client.get(), usernameField.getText().toLowerCase());
                 };
             } catch (IOException e) {
                 throw new RuntimeException(e);

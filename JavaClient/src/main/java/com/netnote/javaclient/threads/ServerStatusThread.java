@@ -8,10 +8,14 @@ import javafx.scene.paint.Color;
 import java.net.Socket;
 
 public class ServerStatusThread extends Thread{
+    private static volatile boolean isRunning = true;
+    public static void terminate(){
+        isRunning = false;
+    }
     public static void run(String serverName, int port, Label ServerStatus) {
         // Spawns a new thread to test the connection and report the connection status
         new Thread(() -> {
-            while (true) {
+            while (isRunning) {
                 try {
                     if (Connection.isServerOnline(serverName, port)) {
                         Platform.runLater(() -> ServerStatus.setText("ONLINE"));
@@ -25,6 +29,7 @@ public class ServerStatusThread extends Thread{
                     e.printStackTrace();
                 }
             }
+            System.out.println("Server Status Thread terminated");
         }).start();
     }
 }
