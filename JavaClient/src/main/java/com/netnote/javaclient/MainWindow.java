@@ -29,7 +29,6 @@ public class MainWindow extends Application {
     // Start() method, javafx application entry point
     @Override
     public void start(Stage stage) throws IOException {
-
         // Load the user interface from an FXML file
         VBox root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LoginRegister.fxml")));
         Scene scene = new Scene(root, 600, 400);
@@ -65,12 +64,10 @@ public class MainWindow extends Application {
         Button registerButton = (Button) scene.lookup("#SignUpButton");
         Button loginButton = (Button) scene.lookup("#SignInButton");
 
-        boolean serverStatus = Connection.isServerOnline(SERVER_NAME, PORT);
-
         // Action to perform when the register button is pressed
         registerButton.setOnAction(event -> {
             try {
-                if (UserManagement.register(usernameField, passwordField, client.get(), serverStatus)){
+                if (UserManagement.register(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT))){
                     // Closing the register window and opening the notes window
                     GoToNote.goToNoteWindow(stage, client.get(), usernameField.getText().toLowerCase());
                 }
@@ -82,7 +79,7 @@ public class MainWindow extends Application {
         // Action to perform when the login button is pressed
         loginButton.setOnAction(event -> {
             try {
-                if (UserManagement.login(usernameField, passwordField, client.get(), serverStatus)){
+                if (UserManagement.login(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT))){
                     GoToNote.goToNoteWindow(stage, client.get(), usernameField.getText().toLowerCase());
                 };
             } catch (IOException e) {
