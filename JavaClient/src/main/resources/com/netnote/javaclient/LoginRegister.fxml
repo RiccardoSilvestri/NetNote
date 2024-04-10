@@ -15,7 +15,7 @@
     <children>
         <AnchorPane prefHeight="550.0" prefWidth="600.0" stylesheets="@style.css" VBox.vgrow="ALWAYS">
             <children>
-                <Label alignment="CENTER" layoutX="2.0" layoutY="331.2" prefHeight="35.0" prefWidth="135.0" text="New User? " textFill="#2f4f4f" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="463.0" AnchorPane.topAnchor="331.0">
+                <Label fx:id="newUser" alignment="CENTER" layoutX="2.0" layoutY="331.2" prefHeight="35.0" prefWidth="135.0" text="New User? " textFill="#2f4f4f" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="463.0" AnchorPane.topAnchor="331.0">
                     <font>
                         <Font name="Gill Sans MT" size="21.0" />
                     </font>
