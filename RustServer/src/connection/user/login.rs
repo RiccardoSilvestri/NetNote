@@ -1,13 +1,14 @@
 use serde_json::{Value,};
 use crate::connection::user::user_exists::user_exists;
-use sha2::{Sha256, Digest};
 use super::get_credentials::*;
 
+/*
 fn get_hash(text :String) -> String{
     let mut hasher = Sha256::new();
     hasher.update(text);
     return hasher.finalize().iter().map(|b| format!("{:02x}", b)).collect();
 }
+ */
 
 pub fn login(received : String) -> Result<String, JsonCustomError> {
     let v: Value = serde_json::from_str(&received).map_err(JsonCustomError::from)?;
