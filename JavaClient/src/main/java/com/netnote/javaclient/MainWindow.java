@@ -65,9 +65,7 @@ public class MainWindow extends Application {
         Button registerButton = (Button) scene.lookup("#SignUpButton");
         Button loginButton = (Button) scene.lookup("#SignInButton");
 
-        //
         boolean serverStatus = Connection.isServerOnline(SERVER_NAME, PORT);
-        String username = usernameField.getText().toLowerCase();
 
         // Action to perform when the register button is pressed
         registerButton.setOnAction(event -> {

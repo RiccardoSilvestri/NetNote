@@ -13,6 +13,7 @@ public class GoToNote {
         stage.close();
         Note note = new Note();
         note.notesWindow(client, username);
+        // terminate threads
         EstablishConnectionThread.terminate();
         ServerStatusThread.terminate();
     }
