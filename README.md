@@ -30,9 +30,18 @@ NetNote offers a variety of features that make it a compelling note-taking appli
 
 The server is in charge of handling users and notes, and storing them to file.
 
-It uses the port 4444.
+## Arguments
 
-It stores the notes as json into received.json and the users to users.json.
+It accepts two arguments, which are `localhost` and `port`.
+
+If there is only one argument and it's an integer, the server assumes it's the `port`, otherwise it's the `localhost`.
+
+If an argument or more is missing, the server uses the default values:
+
+```rust
+let hostname = "0.0.0.0";
+let port = 4444;
+```
 
 ## Dependencies
 
@@ -168,8 +177,6 @@ Also, there is handy text label on the bottom left of the window that indicates 
 Once the user is logged in, they are presented with an array of button, each representing a note they made (empty if they just signed up).
 
 The content of the selected note is displayes on an inputbox, so that it's editable.
-
-
 
 ```mermaid
 sequenceDiagram
