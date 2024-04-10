@@ -61,13 +61,13 @@ public class UserManagement {
     }
 
     // Method for register a new user
-    public static void register(TextField usernameField, PasswordField passwordField, Socket client, boolean serverStatus) throws IOException {
+    public static boolean register(TextField usernameField, PasswordField passwordField, Socket client, boolean serverStatus) throws IOException {
         String username = usernameField.getText().toLowerCase();
         String password = passwordField.getText();
 
         // check of credentials
         if (!checkCredentials(username, password, serverStatus))
-            return;
+            return false;
 
         // Sending credentials to the server for registration
         int serverReturn = SendCredentials.sendCredentials(client, "1", username, password);
@@ -85,13 +85,9 @@ public class UserManagement {
             alert.setHeaderText("registration failed");
             alert.setContentText("User already registered.");
             alert.showAndWait();
-        } else {
-
-            // Closing the register window and opening the notes window
-            stage.close();
-            Note note = new Note();
-            note.notesWindow(client, username);
+            return false;
         }
+        return true;
     }
 
     // Method to login a user

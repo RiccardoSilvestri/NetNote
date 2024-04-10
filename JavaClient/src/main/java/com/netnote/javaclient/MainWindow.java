@@ -2,6 +2,7 @@ package com.netnote.javaclient;
 import com.netnote.javaclient.notes.Note;
 import com.netnote.javaclient.threads.EstablishConnectionThread;
 import com.netnote.javaclient.threads.ServerStatusThread;
+import com.netnote.javaclient.utils.goToNote;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -65,10 +66,17 @@ public class MainWindow extends Application {
         Button registerButton = (Button) scene.lookup("#SignUpButton");
         Button loginButton = (Button) scene.lookup("#SignInButton");
 
+        //
+        boolean serverStatus = Connection.isServerOnline(SERVER_NAME, PORT);
+        String username = usernameField.getText().toLowerCase();
+
         // Action to perform when the register button is pressed
         registerButton.setOnAction(event -> {
             try {
-                UserManagement.register(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT));
+                if (UserManagement.register(usernameField, passwordField, client.get(), serverStatus)){
+                    // Closing the register window and opening the notes window
+                    goToNote.goToNoteWindow(stage, client.get(), username);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -77,12 +85,8 @@ public class MainWindow extends Application {
         // Action to perform when the login button is pressed
         loginButton.setOnAction(event -> {
             try {
-                if (UserManagement.login(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT))){
-                    // Closing the login window and opening the notes window
-                    stage.close();
-                    Note note = new Note();
-                    note.notesWindow(client.get(), usernameField.getText().toLowerCase());
-                    EstablishConnectionThread.terminate();
+                if (UserManagement.login(usernameField, passwordField, client.get(), serverStatus)){
+                    goToNote.goToNoteWindow(stage, client.get(), username);
                 };
             } catch (IOException e) {
                 throw new RuntimeException(e);
