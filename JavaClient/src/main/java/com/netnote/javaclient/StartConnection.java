@@ -12,7 +12,7 @@ public class StartConnection {
             System.out.println("Connected");
             return true;
         } catch (IOException e) {
-            System.out.println("Connection failed");
+            System.out.println("Connection attempt failed");
         }
         return false;
     }

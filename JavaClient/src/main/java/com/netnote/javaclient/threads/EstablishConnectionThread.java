@@ -16,10 +16,8 @@ public class EstablishConnectionThread extends Thread{
         new Thread(() -> {
             boolean connected = false;
             while (isRunning) {
-                if (!Connection.isServerOnline(serverName, port) || !connected) {
+                if (!Connection.isServerOnline(serverName, port) || !connected)
                     connected = StartConnection.EstablishConnection(client, serverName, port);
-                    System.out.println(connected);
-                }
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {

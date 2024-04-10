@@ -24,7 +24,7 @@ public class ServerStatusThread extends Thread{
                         Platform.runLater(() -> ServerStatus.setText("OFFLINE"));
                         ServerStatus.setTextFill(Color.RED);
                     }
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

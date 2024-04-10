@@ -31,7 +31,7 @@ public class MainWindow extends Application {
     public void start(Stage stage) throws IOException {
         // Load the user interface from an FXML file
         VBox root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LoginRegister.fxml")));
-        Scene scene = new Scene(root, 600, 438);
+        Scene scene = new Scene(root, 600, 390);
         stage.setResizable(false);
 
         // Set the icon for the stage
