@@ -35,7 +35,7 @@ public class Note {
         noteStage.getIcons().add(icon);
 
         // Adding a personalized label to the user
-        Label label = new Label("Benvenuto " + user + "!");
+        Label label = new Label("Welcome " + user + "!");
         label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         newRoot.getChildren().add(0, label);
 
@@ -48,7 +48,7 @@ public class Note {
 
         // take the textarea for notes from the layout
         TextArea noteTextArea = (TextArea) newRoot.lookup("#noteTextArea");
-        noteTextArea.setText("Seleziona una nota per visualizzare il contenuto");
+        noteTextArea.setText("Select a note to view the content");
 
         // Initialization of NoteManagement
         NoteManagement noteManagement = new NoteManagement(newRoot);
