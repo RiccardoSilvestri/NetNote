@@ -1,4 +1,4 @@
-module com.example.javaclient {
+module com.notenote.javaclient {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
