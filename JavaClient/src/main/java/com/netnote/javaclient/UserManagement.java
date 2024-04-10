@@ -90,17 +90,17 @@ public class UserManagement {
             // Closing the register window and opening the notes window
             stage.close();
             Note note = new Note();
-            note.notes(client, username);
+            note.notesWindow(client, username);
         }
     }
 
     // Method to login a user
-    public static void login(TextField usernameField, PasswordField passwordField, Socket client, boolean serverStatus) throws IOException {
+    public static boolean login(TextField usernameField, PasswordField passwordField, Socket client, boolean serverStatus) throws IOException {
         String username = usernameField.getText().toLowerCase();
         String password = passwordField.getText();
 
         if (!checkConnection(serverStatus))
-            return;
+            return false;
         // Sending credentials to the server for login
         int serverReturn = SendCredentials.sendCredentials(client, "2", username, password);
 
@@ -114,14 +114,8 @@ public class UserManagement {
             alert.setHeaderText("Failed Login");
             alert.setContentText("Name or Password is wrong!.");
             alert.showAndWait();
-        } else {
-            // Obtaining the current window to manage closing after login
-            Stage stage = (Stage) usernameField.getScene().getWindow();
-
-            // Closing the login window and opening the notes window
-            stage.close();
-            Note note = new Note();
-            note.notes(client, username);
+            return false;
         }
+        return true;
     }
 }

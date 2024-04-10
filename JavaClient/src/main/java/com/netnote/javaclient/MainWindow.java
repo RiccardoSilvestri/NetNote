@@ -1,6 +1,7 @@
 package com.netnote.javaclient;
-import com.netnote.javaclient.utils.ConnectionCheckThread;
-import com.netnote.javaclient.utils.ServerStatusThread;
+import com.netnote.javaclient.notes.Note;
+import com.netnote.javaclient.threads.EstablishConnectionThread;
+import com.netnote.javaclient.threads.ServerStatusThread;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +54,7 @@ public class MainWindow extends Application {
         AtomicReference<Socket> client = new AtomicReference<>();
 
         // Thread to keep the connection to the server active
-        ConnectionCheckThread.run(client, SERVER_NAME, PORT);
+        EstablishConnectionThread.run(client, SERVER_NAME, PORT);
 
         // Spawns a new thread to test the connection and report the connection status
         ServerStatusThread.run(SERVER_NAME, PORT, ServerStatus);
@@ -76,7 +77,13 @@ public class MainWindow extends Application {
         // Action to perform when the login button is pressed
         loginButton.setOnAction(event -> {
             try {
-                UserManagement.login(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT));
+                if (UserManagement.login(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT))){
+                    // Closing the login window and opening the notes window
+                    stage.close();
+                    Note note = new Note();
+                    note.notesWindow(client.get(), usernameField.getText().toLowerCase());
+                    EstablishConnectionThread.terminate();
+                };
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

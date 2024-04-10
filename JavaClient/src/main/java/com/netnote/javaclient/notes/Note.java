@@ -1,11 +1,9 @@
 package com.netnote.javaclient.notes;
 
-import com.netnote.javaclient.Connection;
-import com.netnote.javaclient.StartConnection;
+import com.netnote.javaclient.threads.ConnectionThread;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -18,11 +16,9 @@ import javafx.scene.image.ImageView;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Note {
-    public void notes(Socket client, String user) throws IOException {
+    public void notesWindow(Socket client, String user) throws IOException {
         ConnectionThread.run(client);
 
         // Loading the note layout from the FXML

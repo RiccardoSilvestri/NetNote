@@ -9,4 +9,6 @@ module com.notenote.javaclient {
     exports com.netnote.javaclient;
     exports com.netnote.javaclient.PackageTestingRiccardo;
     opens com.netnote.javaclient.PackageTestingRiccardo to javafx.fxml;
+    exports com.netnote.javaclient.threads;
+    opens com.netnote.javaclient.threads to javafx.fxml;
 }

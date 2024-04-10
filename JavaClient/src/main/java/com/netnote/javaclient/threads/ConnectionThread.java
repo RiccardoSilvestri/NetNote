@@ -1,4 +1,4 @@
-package com.netnote.javaclient.notes;
+package com.netnote.javaclient.threads;
 
 import com.netnote.javaclient.Connection;
 import com.netnote.javaclient.StartConnection;

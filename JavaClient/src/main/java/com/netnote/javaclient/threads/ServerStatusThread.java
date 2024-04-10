@@ -1,4 +1,4 @@
-package com.netnote.javaclient.utils;
+package com.netnote.javaclient.threads;
 
 import com.netnote.javaclient.Connection;
 import javafx.application.Platform;
