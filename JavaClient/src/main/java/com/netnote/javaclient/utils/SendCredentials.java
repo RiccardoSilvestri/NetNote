@@ -1,4 +1,4 @@
-package com.netnote.javaclient.PackageTestingRiccardo;
+package com.netnote.javaclient.utils;
 
 import com.netnote.javaclient.utils.GetSha;
 

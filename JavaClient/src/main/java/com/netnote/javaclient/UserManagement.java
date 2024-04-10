@@ -1,7 +1,6 @@
 package com.netnote.javaclient;
 
-import com.netnote.javaclient.PackageTestingRiccardo.SendCredentials;
-import com.netnote.javaclient.notes.Note;
+import com.netnote.javaclient.utils.SendCredentials;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;

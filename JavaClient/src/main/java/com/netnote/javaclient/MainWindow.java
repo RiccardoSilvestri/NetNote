@@ -63,7 +63,6 @@ public class MainWindow extends Application {
         passwordField = (PasswordField) scene.lookup("#passwordField");
         Button registerButton = (Button) scene.lookup("#SignUpButton");
         Button loginButton = (Button) scene.lookup("#SignInButton");
-
         // Action to perform when the register button is pressed
         registerButton.setOnAction(event -> {
             try {
