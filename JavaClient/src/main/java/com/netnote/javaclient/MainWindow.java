@@ -31,7 +31,7 @@ public class MainWindow extends Application {
     public void start(Stage stage) throws IOException {
         // Load the user interface from an FXML file
         VBox root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LoginRegister.fxml")));
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 600, 438);
         stage.setResizable(false);
 
         // Set the icon for the stage
@@ -44,10 +44,7 @@ public class MainWindow extends Application {
         stage.show();
 
         // Label to show server status
-        Label ServerStatus = new Label(" ");
-        ServerStatus.setAlignment(Pos.TOP_RIGHT);
-        VBox.setMargin(ServerStatus, new Insets(10));
-        root.getChildren().add(ServerStatus);
+        Label ServerStatus = (Label) scene.lookup("#ServerStatus");
 
         // main connection to the server
         AtomicReference<Socket> client = new AtomicReference<>();

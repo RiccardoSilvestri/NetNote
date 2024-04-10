@@ -11,10 +11,15 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="413.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="413.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <AnchorPane prefHeight="550.0" prefWidth="600.0" stylesheets="@style.css" VBox.vgrow="ALWAYS">
             <children>
+                <Label alignment="CENTER" layoutX="11.0" layoutY="14.0" prefHeight="57.0" prefWidth="270.0" text="Welcome to NetNote" textFill="#2f4f4f">
+                    <font>
+                        <Font name="Gill Sans MT" size="24.0" />
+                    </font>
+                </Label>
                 <Label fx:id="newUser" alignment="CENTER" layoutX="2.0" layoutY="331.2" prefHeight="35.0" prefWidth="135.0" text="New User? " textFill="#2f4f4f" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="463.0" AnchorPane.topAnchor="331.0">
                     <font>
                         <Font name="Gill Sans MT" size="21.0" />
@@ -32,20 +37,14 @@
                         <Font size="18.0" />
                     </font>
                 </Button>
-            <Label alignment="CENTER" layoutX="11.0" layoutY="14.0" prefHeight="57.0" prefWidth="270.0" text="Welcome to NetNote" textFill="#2f4f4f">
-               <font>
-                  <Font name="Gill Sans MT" size="24.0" />
-               </font>
-            </Label>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dae5eb" height="413.0" layoutX="300.0" layoutY="-2.0" stroke="TRANSPARENT" strokeType="INSIDE" width="301.0" />
-            <ImageView fitHeight="241.0" fitWidth="241.0" layoutX="330.0" layoutY="71.0">
-               <image>
-                  <Image url="@Logo.png" />
-               </image>
-            </ImageView>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dae5eb" height="440.0" layoutX="300.0" layoutY="-9.0" stroke="TRANSPARENT" strokeType="INSIDE" width="301.0" />
+                <Label fx:id="ServerStatus" layoutX="513.0" layoutY="6.0" prefHeight="17.0" prefWidth="74.0" text="Server Status" />
+                <ImageView fitHeight="241.0" fitWidth="241.0" layoutX="330.0" layoutY="71.0">
+                    <image>
+                        <Image url="@Logo.png" />
+                    </image>
+                </ImageView>
             </children>
         </AnchorPane>
-      <VBox prefHeight="0.0" prefWidth="600.0" />
     </children>
-
 </VBox>
