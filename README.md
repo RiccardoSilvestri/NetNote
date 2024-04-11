@@ -14,9 +14,9 @@ A TCP Note-Taking application written in Rust and Java.
 
 **Authors**:
 
-- Francesco Lanza
+- [Francesco Lanza](https://github.com/fralnz)
 
-- Riccardo Silvestri
+- [Riccardo Silvestri](https://github.com/RiccardoSilvestri)
 
 # Main Features
 
@@ -29,6 +29,10 @@ NetNote offers a variety of features that make it a compelling note-taking appli
 - **Note management**: users are able to create, edit and delete notes.
 
 - **User Interface**: each point above can be done using our user-friendly interface.
+
+## Binaries
+
+You can download the binaries in the [release](https://github.com/RiccardoSilvestri/UFS-02/releases/).
 
 ## Arguments
 
@@ -68,10 +72,6 @@ sequenceDiagram
     Server->>Client: NotesOfAuthor
     Note over Client, Server: Back to NoteOption
 ```
-
-## Binaries
-
-You can download the binaries in the release.
 
 ## Compile Server
 
