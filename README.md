@@ -24,6 +24,28 @@ NetNote offers a variety of features that make it a compelling note-taking appli
 
 - **User Interface**: each point above can be done using our user-friendly interface.
 
+## TCP Connection
+
+Client and Server communicate through TCP.
+
+This is a graph of the exchange of messages:
+
+```mermaid
+sequenceDiagram
+    participant Server
+    participant Client
+
+    Client->>Server: LoginOption
+    Server->>Client: "Request Received"
+    Client->>Server: CredentialsJson
+    Server->>Client: logged (bool)
+    Client->>Server: NoteOption
+    Server->>Client: NotesOfAuthor
+    Client->>Server: Note
+    Server->>Client: NotesOfAuthor
+    Note over Client, Server: Back to NoteOption
+```
+
 ---
 
 # Server
@@ -176,20 +198,4 @@ Also, there is handy text label on the bottom left of the window that indicates 
 
 Once the user is logged in, they are presented with an array of button, each representing a note they made (empty if they just signed up).
 
-The content of the selected note is displayes on an inputbox, so that it's editable.
-
-```mermaid
-sequenceDiagram
-    participant Server
-    participant Client
-
-    Client->>Server: LoginOption
-    Server->>Client: "Request Received"
-    Client->>Server: CredentialsJson
-    Server->>Client: logged (bool)
-    Client->>Server: NoteOption
-    Server->>Client: NotesOfAuthor
-    Client->>Server: Note
-    Server->>Client: NotesOfAuthor
-    Note over Client, Server: Back to NoteOption
-```
+The content of the selected note is displayes on an inputbox, so that it's editable..
