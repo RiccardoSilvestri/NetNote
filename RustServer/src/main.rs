@@ -28,26 +28,30 @@ fn main() {
 
     let mut addr = hostname + ":";
     addr.push_str(&*port.to_string());
-    let listener = TcpListener::bind(&addr).expect("Could not bind");
-    println!("Server started on {}", addr);
-    for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                // println!("{:?}", stream);
-                // Clone the Arc<Mutex<()>> before moving it into the closure
-                let file_access_clone = Arc::clone(&file_access);
-                let _ = thread::spawn(move || {
-                    let result = std::panic::catch_unwind(|| {
-                        handle_client(stream, file_access_clone);
-                    });
-                    if let Err(_panic) = result {
-                        eprintln!("A client connection caused a thread to panic.");
+    let listener = TcpListener::bind(&addr);
+    match listener {
+        Ok(listener) => {
+            println!("Server started on {}", addr);
+            for stream in listener.incoming() {
+                match stream {
+                    Ok(stream) => {
+                        // Clone the Arc<Mutex<()>> before moving it into the closure
+                        let file_access_clone = Arc::clone(&file_access);
+                        let _ = thread::spawn(move || {
+                            let result = std::panic::catch_unwind(|| {
+                                handle_client(stream, file_access_clone);
+                            });
+                            if let Err(_panic) = result {
+                                eprintln!("A client connection caused a thread to panic.");
+                            }
+                        });
                     }
-                });
-                // Wait for the thread to finish.
-                // handle.join().unwrap();
+                    Err(e) => { eprintln!("Unable to connect: {}", e); }
+                }
             }
-            Err(e) => { eprintln!("Unable to connect: {}", e); }
+        },
+        Err(e) => {
+            eprintln!("Could not bind to {}: {}", addr, e);
         }
     }
 }
