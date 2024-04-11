@@ -15,18 +15,27 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainWindow extends Application {
     private TextField usernameField;
     private PasswordField passwordField;
-    private static final String SERVER_NAME = "localhost";
-    private static final int PORT = 4444;
+    private static String serverName = "localhost";
+    private static int port = 4444;
 
     // Start() method, javafx application entry point
     @Override
     public void start(Stage stage) throws IOException {
+        List<String> args = getParameters().getRaw();
+        // Check the arguments and assign them to server name and port
+        if (args.size() == 2) {
+            serverName = args.get(0);
+            port = Integer.parseInt(args.get(1));
+        } else if (args.size() == 1) {
+            port = Integer.parseInt(args.get(0));
+        }
         // Load the user interface from an FXML file
         VBox root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LoginRegister.fxml")));
         Scene scene = new Scene(root, 600, 390);
@@ -48,10 +57,10 @@ public class MainWindow extends Application {
         AtomicReference<Socket> client = new AtomicReference<>();
 
         // Thread to keep the connection to the server active
-        EstablishConnectionThread.run(client, SERVER_NAME, PORT);
+        EstablishConnectionThread.run(client, serverName, port);
 
         // Spawns a new thread to test the connection and report the connection status
-        ServerStatusThread.run(SERVER_NAME, PORT, ServerStatus);
+        ServerStatusThread.run(serverName, port, ServerStatus);
 
         // Initialization of input fields and buttons for registration and login
         usernameField = (TextField) scene.lookup("#usernameField");
@@ -61,7 +70,7 @@ public class MainWindow extends Application {
         // Action to perform when the register button is pressed
         registerButton.setOnAction(event -> {
             try {
-                if (UserManagement.register(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT))){
+                if (UserManagement.register(usernameField, passwordField, client.get(), Connection.isServerOnline(serverName, port))){
                     // Closing the register window and opening the notes window
                     GoToNote.goToNoteWindow(stage, client.get(), usernameField.getText().toLowerCase());
                 }
@@ -73,7 +82,7 @@ public class MainWindow extends Application {
         // Action to perform when the login button is pressed
         loginButton.setOnAction(event -> {
             try {
-                if (UserManagement.login(usernameField, passwordField, client.get(), Connection.isServerOnline(SERVER_NAME, PORT))){
+                if (UserManagement.login(usernameField, passwordField, client.get(), Connection.isServerOnline(serverName, port))){
                     GoToNote.goToNoteWindow(stage, client.get(), usernameField.getText().toLowerCase());
                 };
             } catch (IOException e) {
@@ -88,6 +97,6 @@ public class MainWindow extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }
