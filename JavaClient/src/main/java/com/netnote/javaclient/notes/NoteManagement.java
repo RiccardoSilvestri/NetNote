@@ -153,6 +153,7 @@ public class NoteManagement {
                 sendMsg(json.toString(), client);
                 readStr(client);
                 try {
+                    newStage.setTitle(currentTitle);
                     ImportNotes(client, newStage);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -242,7 +243,7 @@ public class NoteManagement {
                     JSONObject noteObject = jsonArray.getJSONObject(j);
                     if (noteObject.getString("title").equals(buttonText)) {
                         currentTitle = noteObject.getString("title");
-                        newStage.setTitle(currentTitle);
+                        newStage.setTitle(currentTitle+"    "+noteObject.getString("date"));
                         newStage.show();
                         String currentContent = noteTextArea.getText();
 
