@@ -12,6 +12,12 @@
 
 A TCP Note-Taking application written in Rust and Java.
 
+**Authors**:
+
+- Francesco Lanza
+
+- Riccardo Silvestri
+
 # Main Features
 
 NetNote offers a variety of features that make it a compelling note-taking application:
@@ -24,9 +30,26 @@ NetNote offers a variety of features that make it a compelling note-taking appli
 
 - **User Interface**: each point above can be done using our user-friendly interface.
 
+## Arguments
+
+The client accept two arguments, the serverName and port. If one or more are missing, it uses the default ones:
+
+```java
+private static String serverName = "localhost";
+private static int port = 4444;
+```
+
+**Example:**
+
+```bash
+JavaClient localhost 4444
+```
+
+## 
+
 ## TCP Connection
 
-Client and Server communicate through TCP.
+Client and Server communicate through **TCP**.
 
 This is a graph of the exchange of messages:
 
@@ -46,6 +69,23 @@ sequenceDiagram
     Note over Client, Server: Back to NoteOption
 ```
 
+## Binaries
+
+You can download the binaries in the release.
+
+## Compile Server
+
+To compile the server, you need to have `cargo` installed.
+
+```bash
+cd RustServer
+cargo build
+```
+
+## Compile Client
+
+Open the project in IntelliJ Idea, set a build artefact and set the main class to Launcher. Build the artefact.
+
 ---
 
 # Server
@@ -63,6 +103,12 @@ If an argument or more is missing, the server uses the default values:
 ```rust
 let hostname = "0.0.0.0";
 let port = 4444;
+```
+
+Example:
+
+```bash
+RustServer 127.0.0.1 4444
 ```
 
 ## Dependencies
