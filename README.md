@@ -238,10 +238,10 @@ The first window the user is prompted to is the Log-in one, named `MainWindow`.
 
 Here, the user can enter username and password into `TextBoxes` and press the button "Sign in" or "Sign up".
 
-Also, there is handy text label on the bottom left of the window that indicates the server status.
+Also, there is a handy text label on the bottom left of the window that indicates the server status.
 
 ### Note Management Window
 
-Once the user is logged in, they are presented with an array of button, each representing a note they made (empty if they just signed up).
+Once the user is logged in, they are presented with an array of buttons, each representing a note they made (empty if they just signed up).
 
-The content of the selected note is displayes on an inputbox, so that it's editable..
+The content of the selected note is displayed on an inputbox, so that it's editable.
