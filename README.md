@@ -22,11 +22,11 @@ A TCP Note-Taking application written in Rust and Java.
 
 NetNote offers a variety of features that make it a compelling note-taking application:
 
-- **User management**: the users are able to register and log in to the server, so that only they can read their notes.
+- **User management**: the users can register and log in to the server, so that only they can read their notes.
 
 - **Security**: user passwords are cypted using `sha256`.
 
-- **Note management**: users are able to create, edit and delete notes.
+- **Note management**: users can create, edit and delete notes.
 
 - **User Interface**: each point above can be done using our user-friendly interface.
 
@@ -34,9 +34,13 @@ NetNote offers a variety of features that make it a compelling note-taking appli
 
 You can download the binaries in the [release](https://github.com/RiccardoSilvestri/UFS-02/releases/).
 
+The executable for the client is available for all operating systems (must have Java>=21).
+
+The binaries for the server are only available for Windows and Linux, since we don't have a Mac to compile with. However, Mac users can compile their own binary following the [compile section](#Compile Server).
+
 ## Arguments
 
-The client accept two arguments, the serverName and port. If one or more are missing, it uses the default ones:
+The client accept two arguments, the `serverName` and `port`. If one or more are missing, it uses the default ones:
 
 ```java
 private static String serverName = "localhost";
@@ -84,13 +88,13 @@ cargo build
 
 ## Compile Client
 
-Open the project in IntelliJ Idea, set a build artefact and set the main class to Launcher. Build the artefact.
+Open the project in IntelliJ Idea, set a build artifact and set the main class to Launcher. Build the artifact.
 
 ---
 
 # Server
 
-The server is in charge of handling users and notes, and storing them to file.
+The server is in charge of handling users and notes and storing them to file.
 
 ## Arguments
 
