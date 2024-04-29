@@ -32,7 +32,7 @@ NetNote offers a variety of features that make it a compelling note-taking appli
 
 ## Binaries
 
-You can download the binaries in the [release](https://github.com/RiccardoSilvestri/UFS-02/releases/).
+You can download the binaries in the [release tab](https://github.com/RiccardoSilvestri/NetNote/releases).
 
 The executable for the client is available for all operating systems (must have `Java>=21`).
 
