@@ -34,7 +34,7 @@ NetNote offers a variety of features that make it a compelling note-taking appli
 
 You can download the binaries in the [release](https://github.com/RiccardoSilvestri/UFS-02/releases/).
 
-The executable for the client is available for all operating systems (must have Java>=21).
+The executable for the client is available for all operating systems (must have `Java>=21`).
 
 The binaries for the server are only available for Windows and Linux, since we don't have a Mac to compile with. However, Mac users can compile their own binary following the [compile section](#compile-server).
 
